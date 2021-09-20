@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+         #
+#    By: seoyounglee <seoyounglee@student.42lyon    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/24 16:54:06 by acusanno          #+#    #+#              #
-#    Updated: 2021/05/26 09:32:49 by acusanno         ###   ########lyon.fr    #
+#    Updated: 2021/09/20 15:36:55 by seoyounglee      ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,7 @@ OBJS_BONUS	= ${SRCS_BONUS:.c=.o}
 
 NAME		= libft.a
 
-CC			= gcc -g3 -g
+CC			= gcc
 
 AR			= ar rc
 

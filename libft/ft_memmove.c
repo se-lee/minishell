@@ -3,15 +3,44 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: seoyounglee <seoyounglee@student.42lyon    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 13:08:14 by acusanno          #+#    #+#             */
-/*   Updated: 2021/03/30 09:18:56 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/09/20 15:39:31 by seoyounglee      ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <string.h>
 
+void	*ft_memmove(void *dst, const void *src, size_t len)
+{
+	size_t	i;
+
+	i = 0;
+	if (!src && !dst)
+		return (0);
+	if (src < dst)
+	{
+		while (len > 0)
+		{
+			((char *)dst)[len - 1] = ((char *)src)[len - 1];
+			len--;
+		}
+	}
+	else
+	{
+		while (i < len)
+		{
+			((char *)dst)[i] = ((char *)src)[i];
+			i++;
+		}
+	}
+	return (dst);
+}
+
+
+
+/*
 void	*ft_memmove(void *dst, const void *src, size_t len)
 {
 	size_t	i;
@@ -35,3 +64,4 @@ void	*ft_memmove(void *dst, const void *src, size_t len)
 	}
 	return (dst);
 }
+*/
