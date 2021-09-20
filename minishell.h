@@ -4,8 +4,8 @@
 # include <unistd.h>
 # include <stdio.h>
 
-typedef s_list t_list;
-typedef s_vars t_vars;
+typedef struct s_list t_list;
+typedef struct s_vars t_vars;
 
 typedef struct s_list {
 	char			**command;
