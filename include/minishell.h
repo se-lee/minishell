@@ -4,19 +4,31 @@
 # include <unistd.h>
 # include <stdio.h>
 
-typedef struct s_list t_list;
 typedef struct s_vars t_vars;
+typedef struct s_command t_command;
+typedef struct s_token t_token;
+typedef struct s_string t_string;
 
-struct s_list {
-	char			**command;
-	struct s_list	*next;
+struct s_string {
+	char	*str;
+	int		len;
+};
+
+struct s_token {
+	t_string buffer;
+
+};
+
+struct s_command {
+	t_token		token;
+	t_command *next;
 };
 
 struct s_vars {
-	t_list	list;
-	int		cmd_number;
+	t_command	first;
+	int			cmd_number;
 };
 
-void parsing(t_vars *vars, char **argv);
+void parsing(t_vars *vars, char *str);
 
 #endif

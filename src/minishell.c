@@ -5,6 +5,7 @@ int main(int argc, char **argv)
 	t_vars	vars;
 
 	(void)argc;
-	parsing(&vars, argv);
+	if (argc > 1)
+		parsing(&vars, argv[0]);
 	return (0);
 }
