@@ -7,12 +7,12 @@
 typedef struct s_list t_list;
 typedef struct s_vars t_vars;
 
-typedef struct s_list {
+struct s_list {
 	char			**command;
 	struct s_list	*next;
 };
 
-typedef struct s_vars {
+struct s_vars {
 	t_list	list;
 	int		cmd_number;
 };

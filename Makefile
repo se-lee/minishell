@@ -1,10 +1,11 @@
 NAME = minishell
 
-SRCS =	minishell.c
+SRCS =	minishell.c	\
+		parsing.c	\
 
-GCCF = gcc -Wall -Werror -Wextra
+GCCF = gcc# -Wall -Wextra -Werror
 
-OBJS = ${SRCS:.c=.o}
+OBJS = $(addprefix bin/, ${SRCS:.c=.o})
 
 _END = \033[0m
 _DIM = \033[2m
@@ -15,12 +16,13 @@ _ROSE = \033[95m
 _CYAN = \033[96m
 .PHONY :	all clean fclean re libft_
 
-%.o : 		%.c		minishell.h
-			${GCCF} -c $< -o $@ 
+bin/%.o : 		src/%.c		include/minishell.h
+			mkdir -p $(dir $@)
+			${GCCF} -c $< -o $@ -I include
 
 all :		libft_ ${NAME}
 
-$(NAME) :	${OBJS} minishell.h | libft/libft.a
+$(NAME) :	${OBJS} include/minishell.h | libft/libft.a
 			${GCCF} libft/libft.a $(OBJS) -o $(NAME)
 
 libft_ :
