@@ -3,11 +3,22 @@
 
 # include <unistd.h>
 # include <stdio.h>
+# include "libft.h"
 
 typedef struct s_vars t_vars;
 typedef struct s_command t_command;
 typedef struct s_token t_token;
 typedef struct s_string t_string;
+
+enum TYPE
+{
+	word,
+	quote,
+	single_quote,
+	space,
+	pipe,
+	redirect
+};
 
 struct s_string {
 	char	*str;
@@ -15,13 +26,13 @@ struct s_string {
 };
 
 struct s_token {
-	t_string buffer;
-
+	t_string	buffer;
+	enum TYPE	token_type;
 };
 
 struct s_command {
 	t_token		token;
-	t_command *next;
+	t_command	*next;
 };
 
 struct s_vars {
