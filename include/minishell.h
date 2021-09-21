@@ -5,19 +5,23 @@
 # include <stdio.h>
 # include "../libft/libft.h"
 
-typedef struct s_vars t_vars;
-typedef struct s_command t_command;
-typedef struct s_token t_token;
-typedef struct s_string t_string;
+# define TRUE	1
+# define FALSE	0
 
-enum TYPE
+typedef struct s_vars		t_vars;
+typedef struct s_command	t_command;
+typedef struct s_token		t_token;
+typedef struct s_string		t_string;
+typedef enum e_type			t_type;
+
+enum e_type
 {
-	word,
-	quote,
-	single_quote,
-	space,
-	pipe_sign,
-	redirect
+	WORD,
+	QUOTE,
+	SINGLE_QUOTE,
+	SPACE,
+	PIPE_SIGN,
+	REDIRECT
 };
 
 struct s_string {
@@ -27,7 +31,7 @@ struct s_string {
 
 struct s_token {
 	t_string	*buffer;
-	enum TYPE	token_type;
+	t_type		token_type;
 };
 
 struct s_command {
@@ -36,10 +40,11 @@ struct s_command {
 };
 
 struct s_vars {
-	t_command	first;
-	int			cmd_number;
+	t_command	*first;
 };
 
-void parsing(t_vars *vars, char *str);
+//Parsing fonctions
+int		isspecial(char c);
+void	parsing(t_vars *vars, char *str);
 
 #endif

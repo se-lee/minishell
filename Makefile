@@ -3,7 +3,7 @@ NAME = minishell
 SRCS =	minishell.c	\
 		parsing.c	\
 
-GCCF = gcc# -Wall -Wextra -Werror
+GCCF = gcc -g # -Wall -Wextra -Werror
 
 OBJS = $(addprefix bin/, ${SRCS:.c=.o})
 
