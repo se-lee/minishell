@@ -46,5 +46,6 @@ struct s_vars {
 //Parsing fonctions
 int		isspecial(char c);
 void	parsing(t_vars *vars, char *str);
+void	ft_comandadd_back(t_command **alst, t_command *new);
 
 #endif

@@ -35,11 +35,12 @@ int	token(t_token *token, char *str, char c, enum e_type token_type)
 	int 	i;
 	char	*string;
 
-	printf("yo\n");
+	// printf("yo\n");
 	token->token_type = token_type;
 	string = malloc(sizeof(char) * 2);
 	string[0] = str[0];
 	string[1] = '\0';
+	// printf("%s\n", string);
 	token->buffer->str = string;
 	token->buffer->len = 1;
 	i = 1;
@@ -78,6 +79,7 @@ void	tokenization(t_vars *vars, char *str)
 	while (str[i])
 	{
 		command = malloc(sizeof(t_command));
+		ft_comandadd_back(&vars->first, command);
 		if (isspecial(str[i]) == FALSE)
 			i += token_word(&command->token, &str[i]);
 		else if (str[i] == ' ')
