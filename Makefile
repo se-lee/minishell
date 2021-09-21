@@ -1,7 +1,8 @@
 NAME = minishell
 
-SRCS =	minishell.c	\
-		parsing.c	\
+SRCS =	minishell.c		\
+		parsing.c		\
+		parsing_utils.c	\
 
 GCCF = gcc -g # -Wall -Wextra -Werror
 

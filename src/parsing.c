@@ -14,7 +14,7 @@ int	token_word(t_token *token, char *str)
 {
 	int		i;
 	char	*string;
-
+	
 	token->token_type = WORD;
 	string = malloc(sizeof(char) * 2);
 	string[0] = str[0];
@@ -32,34 +32,41 @@ int	token_word(t_token *token, char *str)
 
 int	token(t_token *token, char *str, char c, enum e_type token_type)
 {
-	int i;
+	int 	i;
+	char	*string;
 
-	i = 0;
+	printf("yo\n");
 	token->token_type = token_type;
-	while (str[i] == c)
-	{
-		add_char(token, str[i]);
-		i++;
-	}
-	return (i);
-}
-
-int	token_quote(t_token *token, char *str, char c, enum e_type token_type)
-{
-	int i;
-
-	token->token_type = token_type;
-	add_char(token, str[0]);
+	string = malloc(sizeof(char) * 2);
+	string[0] = str[0];
+	string[1] = '\0';
+	token->buffer->str = string;
+	token->buffer->len = 1;
 	i = 1;
-	while (str[i] != 'c')
+	while (str[i] && str[i] == c)
 	{
 		add_char(token, str[i]);
 		i++;
 	}
-	add_char(token, str[i]);
-	i++;
 	return (i);
 }
+
+// int	token_quote(t_token *token, char *str, char c, enum e_type token_type)
+// {
+// 	int i;
+
+// 	token->token_type = token_type;
+// 	add_char(token, str[0]);
+// 	i = 1;
+// 	while (str[i] != 'c')
+// 	{
+// 		add_char(token, str[i]);
+// 		i++;
+// 	}
+// 	add_char(token, str[i]);
+// 	i++;
+// 	return (i);
+// }
 
 void	tokenization(t_vars *vars, char *str)
 {
@@ -73,14 +80,14 @@ void	tokenization(t_vars *vars, char *str)
 		command = malloc(sizeof(t_command));
 		if (isspecial(str[i]) == FALSE)
 			i += token_word(&command->token, &str[i]);
-		else if (str[i] == '"')
-			i += token_quote(&command->token, &str[i], '"', QUOTE);
-		else if (str[i] == '\'')
-			i += token_quote(&command->token, &str[i], '\'', SINGLE_QUOTE);
 		else if (str[i] == ' ')
 			i += token(&command->token, &str[i], ' ', SPACE);
 		else if (str[i] == '|')
 			i += token(&command->token, &str[i], '|', PIPE_SIGN);
+		// else if (str[i] == '"')
+		// 	i += token_quote(&command->token, &str[i], '"', QUOTE);
+		// else if (str[i] == '\'')
+		// 	i += token_quote(&command->token, &str[i], '\'', SINGLE_QUOTE);
 		printf("%s\n", command->token.buffer->str);
 		command = command->next;
 	}
