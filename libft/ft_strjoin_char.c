@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 08:51:43 by acusanno          #+#    #+#             */
-/*   Updated: 2021/09/21 09:57:17 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/09/21 11:20:04 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*ft_strjoin_char(char const *s1, char c)
 	char	*s3;
 
 	i = -1;
-	if (s1 == 0 || s2 == 0)
+	if (s1 == 0)
 		return (0);
 	len1 = ft_strlen(s1);
 	s3 = malloc(sizeof(char) * (len1 + 2));

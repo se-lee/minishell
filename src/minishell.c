@@ -6,6 +6,6 @@ int main(int argc, char **argv)
 
 	(void)argc;
 	if (argc > 1)
-		parsing(&vars, argv[0]);
+		parsing(&vars, argv[1]);
 	return (0);
 }

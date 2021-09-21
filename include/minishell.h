@@ -3,7 +3,7 @@
 
 # include <unistd.h>
 # include <stdio.h>
-# include "libft.h"
+# include "../libft/libft.h"
 
 typedef struct s_vars t_vars;
 typedef struct s_command t_command;
@@ -16,7 +16,7 @@ enum TYPE
 	quote,
 	single_quote,
 	space,
-	pipe,
+	pipe_sign,
 	redirect
 };
 

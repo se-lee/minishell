@@ -20,11 +20,20 @@ void	add_char(t_token *token, char c)
 
 int	token_word(t_token *token, char *str)
 {
-	int i;
+	int		i;
+	char	*string;
 
-	i = 0;
 	token->token_type = word;
-	while (ft_isspecial(str[i]) == 0)
+	string = malloc(sizeof(char) * 2);
+	string[0] = str[0];
+	string[1] = '\0';
+	token->buffer->len = 1;
+	dprintf(1, "yo1\n");
+	token->buffer->str = ft_strdup(string);
+	free(string);
+	dprintf(1, "yo2\n");
+	i = 1;
+	while (isspecial(str[i]) == 0)
 	{
 		add_char(token, str[i]);
 		i++;
@@ -63,7 +72,7 @@ int	token_quote(t_token *token, char *str, char c, enum TYPE token_type)
 	return (i + 1);
 }
 
-char	**tokenization(t_vars *vars, char *str)
+void	tokenization(t_vars *vars, char *str)
 {
 	int			i;
 	t_command	command;
@@ -73,7 +82,7 @@ char	**tokenization(t_vars *vars, char *str)
 	while (str[i])
 	{
 		if (isspecial(str[i]) == 0)
-			i += token_word(&(command.token), &str[i]);
+			i += token_word(&command.token, &str[i]);
 		else if (str[i] == '"')
 			i += token_quote(&(command.token), &str[i], '"', quote);
 		else if (str[i] == '\'')
@@ -81,14 +90,16 @@ char	**tokenization(t_vars *vars, char *str)
 		else if (str[i] == ' ')
 			i += token(&(command.token), &str[i], ' ', space);
 		else if (str[i] == '|')
-			i += token(&(command.token), &str[i], '|', pipe);
+			i += token(&(command.token), &str[i], '|', pipe_sign);
+		printf("%s\n", command.token.buffer->str);
 		command = *(command.next);
 	}
 }
 
 void parsing(t_vars *vars, char *str)
 {
-	char	**tokens;
-	tokens = tokenization(vars, str);
+	// char	**tokens;
+
+	tokenization(vars, str);
 	return ;
 }
