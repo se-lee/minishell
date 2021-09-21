@@ -35,20 +35,17 @@ int	token_word(t_token *token, char *str)
 char	**tokenization(t_vars *vars, char *str)
 {
 	int			i;
-	int			j;
 	t_command	command;
 
 	command = vars->first;
 	i = 0;
-	j = 0;
 	while (str[i])
 	{
 		if (isspecial(str[i]) == 0)
 		{
-			i += token_word(command.token, &str[i]);
-			command = command.next;
+			i += token_word(&(command.token), &str[i]);
 		}
-		j++;
+		command = *(command.next);
 	}
 }
 

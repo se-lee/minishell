@@ -26,7 +26,7 @@ struct s_string {
 };
 
 struct s_token {
-	t_string	buffer;
+	t_string	*buffer;
 	enum TYPE	token_type;
 };
 
