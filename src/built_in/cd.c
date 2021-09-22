@@ -14,7 +14,8 @@ error: if path is not valid
 
 0) / + pathname (absolute path)
 1) ~/ + pathname
-2) ../ + pathname
+2) ../ + pathname   
+fainéante
 3) ./ or nothing + pathname
 
 get pathname with getcw function
@@ -40,3 +41,10 @@ printf("new path: %s\n", pathname);
 
 	return (0);
 }
+
+// ".." split with '/' and erase the last string (element) in array
+//
+
+
+
+

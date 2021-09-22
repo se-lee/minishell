@@ -2,33 +2,25 @@
 #include <errno.h>
 #include <sys/param.h>
 
-// typedef struct s_path
-// {
-// 	char	*name;
-// 	int		length;
-// } t_path;
+typedef struct s_path
+{
+	char	name[MAXPATHLEN];
+} t_path;
 
-// void	init_path(t_path *path)
-// {
-// printf("!");
-// 	path->length = 100;
-// 	ft_memset(path->name, '\0', path->length);
-// }
 
 void	builtin_pwd()//t_path *path)
 {
-//	init_path(path);
 	char path[MAXPATHLEN];
-	char *res;
-
-	res = getcwd(path, MAXPATHLEN);
-	printf("pwd: %s\n", res);
+	getcwd(path, MAXPATHLEN);
+	printf("%s\n", path);
 }
 
-int main()
+int main(int argc, char **argv)
 {
-//	t_path *path;
-	builtin_pwd();
-
+	(void)argc;
+	if (ft_strcmp(argv[1], "pwd") == 0)
+		builtin_pwd();
+	else if (ft_strcmp(argv[1], "echo") == 0)
+		builtin_echo(argv);
 	return (0);
 }
