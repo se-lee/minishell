@@ -2,16 +2,16 @@
 
 int	isspecial(char c)
 {
-	if ((c == '"') || (c == '\'') || (c == '$')
+	if ((c == '"') || (c == '\'') || (c == '$') || (c == ' ')
 	|| (c == '<') || (c == '>') || (c == '|'))
 		return (1);
 	else
 		return (0);
 }
 
-void	ft_comandadd_back(t_command **alst, t_command *new)
+void	ft_comandadd_back(t_token **alst, t_token *new)
 {
-	t_command	*ptr;
+	t_token	*ptr;
 
 	ptr = *alst;
 	if (!(*alst))
