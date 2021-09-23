@@ -36,10 +36,13 @@ struct s_token {
 
 struct s_vars {
 	t_token	*first;
+	char	**envp;
 };
 
 //Parsing fonctions
 int		isspecial(char c);
+int		ft_isupper(char c);
+char	*replace(char *full, char *placeholder, char *real);
 void	parsing(t_vars *vars, char *str);
 void	ft_comandadd_back(t_token **alst, t_token *new);
 

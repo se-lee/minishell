@@ -52,22 +52,107 @@ int	token(t_token *token, char *str, char c, enum e_type token_type)
 	return (i);
 }
 
-// int	token_quote(t_token *token, char *str, char c, enum e_type token_type)
-// {
-// 	int i;
+char	*find_variable(char *str)
+{
+	int		i;
+	char	*var;
 
-// 	token->token_type = token_type;
-// 	add_char(token, str[0]);
-// 	i = 1;
-// 	while (str[i] != 'c')
-// 	{
-// 		add_char(token, str[i]);
-// 		i++;
-// 	}
-// 	add_char(token, str[i]);
-// 	i++;
-// 	return (i);
-// }
+	i = 0;
+	while (ft_isupper(str[i]) == TRUE)
+		i++;
+	var = malloc(sizeof(char) * (i + 1));
+	i = 0;
+	while (ft_isupper(str[i]) == TRUE)
+	{
+		var[i] = str[i];
+		i++;
+	}
+	return (var);
+}
+
+char	*replace(char *full, char *placeholder, char *real)
+{
+	int		i;
+	int		j;
+	int		len;
+	char	*final;
+
+	len = ft_strlen(full) - ft_strlen(placeholder) + ft_strlen(real);
+	final = malloc(sizeof(char) * (len + 1));
+	i = 0;
+	while (ft_strncmp(full, placeholder, ft_strlen(placeholder)) != 0)
+	{
+		dprintf(1, "yo\n");
+		final[i] = full[i];
+		i++;
+	}
+	j = 0;
+	while (j < ft_strlen(real))
+	{
+		final[i + j] = real[j];
+		j++;
+	}
+	i += ft_strlen(placeholder);
+	j = i + j;
+	while (i < len)
+	{
+		final[j] = full[i];
+		i++;
+		j++;
+	}
+	final[i] = '\0';
+	return (final);
+}
+
+void	replace_env(char *str)
+{
+	int		i;
+	int		j;
+	char	*var;
+	char	*value;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '$' && ft_isupper(str[i + 1]) == TRUE)
+		{
+			var = find_variable(&str[i]);
+			value = getenv(&var[1]);
+			if (ft_strncmp(value, "(null)", 6))
+				str = replace(str, var, NULL);
+			else
+				str = replace(str, var, value);
+			i = -1;
+		}
+		i++;
+	}
+}
+
+int	token_quote(t_token *token, char *str, enum e_type token_type)
+{
+	int		i;
+	char	*string;
+	char	c;
+
+	token->token_type = token_type;
+	if (token_type == QUOTE)
+		c = '"';
+	else
+		c = '\'';
+	string = malloc(sizeof(char) * 2);
+	string[0] = str[0];
+	string[1] = '\0';
+	i = 1;
+	while (str[i] && str[i] != 'c')
+	{
+		add_char(token, str[i]);
+		i++;
+	}
+	add_char(token, str[i]);
+	i++;
+	replace_env(token->buffer.str);
+	return (i);
+}
 
 void	tokenization(t_vars *vars, char *str)
 {
@@ -94,10 +179,10 @@ void	tokenization(t_vars *vars, char *str)
 			i += token(current_token, &str[i], ' ', SPACE);
 		else if (str[i] == '|')
 			i += token(current_token, &str[i], '|', PIPE_SIGN);
-		// else if (str[i] == '"')
-		// 	i += token_quote(&command->token, &str[i], '"', QUOTE);
-		// else if (str[i] == '\'')
-		// 	i += token_quote(&command->token, &str[i], '\'', SINGLE_QUOTE);
+		else if (str[i] == '"')
+			i += token_quote(current_token, &str[i], QUOTE);
+		else if (str[i] == '\'')
+			i += token_quote(current_token, &str[i], SINGLE_QUOTE);
 		printf("%s\n", current_token->buffer.str);
 	}
 }

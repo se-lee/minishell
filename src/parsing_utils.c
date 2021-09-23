@@ -9,6 +9,13 @@ int	isspecial(char c)
 		return (0);
 }
 
+int	ft_isupper(char c)
+{
+	if (c >= 'A' && c <= 'Z')
+		return (1);
+	return(0);
+}
+
 void	ft_comandadd_back(t_token **alst, t_token *new)
 {
 	t_token	*ptr;
