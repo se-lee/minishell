@@ -3,20 +3,16 @@
 
 # include <unistd.h>
 # include <stdio.h>
+# include <stdlib.h>
+# include "../libft/libft.h"
 
 typedef struct s_list t_list;
 typedef struct s_vars t_vars;
 
-struct s_list {
-	char			**command;
-	struct s_list	*next;
-};
 
-struct s_vars {
-	t_list	list;
-	int		cmd_number;
-};
 
-void parsing(t_vars *vars, char **argv);
+/* built-in commands */
+void	builtin_env(char **envp);
+void	builtin_pwd(void);
 
 #endif

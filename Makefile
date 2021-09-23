@@ -5,7 +5,7 @@ SRCS =	minishell.c	\
 		built_in/cd.c \
 		built_in/echo.c \
 
-GCCF = gcc #-Wall -Wextra -Werror
+GCCF = gcc -g #-Wall -Wextra -Werror
 
 OBJS = $(addprefix bin/, ${SRCS:.c=.o})
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: seoyounglee <seoyounglee@student.42lyon    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 15:56:25 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/31 10:02:35 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/09/21 14:58:36 by seoyounglee      ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,4 +86,6 @@ char				*ft_strlcpy_gnl(char *dst, const char *src, size_t dstsize);
 char				*ftgsubstr(char const *s, int start, size_t len, int *ret2);
 char				*after_lb(char *str, int *ret);
 char				*before_lb(char *str, int *ret);
+int					ft_strcmp(char *s1, char *s2);
+
 #endif
