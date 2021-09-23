@@ -47,32 +47,35 @@ char	*find_variable(char *str)
 	return (var);
 }
 
-void	replace_env(t_token *token, char *str)
+void	update_token(t_token *token, char *var, char *value)
+{
+	char	*string;
+
+	string = replace(token->buffer.str, var, value);
+	free(var);
+	free(token->buffer.str);
+	token->buffer.str = string;
+	token->buffer.len = ft_strlen(token->buffer.str);
+}
+
+void	replace_env(t_token *token)
 {
 	int		i;
-	int		j;
 	char	*var;
 	char	*value;
+	char	*string;
 
 	i = 0;
-	while (str[i])
+	while (token->buffer.str[i])
 	{
-		if (str[i] == '$' && ft_isupper(str[i + 1]) == TRUE)
+		if (token->buffer.str[i] == '$' && ft_isupper(token->buffer.str[i + 1]) == TRUE)
 		{
-			var = find_variable(&str[i]);
+			var = find_variable(&token->buffer.str[i]);
 			value = getenv(&var[1]);
 			if (ft_strncmp(value, "(null)", 6))
-			{
-				str = replace(str, var, NULL);
-				token->buffer.str = str;
-				token->buffer.len = ft_strlen(str);
-			}
+				update_token(token, var, NULL);
 			else
-			{
-				str = replace(str, var, value);
-				token->buffer.str = str;
-				token->buffer.len = ft_strlen(str);
-			}
+				update_token(token, var, value);
 			i = -1;
 		}
 		i++;
@@ -87,7 +90,7 @@ void parsing(t_vars *vars, char *str)
 	current_token = vars->first;
 	while (current_token->next != NULL)
 	{
-		replace_env(current_token, current_token->buffer.str);
+		replace_env(current_token);
 		printf("%s\n", current_token->buffer.str);
 		current_token = current_token->next;
 	}
