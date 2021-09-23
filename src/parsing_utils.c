@@ -16,6 +16,22 @@ int	ft_isupper(char c)
 	return(0);
 }
 
+void	*protected_malloc(size_t count, size_t size)
+{
+	void	*p;
+	size_t	i;
+
+	i = 0;
+	p = malloc(size * count);
+	if (!p)
+	{
+		perror("Malloc failed\n");
+		exit(-1);
+	}
+	;
+	return (p);
+}
+
 void	ft_comandadd_back(t_token **alst, t_token *new)
 {
 	t_token	*ptr;

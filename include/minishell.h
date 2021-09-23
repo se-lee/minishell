@@ -42,7 +42,9 @@ struct s_vars {
 //Parsing fonctions
 int		isspecial(char c);
 int		ft_isupper(char c);
+void	*protected_malloc(size_t count, size_t size);
 char	*replace(char *full, char *placeholder, char *real);
+void	tokenization(t_vars *vars, char *str);
 void	parsing(t_vars *vars, char *str);
 void	ft_comandadd_back(t_token **alst, t_token *new);
 

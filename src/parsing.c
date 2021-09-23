@@ -10,46 +10,33 @@ void	add_char(t_token *token, char c)
 	token->buffer.str = str;
 }
 
-int	token_word(t_token *token, char *str)
+char	*replace(char *full, char *placeholder, char *real)
 {
 	int		i;
-	char	*string;
-	
-	token->token_type = WORD;
-	string = malloc(sizeof(char) * 2);
-	string[0] = str[0];
-	string[1] = '\0';
-	token->buffer.str = string;
-	token->buffer.len = 1;
-	i = 1;
-	while (str[i] && isspecial(str[i]) == FALSE)
+	int		j;
+	int		len;
+	char	*final;
+
+	len = ft_strlen(full) + ft_strlen(real) - ft_strlen(placeholder);
+	final = protected_malloc((len + 1), sizeof(char));
+	i = 0;
+	while (ft_strncmp(&full[i], placeholder, ft_strlen(placeholder)) != 0)
 	{
-		add_char(token, str[i]);
+		final[i] = full[i];
 		i++;
 	}
-	return (i);
-}
-
-int	token(t_token *token, char *str, char c, enum e_type token_type)
-{
-	int 	i;
-	char	*string;
-
-	// printf("yo\n");
-	token->token_type = token_type;
-	string = malloc(sizeof(char) * 2);
-	string[0] = str[0];
-	string[1] = '\0';
-	// printf("%s\n", string);
-	token->buffer.str = string;
-	token->buffer.len = 1;
-	i = 1;
-	while (str[i] && str[i] == c)
+	j = 0;
+	while (j < ft_strlen(real))
 	{
-		add_char(token, str[i]);
-		i++;
+		final[i + j] = real[j];
+		j++;
 	}
-	return (i);
+	j = i + j;
+	i += ft_strlen(placeholder);
+	while (j < len)
+		final[j++] = full[i++];
+	final[j] = '\0';
+	return (final);
 }
 
 char	*find_variable(char *str)
@@ -60,7 +47,7 @@ char	*find_variable(char *str)
 	i = 0;
 	while (ft_isupper(str[i]) == TRUE)
 		i++;
-	var = malloc(sizeof(char) * (i + 1));
+	var = protected_malloc((i + 1), sizeof(char));
 	i = 0;
 	while (ft_isupper(str[i]) == TRUE)
 	{
@@ -68,40 +55,6 @@ char	*find_variable(char *str)
 		i++;
 	}
 	return (var);
-}
-
-char	*replace(char *full, char *placeholder, char *real)
-{
-	int		i;
-	int		j;
-	int		len;
-	char	*final;
-
-	len = ft_strlen(full) - ft_strlen(placeholder) + ft_strlen(real);
-	final = malloc(sizeof(char) * (len + 1));
-	i = 0;
-	while (ft_strncmp(full, placeholder, ft_strlen(placeholder)) != 0)
-	{
-		dprintf(1, "yo\n");
-		final[i] = full[i];
-		i++;
-	}
-	j = 0;
-	while (j < ft_strlen(real))
-	{
-		final[i + j] = real[j];
-		j++;
-	}
-	i += ft_strlen(placeholder);
-	j = i + j;
-	while (i < len)
-	{
-		final[j] = full[i];
-		i++;
-		j++;
-	}
-	final[i] = '\0';
-	return (final);
 }
 
 void	replace_env(char *str)
@@ -125,65 +78,6 @@ void	replace_env(char *str)
 			i = -1;
 		}
 		i++;
-	}
-}
-
-int	token_quote(t_token *token, char *str, enum e_type token_type)
-{
-	int		i;
-	char	*string;
-	char	c;
-
-	token->token_type = token_type;
-	if (token_type == QUOTE)
-		c = '"';
-	else
-		c = '\'';
-	string = malloc(sizeof(char) * 2);
-	string[0] = str[0];
-	string[1] = '\0';
-	i = 1;
-	while (str[i] && str[i] != 'c')
-	{
-		add_char(token, str[i]);
-		i++;
-	}
-	add_char(token, str[i]);
-	i++;
-	replace_env(token->buffer.str);
-	return (i);
-}
-
-void	tokenization(t_vars *vars, char *str)
-{
-	int			i;
-	t_token		*current_token;
-
-	i = 0;
-	while (str[i])
-	{
-		if (i == 0)
-		{
-			vars->first = malloc(sizeof(t_token));
-			current_token = vars->first;
-		}
-		else
-		{
-			current_token->next = NULL;
-			current_token = current_token->next;
-			current_token = malloc(sizeof(t_token));
-		}
-		if (isspecial(str[i]) == FALSE)
-			i += token_word(current_token, &str[i]);
-		else if (str[i] == ' ')
-			i += token(current_token, &str[i], ' ', SPACE);
-		else if (str[i] == '|')
-			i += token(current_token, &str[i], '|', PIPE_SIGN);
-		else if (str[i] == '"')
-			i += token_quote(current_token, &str[i], QUOTE);
-		else if (str[i] == '\'')
-			i += token_quote(current_token, &str[i], SINGLE_QUOTE);
-		printf("%s\n", current_token->buffer.str);
 	}
 }
 
