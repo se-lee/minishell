@@ -44,6 +44,7 @@ char	*find_variable(char *str)
 		var[i] = str[i];
 		i++;
 	}
+	printf("%sYO\n", var);
 	return (var);
 }
 
@@ -88,7 +89,7 @@ void parsing(t_vars *vars, char *str)
 
 	tokenization(vars, str);
 	current_token = vars->first;
-	while (current_token->next != NULL)
+	while (current_token)
 	{
 		replace_env(current_token);
 		printf("%s\n", current_token->buffer.str);

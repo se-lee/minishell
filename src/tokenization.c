@@ -87,12 +87,13 @@ void	tokenization(t_vars *vars, char *str)
 		{
 			vars->first = protected_malloc(1, sizeof(t_token));
 			current_token = vars->first;
+			current_token->next = NULL;
 		}
 		else
 		{
-			current_token->next = NULL;
+			current_token->next = protected_malloc(1, sizeof(t_token));
 			current_token = current_token->next;
-			current_token = protected_malloc(1, sizeof(t_token));
+			current_token->next = NULL;
 		}
 		if (isspecial(str[i]) == FALSE)
 			i += token_word(current_token, &str[i]);
