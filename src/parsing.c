@@ -1,15 +1,5 @@
 #include "minishell.h"
 
-void	add_char(t_token *token, char c)
-{
-	char *str;
-
-	token->buffer.len++;
-	str = ft_strjoin_char(token->buffer.str, c);
-	free(token->buffer.str);
-	token->buffer.str = str;
-}
-
 char	*replace(char *full, char *placeholder, char *real)
 {
 	int		i;
@@ -57,7 +47,7 @@ char	*find_variable(char *str)
 	return (var);
 }
 
-void	replace_env(char *str)
+void	replace_env(t_token *token, char *str)
 {
 	int		i;
 	int		j;
@@ -72,9 +62,17 @@ void	replace_env(char *str)
 			var = find_variable(&str[i]);
 			value = getenv(&var[1]);
 			if (ft_strncmp(value, "(null)", 6))
+			{
 				str = replace(str, var, NULL);
+				token->buffer.str = str;
+				token->buffer.len = ft_strlen(str);
+			}
 			else
+			{
 				str = replace(str, var, value);
+				token->buffer.str = str;
+				token->buffer.len = ft_strlen(str);
+			}
 			i = -1;
 		}
 		i++;
@@ -83,8 +81,15 @@ void	replace_env(char *str)
 
 void parsing(t_vars *vars, char *str)
 {
-	// char	**tokens;
+	t_token	*current_token;
 
 	tokenization(vars, str);
+	current_token = vars->first;
+	while (current_token->next != NULL)
+	{
+		replace_env(current_token, current_token->buffer.str);
+		printf("%s\n", current_token->buffer.str);
+		current_token = current_token->next;
+	}
 	return ;
 }

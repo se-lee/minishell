@@ -3,6 +3,7 @@ NAME = minishell
 SRCS =	minishell.c		\
 		parsing.c		\
 		parsing_utils.c	\
+		tokenization.c	\
 
 GCCF = gcc -g -fsanitize=address # -Wall -Wextra -Werror
 

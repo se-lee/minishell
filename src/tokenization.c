@@ -1,5 +1,15 @@
 #include "minishell.h"
 
+void	add_char(t_token *token, char c)
+{
+	char *str;
+
+	token->buffer.len++;
+	str = ft_strjoin_char(token->buffer.str, c);
+	free(token->buffer.str);
+	token->buffer.str = str;
+}
+
 int	token_word(t_token *token, char *str)
 {
 	int		i;
@@ -62,7 +72,6 @@ int	token_quote(t_token *token, char *str, enum e_type token_type)
 	}
 	add_char(token, str[i]);
 	i++;
-	replace_env(token->buffer.str);
 	return (i);
 }
 
@@ -91,10 +100,13 @@ void	tokenization(t_vars *vars, char *str)
 			i += token(current_token, &str[i], ' ', SPACE);
 		else if (str[i] == '|')
 			i += token(current_token, &str[i], '|', PIPE_SIGN);
+		else if (str[i] == '>')
+			i += token(current_token, &str[i], '>', REDIRECT);
+		else if (str[i] == '<')
+			i += token(current_token, &str[i], '<', REDIRECT);
 		else if (str[i] == '"')
 			i += token_quote(current_token, &str[i], QUOTE);
 		else if (str[i] == '\'')
 			i += token_quote(current_token, &str[i], SINGLE_QUOTE);
-		printf("%s\n", current_token->buffer.str);
 	}
 }
