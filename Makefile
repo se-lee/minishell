@@ -5,7 +5,7 @@ SRCS =	minishell.c		\
 		parsing_utils.c	\
 		tokenization.c	\
 
-GCCF = gcc -g -fsanitize=address # -Wall -Wextra -Werror
+GCCF = gcc -g -Wall -Wextra  -fsanitize=address # -Werror 
 
 OBJS = $(addprefix bin/, ${SRCS:.c=.o})
 
