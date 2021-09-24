@@ -6,7 +6,7 @@
 #    By: seoyounglee <seoyounglee@student.42lyon    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/24 16:54:06 by acusanno          #+#    #+#              #
-#    Updated: 2021/09/21 14:56:20 by seoyounglee      ###   ########lyon.fr    #
+#    Updated: 2021/09/23 10:50:47 by seoyounglee      ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,7 +37,7 @@ RM			= rm -f
 
 HEADER		= ./libft.h
 
-CFLAGS		= -Wall -Wextra -Werror
+CFLAGS		= #-Wall -Wextra -Werror
 
 all:		${NAME}
 
