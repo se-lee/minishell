@@ -7,7 +7,7 @@ Export environment variables, create new ones and replace old ones
 Check them with env
 
 if only "export" without any arguments,
-print the list of ____ what is that list? env variable?
+print the list of all exported variables. 
 
 in case of 'export a' (one argument without =VALUE), 
 'a' will not be saved into env variable
@@ -37,7 +37,10 @@ int		count_env(char **envp)
 	return(envp_count);
 }
 
-char  **builtin_export(char **envp, char *new_var) // struct t_var for getting command & argument
+// check input
+// find '=' and check if there is a value after '='
+
+char  **builtin_export(char **envp, char *new_var) // Modify later: struct t_var for getting command & argument
 {
 	char **new_env;
 	int	env_count;
@@ -56,18 +59,18 @@ char  **builtin_export(char **envp, char *new_var) // struct t_var for getting c
 	return (new_env);
 }
 
-int main(int argc, char **argv, char **envp)
-{
-	int	i = 0;
-	char **new;
-
-	builtin_env(envp);
-	printf("\n\n-------<<    export     >>---------\n\n");
-	new = builtin_export(envp, argv[1]);
-	while (new[i])
-	{
-		printf("%s\n", new[i]);
-		i++;
-	}
-	return (0);
-}
+// int main(int argc, char **argv, char **envp)
+// {
+// 	int	i = 0;
+// 	char **new;
+//
+// 	builtin_env(envp);
+// 	printf("\n\n-------<<    export     >>---------\n\n");
+// 	new = builtin_export(envp, argv[1]);
+// 	while (new[i])
+// 	{
+// 		printf("%s\n", new[i]);
+// 		i++;
+// 	}
+// 	return (0);
+// }
