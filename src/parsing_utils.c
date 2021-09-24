@@ -3,7 +3,7 @@
 int	ft_isspecial(char c)
 {
 	if ((c == '"') || (c == '\'') || (c == ' ')
-	|| (c == '<') || (c == '>') || (c == '|'))
+		|| (c == '<') || (c == '>') || (c == '|'))
 		return (1);
 	else
 		return (0);
@@ -13,7 +13,7 @@ int	ft_isupper(char c)
 {
 	if (c >= 'A' && c <= 'Z')
 		return (1);
-	return(0);
+	return (0);
 }
 
 void	*protected_malloc(size_t count, size_t size)
@@ -28,7 +28,6 @@ void	*protected_malloc(size_t count, size_t size)
 		perror("Malloc failed\n");
 		exit(-1);
 	}
-	;
 	return (p);
 }
 

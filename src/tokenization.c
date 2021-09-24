@@ -2,7 +2,7 @@
 
 void	add_char(t_token *token, char c)
 {
-	char *str;
+	char	*str;
 
 	token->buffer.len++;
 	str = ft_strjoin_char(token->buffer.str, c);
@@ -14,7 +14,7 @@ int	token_word(t_token *token, char *str)
 {
 	int		i;
 	char	*string;
-	
+
 	token->token_type = WORD;
 	string = protected_malloc((2), sizeof(char));
 	string[0] = str[0];
@@ -32,7 +32,7 @@ int	token_word(t_token *token, char *str)
 
 int	token(t_token *token, char *str, char c, enum e_type token_type)
 {
-	int 	i;
+	int		i;
 	char	*string;
 
 	token->token_type = token_type;
@@ -75,6 +75,28 @@ int	token_quote(t_token *token, char *str, enum e_type token_type)
 	return (i);
 }
 
+int	token_identification(t_token *current_token, char *str)
+{
+	int	i;
+
+	i = 0;
+	if (ft_isspecial(str[0]) == FALSE)
+		i += token_word(current_token, str);
+	else if (str[0] == ' ')
+		i += token(current_token, str, ' ', SPACE_SIGN);
+	else if (str[0] == '|')
+		i += token(current_token, str, '|', PIPE_SIGN);
+	else if (str[0] == '>')
+		i += token(current_token, str, '>', REDIRECT);
+	else if (str[0] == '<')
+		i += token(current_token, str, '<', REDIRECT);
+	else if (str[0] == '"')
+		i += token_quote(current_token, str, QUOTE);
+	else if (str[0] == '\'')
+		i += token_quote(current_token, str, SINGLE_QUOTE);
+	return (i);
+}
+
 void	tokenization(t_vars *vars, char *str)
 {
 	int			i;
@@ -95,19 +117,6 @@ void	tokenization(t_vars *vars, char *str)
 			current_token = current_token->next;
 			current_token->next = NULL;
 		}
-		if (ft_isspecial(str[i]) == FALSE)
-			i += token_word(current_token, &str[i]);
-		else if (str[i] == ' ')
-			i += token(current_token, &str[i], ' ', SPACE_SIGN);
-		else if (str[i] == '|')
-			i += token(current_token, &str[i], '|', PIPE_SIGN);
-		else if (str[i] == '>')
-			i += token(current_token, &str[i], '>', REDIRECT);
-		else if (str[i] == '<')
-			i += token(current_token, &str[i], '<', REDIRECT);
-		else if (str[i] == '"')
-			i += token_quote(current_token, &str[i], QUOTE);
-		else if (str[i] == '\'')
-			i += token_quote(current_token, &str[i], SINGLE_QUOTE);
+		i += token_identification(current_token, &str[i]);
 	}
 }

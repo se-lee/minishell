@@ -11,17 +11,14 @@ void	free_token(t_token *token)
 void	free_struct(t_vars *vars)
 {
 	t_token	*current_token;
+	t_token	*next;
 
-	while (vars->first->next)
+	while (vars->first)
 	{
-		current_token = vars->first;
-		while (current_token)
-		{
-			current_token = current_token->next;
-		}
+		next = current_token->next;
 		free_token(current_token);
+		current_token = next;
 	}
-	vars->first = NULL;
 }
 
 int	main(int argc, char **argv, char **envp)

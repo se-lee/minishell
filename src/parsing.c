@@ -72,7 +72,6 @@ void	replace_env(t_token *token)
 		{
 			var = find_variable(&token->buffer.str[i]);
 			value = getenv(&var[1]);
-
 			update_token(token, var, value);
 			i = -1;
 		}
@@ -80,7 +79,14 @@ void	replace_env(t_token *token)
 	}
 }
 
-void parsing(t_vars *vars, char *str)
+int	check_error(t_token *token)
+{
+	if (token->buffer.len > 1 && token->token_type == PIPE_SIGN)
+		return (-1);
+	return (0);
+}
+
+void	parsing(t_vars *vars, char *str)
 {
 	t_token	*current_token;
 
@@ -88,10 +94,19 @@ void parsing(t_vars *vars, char *str)
 	current_token = vars->first;
 	while (current_token)
 	{
-		if (current_token->token_type != SINGLE_QUOTE)
-			replace_env(current_token);
-		printf("%s\n", current_token->buffer.str);
-		current_token = current_token->next;
+		if (check_error(current_token) == 0)
+		{
+			if (current_token->token_type == WORD
+				|| current_token->token_type == QUOTE)
+				replace_env(current_token);
+			printf(">>%s<<\n", current_token->buffer.str);
+			current_token = current_token->next;
+		}
+		else
+		{
+			printf("syntax error near unexpected token\n");
+			break ;
+		}
 	}
 	return ;
 }
