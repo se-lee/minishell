@@ -8,13 +8,16 @@ int	main(int argc, char **argv, char **envp)
 	vars.envp = envp;
 	(void)argc;
 	(void)argv;
-	str = readline("minishell$");
+	str = readline("minishell$ ");
 	while (str != NULL)
 	{
 		if (str)
+		{
+			add_history(str);
 			parsing(&vars, str);
-		free(str);
-		str = readline("minishell$");
+			free(str);
+		}
+		str = readline("minishell$ ");
 	}
 	return (0);
 }
