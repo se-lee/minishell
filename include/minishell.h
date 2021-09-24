@@ -63,6 +63,4 @@ void	builtin_cd(t_vars *vars);
 void	builtin_echo(t_vars *vars, t_token *current_token);
 void	builtin_exit(void);
 
-
-
 #endif
