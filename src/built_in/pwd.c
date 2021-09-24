@@ -8,7 +8,7 @@ typedef struct s_path
 } t_path;
 
 
-void	builtin_pwd()//t_path *path)
+void	builtin_pwd(void)
 {
 	char path[MAXPATHLEN];
 	getcwd(path, MAXPATHLEN);

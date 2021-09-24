@@ -50,4 +50,19 @@ void	tokenization(t_vars *vars, char *str);
 void	parsing(t_vars *vars, char *str);
 void	ft_comandadd_back(t_token **alst, t_token *new);
 
+
+/* built-in commands */
+void	builtin_cd(t_vars *vars);
+int		count_env(char **envp);
+char  **builtin_export(char **envp, char *new_var);
+char  **builtin_unset(char **envp, char *var_to_unset);
+void	builtin_pwd(void);
+void	builtin_env(char **envp);
+void	builtin_exec(t_vars *vars);
+void	builtin_cd(t_vars *vars);
+void	builtin_echo(t_vars *vars, t_token *current_token);
+void	builtin_exit(void);
+
+
+
 #endif

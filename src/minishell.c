@@ -39,6 +39,8 @@ int	main(int argc, char **argv, char **envp)
 		{
 			add_history(str);
 			parsing(&vars, str);
+			builtin_exec(&vars);
+
 			// free_struct(&vars);
 			free(str);
 		}

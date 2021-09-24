@@ -90,7 +90,8 @@ void parsing(t_vars *vars, char *str)
 	{
 		if (current_token->token_type != SINGLE_QUOTE)
 			replace_env(current_token);
-		printf("%s\n", current_token->buffer.str);
+		// printf("current token: %s\n", current_token->buffer.str);
+		// printf("first token: %s\n", vars->first->buffer.str);
 		current_token = current_token->next;
 	}
 	return ;

@@ -40,7 +40,8 @@ int		count_env(char **envp)
 // check input
 // find '=' and check if there is a value after '='
 
-char  **builtin_export(char **envp, char *new_var) // Modify later: struct t_var for getting command & argument
+// Modify later: struct t_var for getting command & argument
+char  **builtin_export(char **envp, char *new_var) 
 {
 	char **new_env;
 	int	env_count;
@@ -63,7 +64,7 @@ char  **builtin_export(char **envp, char *new_var) // Modify later: struct t_var
 // {
 // 	int	i = 0;
 // 	char **new;
-//
+
 // 	builtin_env(envp);
 // 	printf("\n\n-------<<    export     >>---------\n\n");
 // 	new = builtin_export(envp, argv[1]);
