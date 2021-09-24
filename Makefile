@@ -1,11 +1,21 @@
 NAME = minishell
 
-SRCS =	minishell.c	\
-		parsing.c \
-		built_in/cd.c \
-		built_in/echo.c \
+SRCS =	minishell.c		\
+		parsing.c		\
+		parsing_utils.c	\
+		tokenization.c	\
+		built_in/cd.c	\
+		built_in/echo.c	\
+		built_in/env.c	\
 
-GCCF = gcc -g #-Wall -Wextra -Werror
+GCCF = gcc -g -fsanitize=address \
+-lreadline -L/usr/local/lib -L/usr/local/include
+
+#-L /Users/$(USER)/.brew/opt/readline/lib \
+#-I/Users/$(USER)/.brew/opt/readline/include #-Wall -Wextra -Werror 
+
+
+
 
 OBJS = $(addprefix bin/, ${SRCS:.c=.o})
 

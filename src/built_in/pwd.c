@@ -15,12 +15,12 @@ void	builtin_pwd()//t_path *path)
 	printf("%s\n", path);
 }
 
-int main(int argc, char **argv)
-{
-	(void)argc;
-	if (ft_strcmp(argv[1], "pwd") == 0)
-		builtin_pwd();
-	else if (ft_strcmp(argv[1], "echo") == 0)
-		builtin_echo(argv);
-	return (0);
-}
+// int main(int argc, char **argv)
+// {
+// 	(void)argc;
+// 	if (ft_strcmp(argv[1], "pwd") == 0)
+// 		builtin_pwd();
+// 	else if (ft_strcmp(argv[1], "echo") == 0)
+// 		builtin_echo(argv);
+// 	return (0);
+// }

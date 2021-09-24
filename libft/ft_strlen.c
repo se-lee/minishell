@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 10:41:21 by acusanno          #+#    #+#             */
-/*   Updated: 2021/03/30 10:16:13 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/09/23 15:36:05 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ size_t	ft_strlen(const char *str)
 
 	i = 0;
 	if (!str)
-		return (-1);
+		return (0);
 	while (str[i])
 		i++;
 	return (i);
