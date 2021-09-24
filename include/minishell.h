@@ -3,6 +3,8 @@
 
 # include <unistd.h>
 # include <stdio.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 # include "../libft/libft.h"
 
 # define TRUE	1
@@ -18,7 +20,7 @@ enum e_type
 	WORD,
 	QUOTE,
 	SINGLE_QUOTE,
-	SPACE,
+	SPACE_SIGN,
 	PIPE_SIGN,
 	REDIRECT
 };
@@ -40,7 +42,7 @@ struct s_vars {
 };
 
 //Parsing fonctions
-int		isspecial(char c);
+int		ft_isspecial(char c);
 int		ft_isupper(char c);
 void	*protected_malloc(size_t count, size_t size);
 char	*replace(char *full, char *placeholder, char *real);

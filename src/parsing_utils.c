@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	isspecial(char c)
+int	ft_isspecial(char c)
 {
 	if ((c == '"') || (c == '\'') || (c == ' ')
 	|| (c == '<') || (c == '>') || (c == '|'))

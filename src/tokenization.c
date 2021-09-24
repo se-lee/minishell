@@ -22,7 +22,7 @@ int	token_word(t_token *token, char *str)
 	token->buffer.str = string;
 	token->buffer.len = 1;
 	i = 1;
-	while (str[i] && isspecial(str[i]) == FALSE)
+	while (str[i] && ft_isspecial(str[i]) == FALSE)
 	{
 		add_char(token, str[i]);
 		i++;
@@ -95,10 +95,10 @@ void	tokenization(t_vars *vars, char *str)
 			current_token = current_token->next;
 			current_token->next = NULL;
 		}
-		if (isspecial(str[i]) == FALSE)
+		if (ft_isspecial(str[i]) == FALSE)
 			i += token_word(current_token, &str[i]);
 		else if (str[i] == ' ')
-			i += token(current_token, &str[i], ' ', SPACE);
+			i += token(current_token, &str[i], ' ', SPACE_SIGN);
 		else if (str[i] == '|')
 			i += token(current_token, &str[i], '|', PIPE_SIGN);
 		else if (str[i] == '>')
