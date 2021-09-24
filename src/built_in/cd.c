@@ -25,22 +25,22 @@ char *getcwd(char *buf, size_t size);
 
 void	builtin_cd(t_vars *vars);
 
-int main()
-{
-	char	*pathname;
-	int		path_len = 100;
+// int main()
+// {
+// 	char	*pathname;
+// 	int		path_len = 100;
 
-	ft_memset(pathname, '\0', path_len);
-printf("before: %s\n", pathname);
-	getcwd(pathname, path_len);
-printf("current path: %s\n", pathname);
+// 	ft_memset(pathname, '\0', path_len);
+// printf("before: %s\n", pathname);
+// 	getcwd(pathname, path_len);
+// printf("current path: %s\n", pathname);
 
-	chdir("/Users/seoyounglee/Documents/[42]/minishell/src/");
-	getcwd(pathname, path_len);
-printf("new path: %s\n", pathname);
+// 	chdir("/Users/seoyounglee/Documents/[42]/minishell/src/");
+// 	getcwd(pathname, path_len);
+// printf("new path: %s\n", pathname);
 
-	return (0);
-}
+// 	return (0);
+// }
 
 // ".." split with '/' and erase the last string (element) in array
 //

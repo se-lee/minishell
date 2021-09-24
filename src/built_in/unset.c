@@ -40,20 +40,20 @@ char  **builtin_unset(char **envp, char *var_to_unset) // Modify later: struct t
 	return (new_env);
 }
 
-int main(int argc, char **argv, char **envp)
-{
-	int	i = 0;
-	char **new;
+// int main(int argc, char **argv, char **envp)
+// {
+// 	int	i = 0;
+// 	char **new;
 
-	builtin_env(envp);
-	printf("\n\n-------<<    export     >>---------\n\n");
-	new = builtin_unset(envp, argv[1]);
-	while (new[i])
-	{
-		printf("%s\n", new[i]);
-		i++;
-	}
-	return (0);
-}
+// 	builtin_env(envp);
+// 	printf("\n\n-------<<    export     >>---------\n\n");
+// 	new = builtin_unset(envp, argv[1]);
+// 	while (new[i])
+// 	{
+// 		printf("%s\n", new[i]);
+// 		i++;
+// 	}
+// 	return (0);
+// }
 
 // t_vars vars->first->buffer->str  will give me the command

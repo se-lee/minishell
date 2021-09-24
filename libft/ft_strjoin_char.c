@@ -1,25 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_strjoin_char.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/23 10:41:21 by acusanno          #+#    #+#             */
-/*   Updated: 2021/09/23 15:36:05 by acusanno         ###   ########lyon.fr   */
+/*   Created: 2020/11/25 08:51:43 by acusanno          #+#    #+#             */
+/*   Updated: 2021/09/21 13:34:14 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <string.h>
+#include <stdlib.h>
+#include "libft.h"
 
-size_t	ft_strlen(const char *str)
+char	*ft_strjoin_char(char const *s1, char c)
 {
-	size_t	i;
+	int		len1;
+	int		i;
+	char	*s3;
 
 	i = 0;
-	if (!str)
+	if (s1 == 0)
 		return (0);
-	while (str[i])
+	len1 = ft_strlen(s1);
+	s3 = malloc(sizeof(char) * (len1 + 2));
+	if (!s3)
+		return (0);
+	while (i < len1)
+	{
+		s3[i] = (char)s1[i];
 		i++;
-	return (i);
+	}
+	s3[i] = c;
+	s3[i + 1] = '\0';
+	return (s3);
 }
