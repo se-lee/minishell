@@ -9,13 +9,8 @@ SRCS =	minishell.c		\
 		built_in/env.c	\
 
 GCCF = gcc -g -fsanitize=address \
--lreadline -L/usr/local/lib -L/usr/local/include
-
-#-L /Users/$(USER)/.brew/opt/readline/lib \
-#-I/Users/$(USER)/.brew/opt/readline/include #-Wall -Wextra -Werror 
-
-
-
+-lreadline -L /Users/$(USER)/.brew/opt/readline/lib \
+-I/Users/$(USER)/.brew/opt/readline/include #-Wall -Wextra -Werror 
 
 OBJS = $(addprefix bin/, ${SRCS:.c=.o})
 
