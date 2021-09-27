@@ -23,12 +23,16 @@ void	free_struct(t_vars *vars)
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_vars	vars;
-	char	*str;
+	t_vars			vars;
+	char			*str;
+	struct termios	t;
 
 	vars.envp = envp;
 	(void)argc;
 	(void)argv;
+	tcgetattr(0, &t);
+	t.c_cc[VINTR] = 0;  // set the INT character to 0 (disable)
+    tcsetattr(STDIN_FILENO, TCSANOW, &t);
 	str = readline("minishell$ ");
 	while (str != NULL)
 	{
