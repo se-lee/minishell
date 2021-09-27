@@ -64,14 +64,21 @@ int	token_quote(t_token *token, char *str, enum e_type token_type)
 	string = protected_malloc((2), sizeof(char));
 	string[0] = str[0];
 	string[1] = '\0';
+	token->buffer.str = string;
+	token->buffer.len = 1;
+	token->quote_nb = 1;
 	i = 1;
-	while (str[i] && str[i] != 'c')
+	while (str[i] && str[i] != c)
 	{
 		add_char(token, str[i]);
 		i++;
 	}
-	add_char(token, str[i]);
-	i++;
+	if (str[i])
+	{
+		token->quote_nb++;
+		add_char(token, str[i]);
+		i++;
+	}
 	return (i);
 }
 

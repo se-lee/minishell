@@ -35,11 +35,11 @@ char	*find_variable(char *str)
 	char	*var;
 
 	i = 0;
-	while (str[i] && str[i] != ' ')
+	while (str[i] && str[i] != ' ' && str[i] != '"')
 		i++;
 	var = protected_malloc((i + 1), sizeof(char));
 	i = 0;
-	while (str[i] && str[i] != ' ')
+	while (str[i] && str[i] != ' ' && str[i] != '"')
 	{
 		var[i] = str[i];
 		i++;
@@ -82,6 +82,9 @@ void	replace_env(t_token *token)
 int	check_error(t_token *token)
 {
 	if (token->buffer.len > 1 && token->token_type == PIPE_SIGN)
+		return (-1);
+	if ((token->token_type == QUOTE || token->token_type == SINGLE_QUOTE)
+		&& token->quote_nb != 2)
 		return (-1);
 	return (0);
 }
