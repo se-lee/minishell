@@ -1,42 +1,86 @@
 #include "../../include/minishell.h"
 
-char  **builtin_unset(char **envp, char *var_to_unset) 
+static void	print_all_env(char **envp)
 {
-	char **new_env;
-	int	env_count;
 	int	i;
 
-	env_count = count_env(envp);
-	new_env = malloc(sizeof(char *) * env_count);
+	i = 1;
 
-// check if var_to_unset is in correct form
-// check if var_to_unset already exists
-
-	if (getenv(var_to_unset) != NULL)
-
-
-	i = 0;
-	while (envp[i])
+	while (envp[i] != NULL)
 	{
-		new_env[i] = envp[i];
+		printf("[%d]%s\n", i, envp[i]);
 		i++;
 	}
-	new_env[i + 1] = NULL;
-	return (new_env);
 }
+
+static void	delete_env_var(char **envp, int i)
+{
+	while (envp[i])
+	{
+		envp[i] = envp[i + 1];
+		i++;
+	}
+}
+
+void	builtin_unset(t_vars *vars, t_token *current_token)
+{
+	char *var_str;
+	char *temp;
+	char *var_to_unset;
+	int	i;
+	
+	while (current_token)
+	{
+		if (current_token->token_type == WORD)
+		{
+			var_to_unset = current_token->buffer.str;
+			break ;
+		}
+		current_token = current_token->next;
+	}
+// printf("var_to_unset: %s\n", var_to_unset);
+	if (getenv(var_to_unset) == NULL)
+		return ;
+	temp = ft_strjoin(var_to_unset, "=");
+	var_str = ft_strjoin(temp, getenv(var_to_unset));
+	free(temp);
+	i = 0;
+	while (vars->envp[i])
+	{
+		if ((ft_strcmp(vars->envp[i], var_str) == 0))
+			delete_env_var(vars->envp, i);
+		i++;
+	}
+}
+
+// void builtin_unset(char **envp, char *var_to_unset) 
+// {
+// 	char *var_str;
+// 	char *temp;
+// 	int	i;
+
+// 	if (getenv(var_to_unset) == NULL)
+// 		return ;
+// 	temp = ft_strjoin(var_to_unset, "=");
+// 	var_str = ft_strjoin(temp, getenv(var_to_unset));
+
+// 	i = 0;
+// 	while (envp[i])
+// 	{
+// 		if ((ft_strcmp(envp[i], var_str) == 0))
+// 			delete_env_var(envp, i);
+// 		i++;
+// 	}
+// }
 
 // int main(int argc, char **argv, char **envp)
 // {
 // 	int	i = 0;
 // 	char **new;
 
-// 	builtin_env(envp);
-// 	printf("\n\n-------<<    export     >>---------\n\n");
-// 	new = builtin_unset(envp, argv[1]);
-// 	while (new[i])
-// 	{
-// 		printf("%s\n", new[i]);
-// 		i++;
-// 	}
+// 	// print_all_env(envp);
+// 	// printf("\n\n-------<<    unset     >>---------\n\n");
+// 	builtin_unset(envp, argv[1]);
+// 	// print_all_env(envp);
 // 	return (0);
 // }

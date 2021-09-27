@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	builtin_exec(t_vars *vars)
+void	builtin_exec(t_vars *vars) //+ t_token *current_token
 {
 	char *command;
 	int	len_command;
@@ -23,7 +23,7 @@ void	builtin_exec(t_vars *vars)
 	else if (ft_strcmp(command, "pwd") == 0)
 		builtin_pwd();
 	else if (ft_strcmp(command, "unset") == 0)
-		builtin_unset(vars->envp, vars->first->next->buffer.str);
+		builtin_unset(vars, current_token->next);
 }
 
 // execution of commands other than builtin commands ---- execve
