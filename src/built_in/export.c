@@ -19,7 +19,6 @@ in case of 'export a=123' (NAME=VALUE),
 そこに既存の環境変数をDupし、
 新たな環境変数とNULLを追加
 既存の環境変数をフリー →  **newに入れ替える
-
 */
 
 int		count_env(char **envp)
@@ -37,41 +36,66 @@ int		count_env(char **envp)
 	return(envp_count);
 }
 
-// check input
-// find '=' and check if there is a value after '='
+// find '=' and check if there is a value after '=', return 1;
 
-// Modify later: struct t_var for getting command & argument
-char  **builtin_export(char **envp, char *new_var) 
+static int		var_value_is_valid(char *new_var)
 {
-	char **new_env;
-	int	env_count;
 	int	i;
-
-	env_count = count_env(envp);
-	new_env = malloc(sizeof(char *) * env_count + 2);
-	i = 0;
-	while (envp[i])
-	{
-		new_env[i] = envp[i];
-		i++;
-	}
-	new_env[i] = new_var;
-	new_env[i + 1] = NULL;
-	return (new_env);
+	return (i);
 }
 
-// int main(int argc, char **argv, char **envp)
-// {
-// 	int	i = 0;
-// 	char **new;
+void	free_element(char **array)
+{
+	int	i;
 
-// 	builtin_env(envp);
-// 	printf("\n\n-------<<    export     >>---------\n\n");
-// 	new = builtin_export(envp, argv[1]);
-// 	while (new[i])
-// 	{
-// 		printf("%s\n", new[i]);
-// 		i++;
-// 	}
-// 	return (0);
-// }
+	i = 0;
+	while (array[i])
+	{
+		free(array[i]);
+		i++;
+	}
+	free(array);
+}
+
+static void 	free_and_replace_envp(char **env, char **new_env)
+{
+	int		i;
+
+	free_element(env);
+	i = 0;
+printf("new_env count:%d\n", count_env(new_env));
+	env = malloc(sizeof(char *) * (count_env(new_env)));
+	while (new_env[i])
+	{
+		env[i] = ft_strdup(new_env[i]);
+		i++;
+	}
+}
+
+void	builtin_export(t_vars *vars, t_token *current_token)
+{
+	char *new_var;
+	char **new_env;
+	int	i;
+
+	while (current_token)
+	{
+		if (current_token->token_type == WORD)
+		{
+			new_var = current_token->buffer.str;
+			break ;
+		}
+		current_token = current_token->next;
+	}
+	printf("new_var: %s\n", new_var);
+	new_env = malloc(sizeof(char *) * (count_env(vars->envp) + 2));
+	i = 0;
+	while (vars->envp[i])
+	{
+		new_env[i] = ft_strdup(vars->envp[i]);
+		i++;
+	}
+	new_env[i] = ft_strdup(new_var);
+	new_env[i + 1] = NULL;
+	free_and_replace_envp(vars->envp, new_env);
+}

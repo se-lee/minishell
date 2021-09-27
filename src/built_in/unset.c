@@ -22,6 +22,8 @@ static void	delete_env_var(char **envp, int i)
 	}
 }
 
+static char *join_all_var_str(char *var_to_unset);
+
 void	builtin_unset(t_vars *vars, t_token *current_token)
 {
 	char *var_str;
@@ -53,34 +55,15 @@ void	builtin_unset(t_vars *vars, t_token *current_token)
 	}
 }
 
-// void builtin_unset(char **envp, char *var_to_unset) 
-// {
-// 	char *var_str;
-// 	char *temp;
-// 	int	i;
-
-// 	if (getenv(var_to_unset) == NULL)
-// 		return ;
-// 	temp = ft_strjoin(var_to_unset, "=");
-// 	var_str = ft_strjoin(temp, getenv(var_to_unset));
-
-// 	i = 0;
-// 	while (envp[i])
-// 	{
-// 		if ((ft_strcmp(envp[i], var_str) == 0))
-// 			delete_env_var(envp, i);
-// 		i++;
-// 	}
-// }
-
-// int main(int argc, char **argv, char **envp)
-// {
-// 	int	i = 0;
-// 	char **new;
-
-// 	// print_all_env(envp);
-// 	// printf("\n\n-------<<    unset     >>---------\n\n");
-// 	builtin_unset(envp, argv[1]);
-// 	// print_all_env(envp);
-// 	return (0);
-// }
+/*
+int main(int argc, char **argv, char **envp)
+{
+	int	i = 0;
+	char **new;
+	// print_all_env(envp);
+	// printf("\n\n-------<<    unset     >>---------\n\n");
+	builtin_unset(envp, argv[1]);
+	// print_all_env(envp);
+	return (0);
+}
+*/

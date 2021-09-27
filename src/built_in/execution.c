@@ -15,11 +15,11 @@ void	builtin_exec(t_vars *vars) //+ t_token *current_token
 	if (ft_strcmp(command, "echo") == 0)
 		builtin_echo(vars, current_token->next);
 	else if (ft_strcmp(command, "env") == 0)
-		builtin_env(vars->envp);
+		builtin_env(vars);
 	else if (ft_strcmp(command, "exit") == 0)
 		builtin_exit();
 	else if (ft_strcmp(command, "export") == 0)
-		builtin_export(vars->envp, vars->first->next->buffer.str);
+		builtin_export(vars, current_token->next);
 	else if (ft_strcmp(command, "pwd") == 0)
 		builtin_pwd();
 	else if (ft_strcmp(command, "unset") == 0)
@@ -27,7 +27,6 @@ void	builtin_exec(t_vars *vars) //+ t_token *current_token
 }
 
 // execution of commands other than builtin commands ---- execve
-
 void	command_exec();
 
 

@@ -24,12 +24,27 @@ void	free_struct(t_vars *vars)
 	vars->first = NULL;
 }
 
+void	malloc_envp(t_vars *vars, char **envp)
+{
+	int	i;
+	
+	vars->envp = malloc(sizeof(char *) * (count_env(envp) + 1));
+	i = 0;
+	while (envp[i])
+	{
+		vars->envp[i] = ft_strdup(envp[i]);
+		i++;
+	}
+	vars->envp[i] = NULL;
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_vars	vars;
 	char	*str;
 
-	vars.envp = envp;
+	// vars.envp = envp;
+	malloc_envp(&vars, envp);
 	(void)argc;
 	(void)argv;
 	str = readline("minishell$ ");
