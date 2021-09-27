@@ -3,10 +3,10 @@
 void	free_token(t_token *token)
 {
 	free(token->buffer.str);
+	token->buffer.len = 0;
+	token->token_type = 0;
+	token->next = NULL;
 	free(token);
-	// token->buffer.len = 0;
-	// token->token_type = 0;
-	// token->next = NULL;
 }
 
 void	free_struct(t_vars *vars)
@@ -21,6 +21,8 @@ void	free_struct(t_vars *vars)
 		free_token(current_token);
 		current_token = next;
 	}
+	if (current_token)
+		free(current_token);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -34,7 +36,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	tcgetattr(0, &t);
 	t.c_cc[VINTR] = 0;
-    tcsetattr(STDIN_FILENO, TCSANOW, &t);
+	tcsetattr(STDIN_FILENO, TCSANOW, &t);
 	str = readline("minishell$ ");
 	while (str != NULL)
 	{

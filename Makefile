@@ -1,9 +1,11 @@
 NAME = minishell
 
-SRCS =	minishell.c		\
-		parsing.c		\
-		parsing_utils.c	\
-		tokenization.c	\
+SRCS =	minishell.c				\
+		parsing.c				\
+		variables.c				\
+		parsing_utils.c			\
+		tokenization.c			\
+		tokenization_utils.c	\
 
 GCCF = gcc -g -fsanitize=address \
 -lreadline -L /Users/$(USER)/.brew/opt/readline/lib \
