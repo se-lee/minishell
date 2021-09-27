@@ -1,21 +1,5 @@
 #include "../../include/minishell.h"
 
-// int		count_env(char **envp)
-// {
-// 	int		envp_count;
-// 	int		i;
-
-// 	i = 0;
-// 	envp_count = 0;
-// 	while (envp[i])
-// 	{
-// 		envp_count++;
-// 		i++;
-// 	}
-// 	return(envp_count);
-// }
-
-// Modify later: struct t_var for getting command & argument
 char  **builtin_unset(char **envp, char *var_to_unset) 
 {
 	char **new_env;
@@ -56,5 +40,3 @@ char  **builtin_unset(char **envp, char *var_to_unset)
 // 	}
 // 	return (0);
 // }
-
-// t_vars vars->first->buffer->str  will give me the command

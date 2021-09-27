@@ -38,7 +38,8 @@ void	builtin_echo(t_vars *vars, t_token *current_token)
 	{
 		if (current_token->token_type == WORD)
 			printf("%s", current_token->buffer.str);
-		if (current_token->next)
+		if (current_token->token_type == SPACE_SIGN &&
+				current_token->next->token_type != SPACE_SIGN)
 			printf(" ");
 		current_token = current_token->next;
 	}

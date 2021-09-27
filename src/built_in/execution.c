@@ -25,3 +25,9 @@ void	builtin_exec(t_vars *vars)
 	else if (ft_strcmp(command, "unset") == 0)
 		builtin_unset(vars->envp, vars->first->next->buffer.str);
 }
+
+// execution of commands other than builtin commands ---- execve
+
+void	command_exec();
+
+

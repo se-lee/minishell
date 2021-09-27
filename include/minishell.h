@@ -50,7 +50,6 @@ void	tokenization(t_vars *vars, char *str);
 void	parsing(t_vars *vars, char *str);
 void	ft_comandadd_back(t_token **alst, t_token *new);
 
-
 /* built-in commands */
 void	builtin_cd(t_vars *vars);
 int		count_env(char **envp);
