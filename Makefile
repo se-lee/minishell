@@ -8,7 +8,7 @@ SRCS =	minishell.c		\
 		built_in/echo.c	\
 		built_in/env.c	\
 		built_in/exit.c	\
-		built_in/export.c	\
+		built_in/export_chained.c	\
 		built_in/pwd.c	\
 		built_in/unset.c	\
 		built_in/execution.c	\

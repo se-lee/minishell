@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	builtin_exec(t_vars *vars) //+ t_token *current_token
+void	builtin_exec(t_vars *vars, char **envp) //+ t_token *current_token
 {
 	char *command;
 	int	len_command;
@@ -19,7 +19,7 @@ void	builtin_exec(t_vars *vars) //+ t_token *current_token
 	else if (ft_strcmp(command, "exit") == 0)
 		builtin_exit();
 	else if (ft_strcmp(command, "export") == 0)
-		builtin_export(vars, current_token->next);
+		create_envlist(vars, envp);
 	else if (ft_strcmp(command, "pwd") == 0)
 		builtin_pwd();
 	else if (ft_strcmp(command, "unset") == 0)

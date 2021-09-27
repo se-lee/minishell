@@ -1,19 +1,16 @@
 #include "../../include/minishell.h"
 
-/* 
-print all env variables
-*/
-
 void	print_all_env(t_vars *vars)
 {
-	int	i;
+	t_envlist *current_env;
 
-	i = 0;
-	while (vars->envp[i] != NULL)
+	current_env = vars->envp;
+	while (current_env->next != NULL)
 	{
-		printf("%s\n", vars->envp[i]);
-		i++;
+		printf("%s\n", current_env->str);
+		current_env = current_env->next;
 	}
+	printf("%s\n", vars->envp->str);
 }
 
 void	builtin_env(t_vars *vars)

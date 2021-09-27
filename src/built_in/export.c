@@ -72,6 +72,8 @@ printf("new_env count:%d\n", count_env(new_env));
 	}
 }
 
+
+
 void	builtin_export(t_vars *vars, t_token *current_token)
 {
 	char *new_var;
@@ -99,3 +101,5 @@ void	builtin_export(t_vars *vars, t_token *current_token)
 	new_env[i + 1] = NULL;
 	free_and_replace_envp(vars->envp, new_env);
 }
+
+

@@ -24,19 +24,19 @@ void	free_struct(t_vars *vars)
 	vars->first = NULL;
 }
 
-void	malloc_envp(t_vars *vars, char **envp)
-{
-	int	i;
+// void	malloc_envp(t_vars *vars, char **envp)
+// {
+// 	int	i;
 	
-	vars->envp = malloc(sizeof(char *) * (count_env(envp) + 1));
-	i = 0;
-	while (envp[i])
-	{
-		vars->envp[i] = ft_strdup(envp[i]);
-		i++;
-	}
-	vars->envp[i] = NULL;
-}
+// 	vars->envp = malloc(sizeof(char *) * (count_env(envp) + 1));
+// 	i = 0;
+// 	while (envp[i])
+// 	{
+// 		vars->envp[i] = ft_strdup(envp[i]);
+// 		i++;
+// 	}
+// 	vars->envp[i] = NULL;
+// }
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -44,9 +44,10 @@ int	main(int argc, char **argv, char **envp)
 	char	*str;
 
 	// vars.envp = envp;
-	malloc_envp(&vars, envp);
+	// malloc_envp(&vars, envp);
 	(void)argc;
 	(void)argv;
+	create_envlist(&vars, envp);
 	str = readline("minishell$ ");
 	while (str != NULL)
 	{
@@ -54,7 +55,7 @@ int	main(int argc, char **argv, char **envp)
 		{
 			add_history(str);
 			parsing(&vars, str);
-			builtin_exec(&vars);
+			builtin_exec(&vars, envp);
 
 			// free_struct(&vars);
 			free(str);

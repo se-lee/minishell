@@ -13,6 +13,7 @@
 typedef struct s_vars		t_vars;
 typedef struct s_token		t_token;
 typedef struct s_string		t_string;
+typedef struct s_envlist	t_envlist;
 typedef enum e_type			t_type;
 
 enum e_type
@@ -36,9 +37,14 @@ struct s_token {
 	t_token		*next;
 };
 
+struct s_envlist {
+	char		*str;
+	t_envlist	*next;
+};
+
 struct s_vars {
-	t_token	*first;
-	char	**envp;
+	t_token		*first;
+	t_envlist	*envp;
 };
 
 //Parsing fonctions
@@ -58,9 +64,11 @@ void	builtin_export(t_vars *vars, t_token *current_token);
 void	builtin_unset(t_vars *vars, t_token *current_token);
 void	builtin_pwd(void);
 void	builtin_env(t_vars *vars);
-void	builtin_exec(t_vars *vars);
+void	builtin_exec(t_vars *vars, char **envp);
 void	builtin_cd(t_vars *vars);
 void	builtin_echo(t_vars *vars, t_token *current_token);
 void	builtin_exit(void);
+
+void	create_envlist(t_vars *vars, char **envp);
 
 #endif
