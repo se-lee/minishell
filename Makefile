@@ -53,5 +53,3 @@ fclean :	clean
 			${MAKE} -C libft/ fclean
 
 re :		fclean all
-
-
