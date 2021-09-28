@@ -65,27 +65,3 @@ printf("var_to_unset: %s\n", var_to_unset);
 		}
 	}
 }
-
-/*
-void	builtin_unset(t_vars *vars, t_token *current_token)
-{
-	char *var_str;
-	char *temp;
-	char *var_to_unset;
-	int	i;
-	
-// printf("var_to_unset: %s\n", var_to_unset);
-	if (getenv(var_to_unset) == NULL)
-		return ;
-	temp = ft_strjoin(var_to_unset, "=");
-	var_str = ft_strjoin(temp, getenv(var_to_unset));
-	free(temp);
-	i = 0;
-	while (vars->envp->next != NULL)
-	{
-		if ((ft_strcmp(vars->envp->str, var_str) == 0))
-			delete_env_var(vars->envp, i);
-		vars->envp = vars->envp->next;
-	}
-}
-*/
