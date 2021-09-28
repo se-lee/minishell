@@ -64,6 +64,7 @@ void	ft_comandadd_back(t_token **alst, t_token *new);
 
 /* built-in utils */
 int		count_env(char **envp);
+void	print_all_env(t_envlist *envp);
 void	create_envlist(t_vars *vars, char **envp);
 
 /* built-in commands */
