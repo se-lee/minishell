@@ -1,5 +1,23 @@
 #include "minishell.h"
 
+
+void	free_env_list(t_envlist *to_free)
+{
+	t_envlist	*current_env;
+	t_envlist	*temp;
+
+	current_env = to_free;
+	while (current_env->next)
+	{
+		temp = current_env->next;
+		free(current_env->str);
+		free(current_env);
+		current_env = temp;
+	}
+	if (current_env)
+		free(current_env);
+}
+
 void	create_envlist(t_vars *vars, char **envp)
 {
 	int	i;
@@ -120,7 +138,7 @@ void	builtin_export(t_vars *vars, t_token *current_token)
 	{
 		sorted = sort_env(vars);
 		print_all_env(sorted);
-		// free_env(sorted);
+		free_env_list(sorted);
 	}
 // if the given does exists,
 // rewrite_value();

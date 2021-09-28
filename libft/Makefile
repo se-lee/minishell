@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+         #
+#    By: seoyounglee <seoyounglee@student.42lyon    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/24 16:54:06 by acusanno          #+#    #+#              #
-#    Updated: 2021/09/28 09:40:54 by acusanno         ###   ########lyon.fr    #
+#    Updated: 2021/09/28 12:45:10 by seoyounglee      ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
