@@ -13,11 +13,11 @@ SRCS =	minishell.c				\
 		built_in/export.c		\
 		built_in/pwd.c			\
 		built_in/unset.c		\
-		built_in/execution.c	\
+		built_in/execution.c	
 
 GCCF = gcc -g -fsanitize=address \
--lreadline -L/usr/local/lib -I/usr/local/include
-#-L /Users/$(USER)/.brew/opt/readline/lib \
+-lreadline -L/usr/local/lib -I/usr/local/include \
+#-L /Users/$(USER)/.brew/opt/readline/lib 
 #-I/Users/$(USER)/.brew/opt/readline/include #-Wall -Wextra -Werror 
 
 OBJS = $(addprefix bin/, ${SRCS:.c=.o})

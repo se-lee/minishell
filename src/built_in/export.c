@@ -15,7 +15,6 @@ void	create_envlist(t_vars *vars, char **envp)
 		current_envlist->next = malloc(sizeof(t_envlist));
 		current_envlist = current_envlist->next;
 		current_envlist->str = ft_strdup(envp[i]);
-printf("[%d]%s\n", i, current_envlist->str);
 		current_envlist->next = NULL;
 		i++;
 	}
