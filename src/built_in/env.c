@@ -1,4 +1,4 @@
-#include "../../include/minishell.h"
+#include "minishell.h"
 
 void	print_all_env(t_vars *vars)
 {
@@ -10,7 +10,7 @@ void	print_all_env(t_vars *vars)
 		printf("%s\n", current_env->str);
 		current_env = current_env->next;
 	}
-	printf("%s\n", vars->envp->str);
+	printf("%s\n", current_env->str); //vars->envp->str);
 }
 
 void	builtin_env(t_vars *vars)

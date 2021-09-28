@@ -46,4 +46,3 @@ void	builtin_echo(t_vars *vars, t_token *current_token)
 	// if (n_option == 0)
 		printf("\n");
 }
-
