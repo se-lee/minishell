@@ -30,6 +30,8 @@ void	builtin_echo(t_vars *vars, t_token *current_token)
 		{
 			n_option = 1;
 			current_token = current_token->next;
+			if (current_token)
+				current_token = current_token->next;
 		}
 		while (current_token && current_token->token_type != PIPE_SIGN
 			&& current_token->token_type != REDIRECT)

@@ -52,7 +52,7 @@ void	builtin_unset(t_vars *vars, t_token *current_token)
 		current_token = current_token->next;
 	var_to_unset = current_token->buffer.str;
 	current_env = vars->envp;
-printf("var_to_unset: %s\n", var_to_unset);
+	printf("var_to_unset: %s\n", var_to_unset);
 	if (ft_strncmp(current_env->str, var_to_unset, ft_strlen(var_to_unset)) == 0)
 		envlist_delete_first(vars, current_env);
 	else

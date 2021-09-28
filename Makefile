@@ -15,11 +15,9 @@ SRCS =	minishell.c						\
 		built_in/unset.c				\
 		built_in/execution.c			\
 
-GCCF = gcc -g \
--lreadline -L/usr/local/lib -I/usr/local/include
-#-fsanitize=address \
-#-L /Users/$(USER)/.brew/opt/readline/lib \
-#-I/Users/$(USER)/.brew/opt/readline/include #-Wall -Wextra -Werror 
+GCCF = gcc -g #-fsanitize=address #-Wall -Wextra -Werror
+
+READLINE = -lreadline -L /Users/acusanno/.brew/opt/readline/lib -I/Users/acusanno/.brew/opt/readline/include
 
 OBJS = $(addprefix bin/, ${SRCS:.c=.o})
 
@@ -32,7 +30,7 @@ bin/%.o : 		src/%.c		include/minishell.h
 all :		libft_ ${NAME}
 
 $(NAME) :	${OBJS} include/minishell.h | libft/libft.a
-			${GCCF} libft/libft.a $(OBJS) -o $(NAME)
+			${GCCF} ${READLINE} libft/libft.a $(OBJS) -o $(NAME)
 
 libft_ :
 			$(MAKE) -C libft
