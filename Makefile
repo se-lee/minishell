@@ -1,16 +1,18 @@
 NAME = minishell
 
-SRCS =	minishell.c		\
-		parsing.c		\
-		parsing_utils.c	\
-		tokenization.c	\
-		built_in/cd.c	\
-		built_in/echo.c	\
-		built_in/env.c	\
-		built_in/exit.c	\
-		built_in/export.c	\
-		built_in/pwd.c	\
-		built_in/unset.c	\
+SRCS =	minishell.c				\
+		parsing.c				\
+		variables.c				\
+		parsing_utils.c			\
+		tokenization.c			\
+		tokenization_utils.c	\
+		built_in/cd.c			\
+		built_in/echo.c			\
+		built_in/env.c			\
+		built_in/exit.c			\
+		built_in/export.c		\
+		built_in/pwd.c			\
+		built_in/unset.c		\
 		built_in/execution.c	\
 
 GCCF = gcc -g -fsanitize=address \

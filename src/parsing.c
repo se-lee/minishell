@@ -29,58 +29,17 @@ char	*replace(char *full, char *placeholder, char *real)
 	return (final);
 }
 
-char	*find_variable(char *str)
+int	check_error(t_token *token)
 {
-	int		i;
-	char	*var;
-
-	i = 0;
-	while (str[i] && str[i] != ' ')
-		i++;
-	var = protected_malloc((i + 1), sizeof(char));
-	i = 0;
-	while (str[i] && str[i] != ' ')
-	{
-		var[i] = str[i];
-		i++;
-	}
-	var[i] = '\0';
-	return (var);
+	if (token->buffer.len > 1 && token->token_type == PIPE_SIGN)
+		return (-1);
+	if ((token->token_type == QUOTE || token->token_type == SINGLE_QUOTE)
+		&& token->quote_nb != 2)
+		return (-1);
+	return (0);
 }
 
-void	update_token(t_token *token, char *var, char *value)
-{
-	char	*string;
-
-	string = replace(token->buffer.str, var, value);
-	free(var);
-	free(token->buffer.str);
-	token->buffer.str = string;
-	token->buffer.len = ft_strlen(token->buffer.str);
-}
-
-void	replace_env(t_token *token)
-{
-	int		i;
-	char	*var;
-	char	*value;
-
-	i = 0;
-	while (token->buffer.str[i])
-	{
-		if (token->buffer.str[i] == '$')
-		{
-			var = find_variable(&token->buffer.str[i]);
-			value = getenv(&var[1]);
-
-			update_token(token, var, value);
-			i = -1;
-		}
-		i++;
-	}
-}
-
-void parsing(t_vars *vars, char *str)
+void	parsing(t_vars *vars, char *str)
 {
 	t_token	*current_token;
 
@@ -88,11 +47,19 @@ void parsing(t_vars *vars, char *str)
 	current_token = vars->first;
 	while (current_token)
 	{
-		if (current_token->token_type != SINGLE_QUOTE)
-			replace_env(current_token);
-		// printf("current token: %s\n", current_token->buffer.str);
-		// printf("first token: %s\n", vars->first->buffer.str);
-		current_token = current_token->next;
+		if (check_error(current_token) == 0)
+		{
+			if (current_token->token_type == WORD
+				|| current_token->token_type == QUOTE)
+				replace_env(current_token);
+			printf(">>%s<<\n", current_token->buffer.str);
+			current_token = current_token->next;
+		}
+		else
+		{
+			printf("syntax error near unexpected token\n");
+			break ;
+		}
 	}
 	return ;
 }
