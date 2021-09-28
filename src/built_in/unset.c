@@ -1,59 +1,67 @@
-#include "../../include/minishell.h"
+#include "minishell.h"
 
-int		count_env(char **envp)
+void	envlist_delete_first(t_vars *vars, t_envlist *current_env)
 {
-	int		envp_count;
-	int		i;
+	t_envlist *temp;
 
-	i = 0;
-	envp_count = 0;
-	while (envp[i])
+	if(current_env->next != NULL)
 	{
-		envp_count++;
-		i++;
+		temp = current_env->next;
+		free(current_env->str);
+		free(current_env);
+		vars->envp = temp;
 	}
-	return(envp_count);
+	else
+	{
+		free(current_env->str);
+		free(current_env);
+		vars->envp = NULL;
+	}
 }
 
-char  **builtin_unset(char **envp, char *var_to_unset) // Modify later: struct t_var for getting command & argument
+void	envlist_delete_var(t_vars *vars, t_envlist  *current_env)
 {
-	char **new_env;
-	int	env_count;
-	int	i;
+	t_envlist *temp;
 
-	env_count = count_env(envp);
-	new_env = malloc(sizeof(char *) * env_count);
-
-// check if var_to_unset is in correct form
-// check if var_to_unset already exists
-
-	if (getenv(var_to_unset) != NULL)
-
-
-	i = 0;
-	while (envp[i])
+	//	A B C (remove B)
+	
+	if (current_env->next->next == NULL)
 	{
-		new_env[i] = envp[i];
-		i++;
+		free(current_env->next->str);
+		free(current_env->next);
+		current_env->next = NULL;
 	}
-	new_env[i + 1] = NULL;
-	return (new_env);
+	else
+	{
+		temp = current_env->next->next;
+		free(current_env->next->str);
+		free(current_env->next);
+		current_env->next = temp;
+	}
 }
 
-// int main(int argc, char **argv, char **envp)
-// {
-// 	int	i = 0;
-// 	char **new;
+void	builtin_unset(t_vars *vars, t_token *current_token)
+{
+	char	*var_to_unset;
+	char	*var_str;
+	t_envlist *current_env;
 
-// 	builtin_env(envp);
-// 	printf("\n\n-------<<    export     >>---------\n\n");
-// 	new = builtin_unset(envp, argv[1]);
-// 	while (new[i])
-// 	{
-// 		printf("%s\n", new[i]);
-// 		i++;
-// 	}
-// 	return (0);
-// }
-
-// t_vars vars->first->buffer->str  will give me the command
+	while (current_token && (current_token->token_type != WORD
+		&& current_token->token_type != QUOTE
+		&& current_token->token_type != SINGLE_QUOTE))
+		current_token = current_token->next;
+	var_to_unset = current_token->buffer.str;
+	current_env = vars->envp;
+printf("var_to_unset: %s\n", var_to_unset);
+	if (ft_strncmp(current_env->str, var_to_unset, ft_strlen(var_to_unset)) == 0)
+		envlist_delete_first(vars, current_env);
+	else
+	{
+		while (current_env)
+		{
+			if (ft_strncmp(current_env->next->str, var_to_unset, ft_strlen(var_to_unset)) == 0)
+				envlist_delete_var(vars, current_env);
+			current_env = current_env->next; 
+		}
+	}
+}

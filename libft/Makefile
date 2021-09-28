@@ -6,7 +6,11 @@
 #    By: seoyounglee <seoyounglee@student.42lyon    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/24 16:54:06 by acusanno          #+#    #+#              #
+<<<<<<< HEAD
 #    Updated: 2021/09/24 11:36:32 by seoyounglee      ###   ########lyon.fr    #
+=======
+#    Updated: 2021/09/24 15:15:43 by seoyounglee      ###   ########lyon.fr    #
+>>>>>>> builtin
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +22,11 @@ SRCS		= ft_isalnum.c ft_memccpy.c ft_memset.c ft_strlen.c ft_tolower.c \
 			ft_strtrim.c ft_putchar_fd.c ft_putstr_fd.c ft_putendl_fd.c \
 			ft_putnbr_fd.c ft_strmapi.c ft_itoa.c ft_split.c ft_itoa_base.c \
 			ft_min.c ft_max.c ft_itoa_pf.c get_next_line.c get_next_line_utils.c \
+<<<<<<< HEAD
 			ft_strjoin_char.c
+=======
+			ft_strjoin_char.c ft_strcmp.c 
+>>>>>>> builtin
 
 SRCS_BONUS	= ft_lstnew.c ft_lstadd_front.c ft_lstsize.c ft_lstlast.c \
 			  ft_lstadd_back.c ft_lstdelone.c ft_lstclear.c ft_lstiter.c \

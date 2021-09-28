@@ -5,6 +5,7 @@
 # include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+#include <sys/param.h>
 # include "../libft/libft.h"
 
 # define TRUE	1
@@ -13,6 +14,7 @@
 typedef struct s_vars		t_vars;
 typedef struct s_token		t_token;
 typedef struct s_string		t_string;
+typedef struct s_envlist	t_envlist;
 typedef enum e_type			t_type;
 
 enum e_type
@@ -36,9 +38,14 @@ struct s_token {
 	t_token		*next;
 };
 
+struct s_envlist {
+	char		*str;
+	t_envlist	*next;
+};
+
 struct s_vars {
-	t_token	*first;
-	char	**envp;
+	t_token		*first;
+	t_envlist	*envp;
 };
 
 //Parsing fonctions
@@ -49,5 +56,19 @@ char	*replace(char *full, char *placeholder, char *real);
 void	tokenization(t_vars *vars, char *str);
 void	parsing(t_vars *vars, char *str);
 void	ft_comandadd_back(t_token **alst, t_token *new);
+
+/* built-in utils */
+int		count_env(char **envp);
+void	create_envlist(t_vars *vars, char **envp);
+
+/* built-in commands */
+void	builtin_cd(t_vars *vars);
+void	builtin_echo(t_vars *vars, t_token *current_token);
+void	builtin_env(t_vars *vars);
+void	builtin_exec(t_vars *vars, char **envp);
+void	builtin_exit(void);
+void	builtin_export(t_vars *vars, t_token *current_token);
+void	builtin_unset(t_vars *vars, t_token *current_token);
+void	builtin_pwd(void);
 
 #endif

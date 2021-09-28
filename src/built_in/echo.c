@@ -1,4 +1,4 @@
-#include "../../include/minishell.h"
+#include "minishell.h"
 
 /*
 - [echo] with option -n
@@ -11,32 +11,38 @@ print the arguments
 
 */
 
-void	builtin_echo(char **argv) // argv argument to be changed later
+// declare *current_token = vars->first
+// to move (increment) current_token = current_token->next;
+// think about using "Token type"
+
+void	builtin_echo(t_vars *vars, t_token *current_token) 
 {
 	int i;
 	int	n_option;
+	char *first_arg;
+	char *second_arg;
 
-	if (ft_strncmp(argv[1], "-n", 2) == 0)
+	first_arg = vars->first->next->next->buffer.str;
+	second_arg = vars->first->next->next->buffer.str;
+	// if (ft_strncmp(first_arg, "-n", 2) == 0)
+	// {
+	// 	n_option = 1;
+	// 	i = 2;
+	// }
+	// else
+	// {
+	// 	n_option = 0;
+	// 	i = 1;
+	// }
+	while(current_token)
 	{
-		n_option = 1;
-		i = 2;
+		if (current_token->token_type == WORD)
+			printf("%s", current_token->buffer.str);
+		if (current_token->token_type == SPACE_SIGN &&
+				current_token->next->token_type != SPACE_SIGN)
+			printf(" ");
+		current_token = current_token->next;
 	}
-	else
-	{
-		n_option = 0;
-		i = 1;
-	}
-	while(argv[i] != NULL)
-	{
-		printf("%s", argv[i]);
-		i++;
-	}
-	if (n_option == 0)
+	// if (n_option == 0)
 		printf("\n");
-}
-
-int main(int argc, char **argv)
-{
-	builtin_echo(argv);
-	return (0);
 }
