@@ -48,6 +48,7 @@ struct s_envlist {
 struct s_vars {
 	t_token		*first;
 	t_envlist	*envp;
+	int			error;
 };
 
 //Parsing fonctions
