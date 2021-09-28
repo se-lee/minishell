@@ -1,4 +1,4 @@
-#include "../../include/minishell.h"
+#include "minishell.h"
 
 void	envlist_delete_first(t_vars *vars, t_envlist *current_env)
 {
