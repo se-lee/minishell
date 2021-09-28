@@ -23,7 +23,12 @@ get pathname with getcw function
 char *getcwd(char *buf, size_t size);
 */
 
-void	builtin_cd(t_vars *vars);
+static char	*get_path();
+
+void	builtin_cd(t_vars *vars)
+{
+
+}
 
 // int main()
 // {
@@ -44,7 +49,3 @@ void	builtin_cd(t_vars *vars);
 
 // ".." split with '/' and erase the last string (element) in array
 //
-
-
-
-

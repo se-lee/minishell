@@ -25,14 +25,13 @@ int		count_number_str_in_list(t_vars *vars)
 	return (count);
 }
 
-char	**get_command(t_vars *vars, t_token *current_token)
+static char	**get_command(t_vars *vars, t_token *current_token)
 {
 	char **command;
 	int	str_count;
 	int	i;
 
 	str_count = count_number_str_in_list(vars);
-printf("count: %d\n", str_count);
 	command = malloc(sizeof(char *) * (str_count + 1));
 	i = 0;
 	while (current_token && current_token->token_type != PIPE_SIGN
@@ -49,7 +48,7 @@ printf("count: %d\n", str_count);
 	return (command);
 }
 
-char	**get_command_path(t_vars *vars, char *command)
+static char	**get_command_path(t_vars *vars, char *command)
 {
 	char		**path_sep;
 	char		*path;
