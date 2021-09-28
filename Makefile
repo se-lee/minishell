@@ -1,34 +1,28 @@
 NAME = minishell
 
-SRCS =	minishell.c				\
-		parsing.c				\
-		variables.c				\
-		parsing_utils.c			\
-		tokenization.c			\
-		tokenization_utils.c	\
-		built_in/cd.c			\
-		built_in/echo.c			\
-		built_in/env.c			\
-		built_in/exit.c			\
-		built_in/export.c		\
-		built_in/pwd.c			\
-		built_in/unset.c		\
-		built_in/execution.c	
+SRCS =	minishell.c						\
+		parsing/parsing.c				\
+		parsing/variables.c				\
+		parsing/parsing_utils.c			\
+		parsing/tokenization.c			\
+		parsing/tokenization_utils.c	\
+		built_in/cd.c					\
+		built_in/echo.c					\
+		built_in/env.c					\
+		built_in/exit.c					\
+		built_in/export.c				\
+		built_in/pwd.c					\
+		built_in/unset.c				\
+		built_in/execution.c			\
 
-GCCF = gcc -g -fsanitize=address \
--lreadline -L/usr/local/lib -I/usr/local/include \
-#-L /Users/$(USER)/.brew/opt/readline/lib 
+GCCF = gcc -g \
+-lreadline -L/usr/local/lib -I/usr/local/include
+#-fsanitize=address \
+#-L /Users/$(USER)/.brew/opt/readline/lib \
 #-I/Users/$(USER)/.brew/opt/readline/include #-Wall -Wextra -Werror 
 
 OBJS = $(addprefix bin/, ${SRCS:.c=.o})
 
-_END = \033[0m
-_DIM = \033[2m
-_YELLOW = \033[33m
-_GREEN = \033[92m
-_RED = \033[91m
-_ROSE = \033[95m
-_CYAN = \033[96m
 .PHONY :	all clean fclean re libft_
 
 bin/%.o : 		src/%.c		include/minishell.h
