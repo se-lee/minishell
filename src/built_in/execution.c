@@ -13,7 +13,7 @@ void	builtin_exec(t_vars *vars, char **envp) //+ t_token *current_token
 	// if (ft_strcmp(command, "cd") == 0)
 		// builtin_cd(vars);
 	if (ft_strcmp(command, "echo") == 0)
-		builtin_echo(vars, current_token->next);
+		builtin_echo(vars, current_token);
 	else if (ft_strcmp(command, "env") == 0)
 		builtin_env(vars);
 	else if (ft_strcmp(command, "exit") == 0)

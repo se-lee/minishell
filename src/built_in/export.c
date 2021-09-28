@@ -120,10 +120,8 @@ void	builtin_export(t_vars *vars, t_token *current_token)
 	{
 		sorted = sort_env(vars);
 		print_all_env(sorted);
-		free_env(sorted);
+		// free_env(sorted);
 	}
-// if the given variable does not exist
-
 // if the given does exists,
 // rewrite_value();
 }

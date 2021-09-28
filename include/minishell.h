@@ -5,7 +5,7 @@
 # include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-#include <sys/param.h>
+# include <sys/param.h>
 # include <termios.h>
 # include "../libft/libft.h"
 
@@ -48,6 +48,7 @@ struct s_envlist {
 struct s_vars {
 	t_token		*first;
 	t_envlist	*envp;
+	int			error;
 };
 
 //Parsing fonctions

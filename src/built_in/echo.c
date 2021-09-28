@@ -17,32 +17,30 @@ print the arguments
 
 void	builtin_echo(t_vars *vars, t_token *current_token) 
 {
-	int i;
 	int	n_option;
-	char *first_arg;
-	char *second_arg;
 
-	first_arg = vars->first->next->next->buffer.str;
-	second_arg = vars->first->next->next->buffer.str;
-	// if (ft_strncmp(first_arg, "-n", 2) == 0)
-	// {
-	// 	n_option = 1;
-	// 	i = 2;
-	// }
-	// else
-	// {
-	// 	n_option = 0;
-	// 	i = 1;
-	// }
-	while(current_token)
-	{
-		if (current_token->token_type == WORD)
-			printf("%s", current_token->buffer.str);
-		if (current_token->token_type == SPACE_SIGN &&
-				current_token->next->token_type != SPACE_SIGN)
-			printf(" ");
+	n_option = 0;
+	current_token = current_token->next;
+	if (current_token && current_token->token_type == SPACE_SIGN)
 		current_token = current_token->next;
+	if (current_token && current_token->token_type != PIPE_SIGN
+		&& current_token->token_type != REDIRECT)
+	{
+		if (ft_strncmp(current_token->buffer.str, "-n", 3) == 0)
+		{
+			n_option = 1;
+			current_token = current_token->next;
+		}
+		while (current_token && current_token->token_type != PIPE_SIGN
+			&& current_token->token_type != REDIRECT)
+		{
+			if (current_token->token_type == SPACE_SIGN)
+				printf(" ");
+			else
+				printf("%s", current_token->buffer.str);
+			current_token = current_token->next;
+		}
 	}
-	// if (n_option == 0)
+	if (n_option == 0)
 		printf("\n");
 }

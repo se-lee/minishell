@@ -52,12 +52,13 @@ void	parsing(t_vars *vars, char *str)
 			if (current_token->token_type == WORD
 				|| current_token->token_type == QUOTE)
 				replace_env(current_token);
-			printf(">>%s<<\n", current_token->buffer.str);
+			// printf(">>%s<<\n", current_token->buffer.str);
 			current_token = current_token->next;
 		}
 		else
 		{
 			printf("syntax error near unexpected token\n");
+			vars->error = -1;
 			break ;
 		}
 	}
