@@ -47,28 +47,28 @@ void	fill_command(t_token *token, t_command *current_command)
 	char 	**cmd;
 	t_token *current_token;
 
-	current_token = token;
 	current_command->pipe = 0;
 	current_command->redirect_left = 0;
 	current_command->redirect_right = 0;
 	i = 0;
+	current_token = token;
 	while (current_token && ft_piperedirect(current_token->token_type) == 0)
 	{
 		i++;
 		current_token = current_token->next;
 	}
-	cmd = protected_malloc(i, sizeof(char *));
+	printf("%d\n", i);
+	cmd = protected_malloc(i + 1, sizeof(char *));
 	i = 0;
 	current_token = token;
 	while (current_token && ft_piperedirect(current_token->token_type) == 0)
 	{
-		printf("%s\n", current_token->buffer.str);
 		cmd[i] = ft_strdup(current_token->buffer.str);
 		i++;
 		current_token = current_token->next;
 	}
 	current_command->command = cmd;
-	if (current_token->next && ft_piperedirect(current_token->token_type) == 1)
+	if (current_token && ft_piperedirect(current_token->token_type) == 1)
 	{
 		if (current_token->token_type == PIPE_SIGN)
 			current_command->pipe = 1;
@@ -78,7 +78,7 @@ void	fill_command(t_token *token, t_command *current_command)
 			current_command->redirect_right = current_token->buffer.len;
 		current_token = current_token->next;
 	}
-	if (current_token->next && ft_piperedirect(current_token->token_type) == 1)
+	if (current_token && ft_piperedirect(current_token->token_type) == 1)
 	{
 		if (current_token->token_type == PIPE_SIGN)
 			current_command->pipe = 1;
@@ -97,6 +97,7 @@ void	fill_commands(t_vars *vars)
 	t_command	*current_cmd;
 
 	current_token = vars->first;
+	i = 0;
 	while(current_token)
 	{
 		if (i == 0)
@@ -108,12 +109,12 @@ void	fill_commands(t_vars *vars)
 		}
 		else
 		{
-			current_cmd->next = protected_malloc(1, sizeof(t_command));
 			current_cmd = current_cmd->next;
+			current_cmd = protected_malloc(1, sizeof(t_command));
 			current_cmd->next = NULL;
 		}
 		fill_command(current_token, current_cmd);
-		current_token = current_token->next;
+		// current_token = current_token->next;
 		while (current_token && ft_piperedirect(current_token->token_type) == 0)
 			current_token = current_token->next;
 		while (current_token && ft_piperedirect(current_token->token_type) == 1)
@@ -134,7 +135,7 @@ void	parsing(t_vars *vars, char *str)
 			if (current_token->token_type == WORD
 				|| current_token->token_type == QUOTE)
 				replace_env(current_token);
-			// printf(">>%s<<\n", current_token->buffer.str);
+			printf(">>%s<<\n", current_token->buffer.str);
 			current_token = current_token->next;
 		}
 		else
@@ -143,7 +144,7 @@ void	parsing(t_vars *vars, char *str)
 			vars->error = -1;
 			break ;
 		}
-		fill_commands(vars);
+		// fill_commands(vars);
 	}
 	return ;
 }
