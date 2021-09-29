@@ -29,14 +29,17 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_vars			vars;
 	char			*str;
-	struct termios	t;
+	t_command		*current_cmd;
 
 	(void)argc;
 	(void)argv;
+	// signal(SIGINT, ctrl_c);
 	create_envlist(&vars, envp);
-	tcgetattr(0, &t);
-	t.c_cc[VINTR] = 0;
-	tcsetattr(STDIN_FILENO, TCSANOW, &t);
+	tcgetattr(0, &vars.t);
+	tcgetattr(0, &vars.not_t);
+	vars.t.c_cc[VINTR] = 0;
+	vars.t.c_cc[VQUIT] = 0;
+	tcsetattr(STDIN_FILENO, TCSANOW, &vars.t);
 	str = readline("minishell$ ");
 	while (str != NULL)
 	{

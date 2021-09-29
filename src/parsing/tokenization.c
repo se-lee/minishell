@@ -77,9 +77,9 @@ int	token_identification(t_token *current_token, char *str)
 	else if (str[0] == '|')
 		i += token(current_token, str, '|', PIPE_SIGN);
 	else if (str[0] == '>')
-		i += token(current_token, str, '>', REDIRECT);
+		i += token(current_token, str, '>', REDIRECT_RIGHT);
 	else if (str[0] == '<')
-		i += token(current_token, str, '<', REDIRECT);
+		i += token(current_token, str, '<', REDIRECT_LEFT);
 	else if (str[0] == '"')
 		i += token_quote(current_token, str, '"', QUOTE);
 	else if (str[0] == '\'')

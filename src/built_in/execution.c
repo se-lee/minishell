@@ -34,8 +34,7 @@ static char	**get_command(t_vars *vars, t_token *current_token)
 	str_count = count_number_str_in_list(vars);
 	command = malloc(sizeof(char *) * (str_count + 1));
 	i = 0;
-	while (current_token && current_token->token_type != PIPE_SIGN
-			&& current_token->token_type != REDIRECT)
+	while (current_token && ft_piperedirect(current_token->token_type) == 0)
 	{
 		if (current_token->token_type == WORD)
 		{
@@ -97,6 +96,7 @@ void	builtin_exec(t_vars *vars, char **envp)
 	current_token = vars->first;
 	// if (ft_strcmp(command, "cd") == 0)
 		// builtin_cd(vars);
+	// tcsetattr(STDIN_FILENO, TCSANOW, &vars->not_t);
 	if (ft_strcmp(command, "echo") == 0)
 		builtin_echo(vars, current_token);
 	else if (ft_strcmp(command, "env") == 0)
@@ -111,4 +111,5 @@ void	builtin_exec(t_vars *vars, char **envp)
 		builtin_unset(vars, current_token->next);
 	else
 		command_exec(vars, envp);
+	// tcsetattr(STDIN_FILENO, TCSANOW, &vars->t);
 }

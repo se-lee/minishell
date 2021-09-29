@@ -25,7 +25,8 @@ enum e_type
 	QUOTE,
 	SINGLE_QUOTE,
 	PIPE_SIGN,
-	REDIRECT
+	REDIRECT_RIGHT,
+	REDIRECT_LEFT
 };
 
 struct s_string {
@@ -46,20 +47,27 @@ struct s_envlist {
 };
 
 struct s_command {
-	char	**command;
-	int		pipe;
+	char		**command;
+	int			pipe;
+	int			redirect_right;
+	int			redirect_left;
+	t_command	*next;
 };
 
 struct s_vars {
-	t_token		*first;
-	t_envlist	*envp;
-	t_command	*cmd;
-	int			error;
+	t_token			*first;
+	t_envlist		*envp;
+	t_command		*cmd;
+	struct	termios	t;
+	struct	termios	not_t;
+	int				return_value;
+	int				error;
 };
 
 //Parsing fonctions
 int		ft_isspecial(char c);
 int		ft_isupper(char c);
+int		ft_piperedirect(int token_type);
 void	*protected_malloc(size_t count, size_t size);
 void	add_char(t_token *token, char c);
 void	update_token(t_token *token, char *var, char *value);
