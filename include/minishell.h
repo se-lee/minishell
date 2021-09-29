@@ -16,6 +16,7 @@ typedef struct s_vars		t_vars;
 typedef struct s_token		t_token;
 typedef struct s_string		t_string;
 typedef struct s_envlist	t_envlist;
+typedef struct s_command	t_command;
 typedef enum e_type			t_type;
 
 enum e_type
@@ -23,7 +24,6 @@ enum e_type
 	WORD,
 	QUOTE,
 	SINGLE_QUOTE,
-	SPACE_SIGN,
 	PIPE_SIGN,
 	REDIRECT
 };
@@ -45,9 +45,15 @@ struct s_envlist {
 	t_envlist	*next;
 };
 
+struct s_command {
+	char	**command;
+	int		pipe;
+};
+
 struct s_vars {
 	t_token		*first;
 	t_envlist	*envp;
+	t_command	*cmd;
 	int			error;
 };
 

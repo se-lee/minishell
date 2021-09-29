@@ -36,6 +36,8 @@ int	check_error(t_token *token)
 	if ((token->token_type == QUOTE || token->token_type == SINGLE_QUOTE)
 		&& token->quote_nb != 2)
 		return (-1);
+	if (token->buffer.len > 2 && token->token_type == REDIRECT)
+		return (-1);
 	return (0);
 }
 
@@ -52,7 +54,7 @@ void	parsing(t_vars *vars, char *str)
 			if (current_token->token_type == WORD
 				|| current_token->token_type == QUOTE)
 				replace_env(current_token);
-			// printf(">>%s<<\n", current_token->buffer.str);
+			printf(">>%s<<\n", current_token->buffer.str);
 			current_token = current_token->next;
 		}
 		else

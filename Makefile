@@ -15,7 +15,7 @@ SRCS =	minishell.c						\
 		built_in/unset.c				\
 		built_in/execution.c			\
 
-GCCF = gcc -g #-fsanitize=address #-Wall -Wextra -Werror
+GCCF = gcc -g -fsanitize=address #-Wall -Wextra -Werror
 
 READLINE = -lreadline -L /Users/acusanno/.brew/opt/readline/lib -I/Users/acusanno/.brew/opt/readline/include
 

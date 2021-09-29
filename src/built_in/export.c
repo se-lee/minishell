@@ -126,8 +126,6 @@ void	builtin_export(t_vars *vars, t_token *current_token)
 	t_envlist	*sorted;
 
 	current_token = current_token->next;
-	if (current_token && current_token->token_type == SPACE_SIGN)
-		current_token = current_token->next;
 	if (current_token && current_token->token_type != PIPE_SIGN
 		&& current_token->token_type != REDIRECT)
 	{
