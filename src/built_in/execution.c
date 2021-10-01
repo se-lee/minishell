@@ -117,7 +117,6 @@ void	execute_command(t_vars *vars, char **envp)
 	int		fd[2];
 	int		pid;
 	int		status;
-	pid_t	wpid;
 
 	command = vars->cmd->command;
 	current_token = vars->first;
@@ -129,10 +128,13 @@ void	execute_command(t_vars *vars, char **envp)
 		perror("fork");
 	if (pid == 0)
 	{
-		dup2(fd[0], STDIN_FILENO);
-		close(fd[0]);
-		close(fd[1]);
+		pipe_flow(fd, STDOUT_FILENO);
 		run_command(vars, command, current_token, envp);
 	}
-	wpid = waitpid(pid, &status, 0);
+	if (pid > 0)
+	{
+		pipe_flow(fd, STDIN_FILENO);
+	}
+	waitpid(pid, &status, 0);
 }
+

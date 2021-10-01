@@ -96,7 +96,8 @@ t_envlist	*envlist_duplicate(t_envlist *envp);
 t_envlist	*envlist_sort_ascii(t_vars *vars);
 
 /* pipe */
-
-
+int	redirect_input(const char *file);
+int	redirect_output(const char *file);
+int	pipe_flow(int *fd, int inout);
 
 #endif

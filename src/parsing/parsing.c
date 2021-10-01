@@ -38,7 +38,32 @@ int	check_error(t_token *token)
 		return (-1);
 	if (token->buffer.len > 2 && ft_piperedirect(token->token_type) == 1)
 		return (-1);
+	if (ft_piperedirect(token->token_type) == 1
+		&& ft_piperedirect(token->next->token_type) == 1)
+		return (-1);
 	return (0);
+}
+
+char	*remove_quotes(char *original, int token_type)
+{
+	int		i;
+	char	*new;
+
+	i = 0;
+	if (token_type == QUOTE || token_type == SINGLE_QUOTE)
+	{
+		new = protected_malloc(ft_strlen(original), sizeof(char));
+		while (i < (ft_strlen(original) - 2))
+		{
+			new[i] = original[i + 1];
+			i++;
+		}
+		new[i] = '\0';
+		free(original);
+		return (new);
+	}
+	else
+		return (original);
 }
 
 void	fill_command(t_token *token, t_command *current_command)
@@ -63,6 +88,7 @@ void	fill_command(t_token *token, t_command *current_command)
 	while (current_token && ft_piperedirect(current_token->token_type) == 0)
 	{
 		cmd[i] = ft_strdup(current_token->buffer.str);
+		cmd[i] = remove_quotes(cmd[i], current_token->token_type);
 		i++;
 		current_token = current_token->next;
 	}
@@ -113,9 +139,6 @@ void	fill_commands(t_vars *vars)
 			current_cmd->next = NULL;
 		}
 		fill_command(current_token, current_cmd);
-		printf("pipes = %d\n", current_cmd->pipe);
-		printf("redirect_right = %d\n", current_cmd->redirect_right);
-		printf("redirect_left = %d\n", current_cmd->redirect_left);
 		while (current_token && ft_piperedirect(current_token->token_type) == 0)
 			current_token = current_token->next;
 		while (current_token && ft_piperedirect(current_token->token_type) == 1)
