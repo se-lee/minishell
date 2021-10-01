@@ -95,20 +95,20 @@ void	tokenization(t_vars *vars, char *str)
 	i = 0;
 	while (str[i])
 	{
-		if (i == 0)
+		while (str[i] && str[i] == ' ')
+			i++;
+		if (str[i] && i == 0)
 		{
 			vars->first = protected_malloc(1, sizeof(t_token));
 			current_token = vars->first;
 			current_token->next = NULL;
 		}
-		else
+		else if (str[i])
 		{
 			current_token->next = protected_malloc(1, sizeof(t_token));
 			current_token = current_token->next;
 			current_token->next = NULL;
 		}
-		while (str[i] && str[i] == ' ')
-			i++;
 		if (str[i])
 			i += token_identification(current_token, &str[i]);
 	}

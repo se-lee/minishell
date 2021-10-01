@@ -29,8 +29,6 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_vars			vars;
 	char			*str;
-	// t_command		*current_cmd;
-	// int i = 0;
 
 	(void)argc;
 	(void)argv;
@@ -48,17 +46,6 @@ int	main(int argc, char **argv, char **envp)
 		{
 			add_history(str);
 			parsing(&vars, str);
-			// current_cmd = vars.cmd;
-			// vars.cmd->len_cmd = 0;
-			// while (current_cmd)
-			// {
-			// 	while (i < 5)
-			// 	{
-			// 		printf("%s\n", current_cmd->command[i]);
-			// 		i++;
-			// 	}
-			// 	current_cmd = current_cmd->next;
-			// }
 			builtin_exec(&vars, envp);
 			free(str);
 			free_struct(&vars);

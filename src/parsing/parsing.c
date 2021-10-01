@@ -114,7 +114,6 @@ void	fill_commands(t_vars *vars)
 			current_cmd->next = NULL;
 		}
 		fill_command(current_token, current_cmd);
-		// current_token = current_token->next;
 		while (current_token && ft_piperedirect(current_token->token_type) == 0)
 			current_token = current_token->next;
 		while (current_token && ft_piperedirect(current_token->token_type) == 1)
@@ -144,7 +143,7 @@ void	parsing(t_vars *vars, char *str)
 			vars->error = -1;
 			break ;
 		}
-		// fill_commands(vars);
+		fill_commands(vars);
 	}
 	return ;
 }
