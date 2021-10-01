@@ -34,8 +34,7 @@ static char	**get_command(t_vars *vars, t_token *current_token)
 	str_count = count_number_str_in_list(vars);
 	command = malloc(sizeof(char *) * (str_count + 1));
 	i = 0;
-	while (current_token && current_token->token_type != PIPE_SIGN
-			&& current_token->token_type != REDIRECT)
+	while (current_token && ft_piperedirect(current_token->token_type) == 0)
 	{
 		if (current_token->token_type == WORD)
 		{

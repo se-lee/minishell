@@ -29,14 +29,16 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_vars			vars;
 	char			*str;
-	struct termios	t;
 
 	(void)argc;
 	(void)argv;
+	// signal(SIGINT, ctrl_c);
 	envlist_create(&vars, envp);
-	tcgetattr(0, &t);
-	t.c_cc[VINTR] = 0;
-	tcsetattr(STDIN_FILENO, TCSANOW, &t);
+	tcgetattr(0, &vars.t);
+	tcgetattr(0, &vars.not_t);
+	vars.t.c_cc[VINTR] = 0;
+	vars.t.c_cc[VQUIT] = 0;
+	tcsetattr(STDIN_FILENO, TCSANOW, &vars.t);
 	str = readline("minishell$ ");
 	while (str != NULL)
 	{
@@ -44,7 +46,8 @@ int	main(int argc, char **argv, char **envp)
 		{
 			add_history(str);
 			parsing(&vars, str);
-			execute_command(&vars, envp);
+			if (vars.error == 0)
+				execute_command(&vars, envp);
 			free(str);
 			free_struct(&vars);
 		}

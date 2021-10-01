@@ -16,6 +16,7 @@ typedef struct s_vars		t_vars;
 typedef struct s_token		t_token;
 typedef struct s_string		t_string;
 typedef struct s_envlist	t_envlist;
+typedef struct s_command	t_command;
 typedef enum e_type			t_type;
 
 enum e_type
@@ -23,9 +24,9 @@ enum e_type
 	WORD,
 	QUOTE,
 	SINGLE_QUOTE,
-	SPACE_SIGN,
 	PIPE_SIGN,
-	REDIRECT
+	REDIRECT_RIGHT,
+	REDIRECT_LEFT
 };
 
 struct s_string {
@@ -45,15 +46,28 @@ struct s_envlist {
 	t_envlist	*next;
 };
 
+struct s_command {
+	char		**command;
+	int			pipe;
+	int			redirect_right;
+	int			redirect_left;
+	t_command	*next;
+};
+
 struct s_vars {
-	t_token		*first;
-	t_envlist	*envp;
-	int			error;
+	t_token			*first;
+	t_envlist		*envp;
+	t_command		*cmd;
+	struct	termios	t;
+	struct	termios	not_t;
+	int				return_value;
+	int				error;
 };
 
 //Parsing fonctions
 int		ft_isspecial(char c);
 int		ft_isupper(char c);
+int		ft_piperedirect(int token_type);
 void	*protected_malloc(size_t count, size_t size);
 void	add_char(t_token *token, char c);
 void	update_token(t_token *token, char *var, char *value);

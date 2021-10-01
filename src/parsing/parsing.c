@@ -36,7 +36,91 @@ int	check_error(t_token *token)
 	if ((token->token_type == QUOTE || token->token_type == SINGLE_QUOTE)
 		&& token->quote_nb != 2)
 		return (-1);
+	if (token->buffer.len > 2 && ft_piperedirect(token->token_type) == 1)
+		return (-1);
 	return (0);
+}
+
+void	fill_command(t_token *token, t_command *current_command)
+{
+	int		i;
+	char 	**cmd;
+	t_token *current_token;
+
+	current_command->pipe = 0;
+	current_command->redirect_left = 0;
+	current_command->redirect_right = 0;
+	i = 0;
+	current_token = token;
+	while (current_token && ft_piperedirect(current_token->token_type) == 0)
+	{
+		i++;
+		current_token = current_token->next;
+	}
+	cmd = protected_malloc(i + 1, sizeof(char *));
+	i = 0;
+	current_token = token;
+	while (current_token && ft_piperedirect(current_token->token_type) == 0)
+	{
+		cmd[i] = ft_strdup(current_token->buffer.str);
+		i++;
+		current_token = current_token->next;
+	}
+	current_command->command = cmd;
+	if (current_token && ft_piperedirect(current_token->token_type) == 1)
+	{
+		if (current_token->token_type == PIPE_SIGN)
+			current_command->pipe = 1;
+		if (current_token->token_type == REDIRECT_LEFT)
+			current_command->redirect_left = current_token->buffer.len;
+		if (current_token->token_type == REDIRECT_RIGHT)
+			current_command->redirect_right = current_token->buffer.len;
+		current_token = current_token->next;
+	}
+	if (current_token && ft_piperedirect(current_token->token_type) == 1)
+	{
+		if (current_token->token_type == PIPE_SIGN)
+			current_command->pipe = 1;
+		if (current_token->token_type == REDIRECT_LEFT)
+			current_command->redirect_left = current_token->buffer.len;
+		if (current_token->token_type == REDIRECT_RIGHT)
+			current_command->redirect_right = current_token->buffer.len;
+		current_token = current_token->next;
+	}
+}
+
+void	fill_commands(t_vars *vars)
+{
+	int			i;
+	t_token		*current_token;
+	t_command	*current_cmd;
+
+	current_token = vars->first;
+	i = 0;
+	while(current_token)
+	{
+		if (i == 0)
+		{
+			vars->cmd = protected_malloc(1, sizeof(t_command));
+			current_cmd = vars->cmd;
+			current_cmd->next = NULL;
+			i++;
+		}
+		else
+		{
+			current_cmd = current_cmd->next;
+			current_cmd = protected_malloc(1, sizeof(t_command));
+			current_cmd->next = NULL;
+		}
+		fill_command(current_token, current_cmd);
+		printf("pipes = %d\n", current_cmd->pipe);
+		printf("redirect_right = %d\n", current_cmd->redirect_right);
+		printf("redirect_left = %d\n", current_cmd->redirect_left);
+		while (current_token && ft_piperedirect(current_token->token_type) == 0)
+			current_token = current_token->next;
+		while (current_token && ft_piperedirect(current_token->token_type) == 1)
+			current_token = current_token->next;
+	}
 }
 
 void	parsing(t_vars *vars, char *str)
@@ -52,7 +136,7 @@ void	parsing(t_vars *vars, char *str)
 			if (current_token->token_type == WORD
 				|| current_token->token_type == QUOTE)
 				replace_env(current_token);
-			// printf(">>%s<<\n", current_token->buffer.str);
+			printf(">>%s<<\n", current_token->buffer.str);
 			current_token = current_token->next;
 		}
 		else
@@ -62,5 +146,6 @@ void	parsing(t_vars *vars, char *str)
 			break ;
 		}
 	}
+	fill_commands(vars);
 	return ;
 }

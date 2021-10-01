@@ -46,3 +46,11 @@ void	ft_comandadd_back(t_token **alst, t_token *new)
 		new->next = NULL;
 	}
 }
+
+int	ft_piperedirect(int token_type)
+{
+	if (token_type == PIPE_SIGN || token_type == REDIRECT_RIGHT
+		|| token_type == REDIRECT_LEFT)
+		return (1);
+	return (0);
+}
