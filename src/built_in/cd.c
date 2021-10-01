@@ -36,7 +36,7 @@ void	builtin_cd(t_vars *vars, t_token *current_token)
 	char	*path;
 
 	current_token = current_token->next;
-	path = getcwd();
+	// path = getcwd();
 printf("path:%s\n", path);
 	chdir(path);
 
