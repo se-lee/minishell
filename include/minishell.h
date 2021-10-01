@@ -48,7 +48,6 @@ struct s_envlist {
 
 struct s_command {
 	char		**command;
-	int			len_cmd;
 	int			pipe;
 	int			redirect_right;
 	int			redirect_left;

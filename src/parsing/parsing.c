@@ -57,7 +57,6 @@ void	fill_command(t_token *token, t_command *current_command)
 		i++;
 		current_token = current_token->next;
 	}
-	printf("%d\n", i);
 	cmd = protected_malloc(i + 1, sizeof(char *));
 	i = 0;
 	current_token = token;
@@ -114,6 +113,9 @@ void	fill_commands(t_vars *vars)
 			current_cmd->next = NULL;
 		}
 		fill_command(current_token, current_cmd);
+		printf("pipes = %d\n", current_cmd->pipe);
+		printf("redirect_right = %d\n", current_cmd->redirect_right);
+		printf("redirect_left = %d\n", current_cmd->redirect_left);
 		while (current_token && ft_piperedirect(current_token->token_type) == 0)
 			current_token = current_token->next;
 		while (current_token && ft_piperedirect(current_token->token_type) == 1)
@@ -143,7 +145,7 @@ void	parsing(t_vars *vars, char *str)
 			vars->error = -1;
 			break ;
 		}
-		fill_commands(vars);
 	}
+	fill_commands(vars);
 	return ;
 }

@@ -46,7 +46,8 @@ int	main(int argc, char **argv, char **envp)
 		{
 			add_history(str);
 			parsing(&vars, str);
-			builtin_exec(&vars, envp);
+			if (vars.error == 0)
+				builtin_exec(&vars, envp);
 			free(str);
 			free_struct(&vars);
 		}
