@@ -91,25 +91,26 @@ void	execute_other_cmd(t_vars *vars, char **envp)
 
 void	execute_command(t_vars *vars, char **envp)
 {
-	char *command;
+	char	**command;
 	t_token	*current_token;
 
-	command = vars->first->buffer.str;
+	command = vars->cmd->command;
 	current_token = vars->first;
-	if (ft_strcmp(command, "cd") == 0)
-		builtin_cd(vars, current_token);
-	else if (ft_strcmp(command, "echo") == 0)
-		builtin_echo(vars, current_token->next);
-	else if (ft_strcmp(command, "env") == 0)
+printf("command[0]:%s\n", command[0]);
+	if (ft_strcmp(command[0], "cd") == 0)
+		builtin_cd(vars, current_token, envp);
+	else if (ft_strcmp(command[0], "echo") == 0)
+		builtin_echo(vars, current_token);
+	else if (ft_strcmp(command[0], "env") == 0)
 		builtin_env(vars);
-	else if (ft_strcmp(command, "exit") == 0)
+	else if (ft_strcmp(command[0], "exit") == 0)
 		builtin_exit();
-	else if (ft_strcmp(command, "export") == 0)
+	else if (ft_strcmp(command[0], "export") == 0)
 		builtin_export(vars, current_token);
-	else if (ft_strcmp(command, "pwd") == 0)
+	else if (ft_strcmp(command[0], "pwd") == 0)
 		builtin_pwd();
-	else if (ft_strcmp(command, "unset") == 0)
-		builtin_unset(vars, current_token->next);
+	else if (ft_strcmp(command[0], "unset") == 0)
+		builtin_unset(vars, current_token);
 	else
 		execute_other_cmd(vars, envp);
 }

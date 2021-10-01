@@ -45,6 +45,8 @@ printf("var_name: %s\n", var_name);
 	return (var_name);
 }
 
+// unset var then re-add the variable
+
 static void	rewrite_value(t_vars *vars, t_token *current_token, char *var_name)
 {
 	t_envlist	*current_env;
@@ -55,7 +57,10 @@ static void	rewrite_value(t_vars *vars, t_token *current_token, char *var_name)
 	while (current_env)
 	{
 		if (ft_strncmp(current_env->str, var_name, var_name_len) == 0)
+		{
+			free(current_env->str);
 			current_env->str = current_token->buffer.str;
+		}
 		current_env = current_env->next;
 	}
 }
@@ -70,10 +75,13 @@ void	builtin_export(t_vars *vars, t_token *current_token)
 	current_token = current_token->next;
 	if (current_token && ft_piperedirect(current_token->token_type) == 0)
 	{
-//	var_name = get_var_name(current_token->buffer.str);
 		var_str = current_token->buffer.str;
+		var_name = get_var_name(var_str);
 printf("var_str: %s\n", var_str);
-		add_new_var_to_list(vars, var_str);
+		if (getenv(var_name) == NULL)
+			add_new_var_to_list(vars, var_str);
+		else if (getenv(var_name) != NULL)
+			rewrite_value(vars, current_token, var_name);
 	}
 	else
 	{
@@ -81,6 +89,4 @@ printf("var_str: %s\n", var_str);
 		envlist_print_all(sorted);
 		envlist_free(sorted);
 	}
-	// if (getenv("var_name") != NULL)
-	// 	rewrite_value(vars, current_token, var_name);
 }

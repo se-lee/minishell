@@ -77,9 +77,8 @@ void	tokenization(t_vars *vars, char *str);
 void	parsing(t_vars *vars, char *str);
 void	ft_comandadd_back(t_token **alst, t_token *new);
 
-
 /* built-in commands */
-void	builtin_cd(t_vars *vars, t_token *current_token);
+void	builtin_cd(t_vars *vars, t_token *current_token, char **envp);
 void	builtin_echo(t_vars *vars, t_token *current_token);
 void	builtin_env(t_vars *vars);
 void	builtin_exit(void);
