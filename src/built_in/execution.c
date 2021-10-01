@@ -89,14 +89,9 @@ void	execute_other_cmd(t_vars *vars, char **envp)
 	perror(command_arr[0]);
 }
 
-void	execute_command(t_vars *vars, char **envp)
+//i dont like this name; rename later
+void	run_command(t_vars *vars, char **command, t_token *current_token, char **envp)
 {
-	char	**command;
-	t_token	*current_token;
-
-	command = vars->cmd->command;
-	current_token = vars->first;
-printf("command[0]:%s\n", command[0]);
 	if (ft_strcmp(command[0], "cd") == 0)
 		builtin_cd(vars, current_token, envp);
 	else if (ft_strcmp(command[0], "echo") == 0)
@@ -113,4 +108,31 @@ printf("command[0]:%s\n", command[0]);
 		builtin_unset(vars, current_token);
 	else
 		execute_other_cmd(vars, envp);
+}
+
+void	execute_command(t_vars *vars, char **envp)
+{
+	char	**command;
+	t_token	*current_token;
+	int		fd[2];
+	int		pid;
+	int		status;
+	pid_t	wpid;
+
+	command = vars->cmd->command;
+	current_token = vars->first;
+	pipe(fd);
+	if (pipe(fd) == -1)
+		perror("pipe");
+	pid = fork();
+	if (pid == -1)
+		perror("fork");
+	if (pid == 0)
+	{
+		dup2(fd[0], STDIN_FILENO);
+		close(fd[0]);
+		close(fd[1]);
+		run_command(vars, command, current_token, envp);
+	}
+	wpid = waitpid(pid, &status, 0);
 }
