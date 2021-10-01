@@ -33,7 +33,7 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	create_envlist(&vars, envp);
+	envlist_create(&vars, envp);
 	tcgetattr(0, &t);
 	t.c_cc[VINTR] = 0;
 	tcsetattr(STDIN_FILENO, TCSANOW, &t);
@@ -44,7 +44,7 @@ int	main(int argc, char **argv, char **envp)
 		{
 			add_history(str);
 			parsing(&vars, str);
-			builtin_exec(&vars, envp);
+			execute_command(&vars, envp);
 			free(str);
 			free_struct(&vars);
 		}

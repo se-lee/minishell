@@ -75,7 +75,8 @@ int	token_identification(t_token *current_token, char *str)
 	if (ft_isspecial(str[0]) == FALSE)
 		i += token_word(current_token, str);
 	else if (str[0] == ' ')
-		i += token(current_token, str, ' ', SPACE_SIGN);
+		i++;
+	//	i += token(current_token, str, ' ', SPACE_SIGN);
 	else if (str[0] == '|')
 		i += token(current_token, str, '|', PIPE_SIGN);
 	else if (str[0] == '>')

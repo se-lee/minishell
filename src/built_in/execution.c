@@ -40,11 +40,13 @@ static char	**get_command(t_vars *vars, t_token *current_token)
 		if (current_token->token_type == WORD)
 		{
 			command[i] = ft_strdup(current_token->buffer.str);
+//		printf("command[%d]:%s\n", i, command[i]);
 			i++;
 		}
 		current_token = current_token->next;
 	}
 	command[i] = NULL;
+//	printf("command[%d]:%s\n", i, command[i]);
 	return (command);
 }
 
@@ -68,7 +70,7 @@ static char	**get_command_path(t_vars *vars, char *command)
 	return (path_sep);
 }
 
-void	command_exec(t_vars *vars, char **envp)
+void	execute_other_cmd(t_vars *vars, char **envp)
 {
 	t_token	*current_token;
 	char	**command_arr;
@@ -88,17 +90,17 @@ void	command_exec(t_vars *vars, char **envp)
 	perror(command_arr[0]);
 }
 
-void	builtin_exec(t_vars *vars, char **envp)
+void	execute_command(t_vars *vars, char **envp)
 {
 	char *command;
 	t_token	*current_token;
 
 	command = vars->first->buffer.str;
 	current_token = vars->first;
-	// if (ft_strcmp(command, "cd") == 0)
-		// builtin_cd(vars);
+	if (ft_strcmp(command, "cd") == 0)
+		builtin_cd(vars, current_token);
 	if (ft_strcmp(command, "echo") == 0)
-		builtin_echo(vars, current_token);
+		builtin_echo(vars, current_token->next);
 	else if (ft_strcmp(command, "env") == 0)
 		builtin_env(vars);
 	else if (ft_strcmp(command, "exit") == 0)
@@ -110,5 +112,5 @@ void	builtin_exec(t_vars *vars, char **envp)
 	else if (ft_strcmp(command, "unset") == 0)
 		builtin_unset(vars, current_token->next);
 	else
-		command_exec(vars, envp);
+		execute_other_cmd(vars, envp);
 }

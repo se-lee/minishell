@@ -63,19 +63,27 @@ void	tokenization(t_vars *vars, char *str);
 void	parsing(t_vars *vars, char *str);
 void	ft_comandadd_back(t_token **alst, t_token *new);
 
-/* built-in utils */
-int		count_env(char **envp);
-void	print_all_env(t_envlist *envp);
-void	create_envlist(t_vars *vars, char **envp);
 
 /* built-in commands */
-void	builtin_cd(t_vars *vars);
+void	builtin_cd(t_vars *vars, t_token *current_token);
 void	builtin_echo(t_vars *vars, t_token *current_token);
 void	builtin_env(t_vars *vars);
-void	builtin_exec(t_vars *vars, char **envp);
 void	builtin_exit(void);
 void	builtin_export(t_vars *vars, t_token *current_token);
 void	builtin_unset(t_vars *vars, t_token *current_token);
 void	builtin_pwd(void);
+
+void	execute_command(t_vars *vars, char **envp);
+
+/* built-in: envlist utils */
+void		envlist_create(t_vars *vars, char **envp);
+void		envlist_free(t_envlist *to_free);
+void		envlist_print_all(t_envlist *envp);
+t_envlist	*envlist_duplicate(t_envlist *envp);
+t_envlist	*envlist_sort_ascii(t_vars *vars);
+
+/* pipe */
+
+
 
 #endif

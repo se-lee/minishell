@@ -2,7 +2,6 @@
 
 /*
 - [echo] with option -n
-
 when 'echo' is called with argument
 print the arguments 
 
@@ -10,10 +9,6 @@ print the arguments
 - where to put spaces
 
 */
-
-// declare *current_token = vars->first
-// to move (increment) current_token = current_token->next;
-// think about using "Token type"
 
 void	builtin_echo(t_vars *vars, t_token *current_token) 
 {

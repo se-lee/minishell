@@ -14,6 +14,7 @@ SRCS =	minishell.c						\
 		built_in/pwd.c					\
 		built_in/unset.c				\
 		built_in/execution.c			\
+		built_in/envlist_util.c
 
 GCCF = gcc -g #-fsanitize=address #-Wall -Wextra -Werror
 
