@@ -66,6 +66,20 @@ char	*remove_quotes(char *original, int token_type)
 		return (original);
 }
 
+add_piperedirect(t_token *current_token, t_command *current_command)
+{
+	if (current_token && ft_piperedirect(current_token->token_type) == 1)
+	{
+		if (current_token->token_type == PIPE_SIGN)
+			current_command->pipe = 1;
+		if (current_token->token_type == REDIRECT_LEFT)
+			current_command->redirect_left = current_token->buffer.len;
+		if (current_token->token_type == REDIRECT_RIGHT)
+			current_command->redirect_right = current_token->buffer.len;
+		current_token = current_token->next;
+	}
+}
+
 void	fill_command(t_token *token, t_command *current_command)
 {
 	int		i;
@@ -93,26 +107,8 @@ void	fill_command(t_token *token, t_command *current_command)
 		current_token = current_token->next;
 	}
 	current_command->command = cmd;
-	if (current_token && ft_piperedirect(current_token->token_type) == 1)
-	{
-		if (current_token->token_type == PIPE_SIGN)
-			current_command->pipe = 1;
-		if (current_token->token_type == REDIRECT_LEFT)
-			current_command->redirect_left = current_token->buffer.len;
-		if (current_token->token_type == REDIRECT_RIGHT)
-			current_command->redirect_right = current_token->buffer.len;
-		current_token = current_token->next;
-	}
-	if (current_token && ft_piperedirect(current_token->token_type) == 1)
-	{
-		if (current_token->token_type == PIPE_SIGN)
-			current_command->pipe = 1;
-		if (current_token->token_type == REDIRECT_LEFT)
-			current_command->redirect_left = current_token->buffer.len;
-		if (current_token->token_type == REDIRECT_RIGHT)
-			current_command->redirect_right = current_token->buffer.len;
-		current_token = current_token->next;
-	}
+	add_piperedirect(current_token, current_command);
+	add_piperedirect(current_token, current_command);
 }
 
 void	fill_commands(t_vars *vars)

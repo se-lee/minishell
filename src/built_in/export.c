@@ -72,7 +72,6 @@ void	builtin_export(t_vars *vars, t_token *current_token)
 	{
 //	var_name = get_var_name(current_token->buffer.str);
 		var_str = current_token->buffer.str;
-printf("var_str: %s\n", var_str);
 		add_new_var_to_list(vars, var_str);
 	}
 	else

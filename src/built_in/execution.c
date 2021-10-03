@@ -96,9 +96,9 @@ void	execute_command(t_vars *vars, char **envp)
 
 	command = vars->first->buffer.str;
 	current_token = vars->first;
-	// if (ft_strcmp(command, "cd") == 0)
-	// 	builtin_cd(vars, current_token);
-	if (ft_strcmp(command, "echo") == 0)
+	if (ft_strcmp(command, "cd") == 0)
+		builtin_cd(vars, current_token);
+	else if (ft_strcmp(command, "echo") == 0)
 		builtin_echo(vars, current_token);
 	else if (ft_strcmp(command, "env") == 0)
 		builtin_env(vars);

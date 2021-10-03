@@ -18,6 +18,14 @@ void	envlist_create(t_vars *vars, char **envp)
 		current_envlist->next = NULL;
 		i++;
 	}
+	current_envlist = vars->envp;
+	while (current_envlist && ft_strncmp(current_envlist->str, "OLDPWD=", 7) != 0)
+		current_envlist = current_envlist->next;
+	if (current_envlist && ft_strncmp(current_envlist->str, "OLDPWD=", 7) == 0)
+	{
+		free(current_envlist->str);
+		current_envlist->str = ft_strjoin_char("OLDPWD=", ' ');
+	}
 }
 
 void	envlist_free(t_envlist *to_free)
