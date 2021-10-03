@@ -110,31 +110,57 @@ void	run_command(t_vars *vars, char **command, t_token *current_token, char **en
 		execute_other_cmd(vars, envp);
 }
 
+// envp argument to be removed later
+void	child_process(t_vars *vars, char **command, t_token *current_token, char **envp, int fd[2])
+{
+	dup2(fd[0 ], 0);
+	close(fd[0]);
+	close(fd[1]);
+	run_command(vars, command, current_token, envp);
+}
+/*
+pid_t	child_process(int no_av, int in, int fds[2], t_pipex *pipex)
+{
+	pid_t	child;
+
+	child = fork();
+	if (child < 0)
+	{
+		perror("Fork ");
+		return (EXIT_FAILURE);
+	}
+	if (child == 0)
+	{
+		dup2(in, 0);
+		dup2(fds[1], 1);
+		close(in);
+		close (fds[1]);
+		close (fds[0]);
+		if (exec_process(pipex->av[no_av], pipex->path, pipex->env) == -1)
+			perror("execve ");
+	}
+	return (child);
+}
+*/
+
 void	execute_command(t_vars *vars, char **envp)
 {
 	char	**command;
 	t_token	*current_token;
 	int		fd[2];
-	int		pid;
+	int		child1;
 	int		status;
 
 	command = vars->cmd->command;
 	current_token = vars->first;
 	pipe(fd);
-	if (pipe(fd) == -1)
+	if (pipe(fd) < 0)
 		perror("pipe");
-	pid = fork();
-	if (pid == -1)
+	child1 = fork();
+	if (child1 < 0)
 		perror("fork");
-	if (pid == 0)
-	{
-		pipe_flow(fd, STDOUT_FILENO);
-		run_command(vars, command, current_token, envp);
-	}
-	if (pid > 0)
-	{
-		pipe_flow(fd, STDIN_FILENO);
-	}
-	waitpid(pid, &status, 0);
+	if (child1 == 0)
+		child_process(vars, command, current_token, envp, fd);
+	
+	waitpid(child1, &status, 0);
 }
-

@@ -6,6 +6,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sys/param.h>
+# include <sys/wait.h>
 # include <termios.h>
 # include "../libft/libft.h"
 
