@@ -32,6 +32,7 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
+	vars.error = 0;
 	// signal(SIGINT, ctrl_c);
 	envlist_create(&vars, envp);
 	tcgetattr(0, &vars.t);

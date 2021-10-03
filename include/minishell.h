@@ -42,7 +42,8 @@ struct s_token {
 };
 
 struct s_envlist {
-	char		*str;
+	char		*name;
+	char		*value;
 	t_envlist	*next;
 };
 
@@ -92,6 +93,7 @@ void	execute_command(t_vars *vars, char **envp);
 /* built-in: envlist utils */
 void		envlist_create(t_vars *vars, char **envp);
 void		envlist_free(t_envlist *to_free);
+char		*env_separation(char *str, int part);
 void		envlist_print_all(t_envlist *envp);
 t_envlist	*envlist_duplicate(t_envlist *envp);
 t_envlist	*envlist_sort_ascii(t_vars *vars);

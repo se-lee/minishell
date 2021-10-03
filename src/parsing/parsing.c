@@ -66,7 +66,7 @@ char	*remove_quotes(char *original, int token_type)
 		return (original);
 }
 
-add_piperedirect(t_token *current_token, t_command *current_command)
+void	add_piperedirect(t_token *current_token, t_command *current_command)
 {
 	if (current_token && ft_piperedirect(current_token->token_type) == 1)
 	{
@@ -107,7 +107,6 @@ void	fill_command(t_token *token, t_command *current_command)
 		current_token = current_token->next;
 	}
 	current_command->command = cmd;
-	add_piperedirect(current_token, current_command);
 	add_piperedirect(current_token, current_command);
 }
 

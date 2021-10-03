@@ -23,7 +23,8 @@ static void	add_new_var_to_list(t_vars *vars, char *new_var)
 		current_env = current_env->next;
 	current_env->next = malloc(sizeof(t_envlist));
 	current_env = current_env->next;
-	current_env->str = ft_strdup(new_var);
+	current_env->name = env_separation(new_var, 0);
+	current_env->value = env_separation(new_var, 1);
 	current_env->next = NULL;
 }
 
@@ -45,20 +46,20 @@ printf("var_name: %s\n", var_name);
 	return (var_name);
 }
 
-static void	rewrite_value(t_vars *vars, t_token *current_token, char *var_name)
-{
-	t_envlist	*current_env;
-	int			var_name_len;
+// static void	rewrite_value(t_vars *vars, t_token *current_token, char *var_name)
+// {
+// 	t_envlist	*current_env;
+// 	int			var_name_len;
 
-	var_name_len = ft_strlen(var_name);
-	current_env = vars->envp;
-	while (current_env)
-	{
-		if (ft_strncmp(current_env->str, var_name, var_name_len) == 0)
-			current_env->str = current_token->buffer.str;
-		current_env = current_env->next;
-	}
-}
+// 	var_name_len = ft_strlen(var_name);
+// 	current_env = vars->envp;
+// 	while (current_env)
+// 	{
+// 		if (ft_strncmp(current_env->str, var_name, var_name_len) == 0)
+// 			current_env->str = current_token->buffer.str;
+// 		current_env = current_env->next;
+// 	}
+// }
 
 void	builtin_export(t_vars *vars, t_token *current_token)
 {
@@ -70,7 +71,6 @@ void	builtin_export(t_vars *vars, t_token *current_token)
 	current_token = current_token->next;
 	if (current_token && ft_piperedirect(current_token->token_type) == 0)
 	{
-//	var_name = get_var_name(current_token->buffer.str);
 		var_str = current_token->buffer.str;
 		add_new_var_to_list(vars, var_str);
 	}
