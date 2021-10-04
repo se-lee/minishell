@@ -2,7 +2,7 @@
 
 void	envlist_print(t_envlist *envp)
 {
-	t_envlist *current_env;
+	t_envlist	*current_env;
 
 	current_env = envp;
 	while (current_env->next != NULL)

@@ -83,8 +83,8 @@ void	add_piperedirect(t_token *current_token, t_command *current_command)
 void	fill_command(t_token *token, t_command *current_command)
 {
 	int		i;
-	char 	**cmd;
-	t_token *current_token;
+	char	**cmd;
+	t_token	*current_token;
 
 	current_command->pipe = 0;
 	current_command->redirect_left = 0;
@@ -118,7 +118,7 @@ void	fill_commands(t_vars *vars)
 
 	current_token = vars->first;
 	i = 0;
-	while(current_token)
+	while (current_token)
 	{
 		if (i == 0)
 		{

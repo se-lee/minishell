@@ -9,7 +9,7 @@ void	ft_append(char **a, char *str)
 	*a = result;
 }
 
-int		count_number_str_in_list(t_vars *vars)
+int	count_number_str_in_list(t_vars *vars)
 {
 	int		count;
 	t_token	*index;
@@ -27,9 +27,9 @@ int		count_number_str_in_list(t_vars *vars)
 
 static char	**get_command(t_vars *vars, t_token *current_token)
 {
-	char **command;
-	int	str_count;
-	int	i;
+	char	**command;
+	int		str_count;
+	int		i;
 
 	str_count = count_number_str_in_list(vars);
 	command = malloc(sizeof(char *) * (str_count + 1));
@@ -39,21 +39,19 @@ static char	**get_command(t_vars *vars, t_token *current_token)
 		if (current_token->token_type == WORD)
 		{
 			command[i] = ft_strdup(current_token->buffer.str);
-//		printf("command[%d]:%s\n", i, command[i]);
 			i++;
 		}
 		current_token = current_token->next;
 	}
 	command[i] = NULL;
-//	printf("command[%d]:%s\n", i, command[i]);
 	return (command);
 }
 
 static char	**get_command_path(t_vars *vars, char *command)
 {
-	char		**path_sep;
-	char		*path;
-	int			i;
+	char	**path_sep;
+	char	*path;
+	int		i;
 
 	path = getenv("PATH");
 	if (path == NULL)
@@ -79,7 +77,6 @@ void	execute_other_cmd(t_vars *vars, char **envp)
 	current_token = vars->first;
 	command_arr = get_command(vars, current_token);
 	path_sep = get_command_path(vars, command_arr[0]);
-
 	i = 0;
 	while (path_sep[i])
 	{
@@ -91,7 +88,7 @@ void	execute_other_cmd(t_vars *vars, char **envp)
 
 void	execute_command(t_vars *vars, char **envp)
 {
-	char *command;
+	char	*command;
 	t_token	*current_token;
 
 	command = vars->first->buffer.str;

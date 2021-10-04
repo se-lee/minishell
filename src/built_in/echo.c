@@ -24,7 +24,7 @@ int	echo_n(char *str)
 	return (1);
 }
 
-void	builtin_echo(t_vars *vars, t_token *current_token) 
+void	builtin_echo(t_vars *vars, t_token *current_token)
 {
 	int	n_option;
 
@@ -44,7 +44,8 @@ void	builtin_echo(t_vars *vars, t_token *current_token)
 		{
 			printf("%s", current_token->buffer.str);
 			current_token = current_token->next;
-			if (current_token && ft_piperedirect(current_token->token_type) == 0)
+			if (current_token
+				&& ft_piperedirect(current_token->token_type) == 0)
 				printf(" ");
 		}
 	}
