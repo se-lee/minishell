@@ -25,6 +25,16 @@ void	free_struct(t_vars *vars)
 		free(current_token);
 }
 
+void	set_termios(void)
+{
+	struct termios	termios;
+
+	tcgetattr(0, &termios);
+	termios.c_cc[VINTR] = 0;
+	termios.c_cc[VQUIT] = 0;
+	tcsetattr(STDIN_FILENO, TCSANOW, &termios);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_vars			vars;
@@ -33,13 +43,9 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	vars.error = 0;
-	// signal(SIGINT, ctrl_c);
 	envlist_create(&vars, envp);
-	tcgetattr(0, &vars.t);
-	tcgetattr(0, &vars.not_t);
-	vars.t.c_cc[VINTR] = 0;
-	vars.t.c_cc[VQUIT] = 0;
-	tcsetattr(STDIN_FILENO, TCSANOW, &vars.t);
+	tcgetattr(0, &vars.saved_termios);
+	set_termios();
 	str = readline("minishell$ ");
 	while (str != NULL)
 	{

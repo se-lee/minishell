@@ -24,7 +24,7 @@ OBJS = $(addprefix bin/, ${SRCS:.c=.o})
 
 .PHONY :	all clean fclean re libft_
 
-bin/%.o : 		src/%.c		include/minishell.h
+bin/%.o : 	src/%.c	include/minishell.h
 			mkdir -p $(dir $@)
 			${GCCF} -c $< -o $@ -I include
 

@@ -80,6 +80,7 @@ void	execute_other_cmd(t_vars *vars, char **envp)
 	i = 0;
 	while (path_sep[i])
 	{
+		tcsetattr(STDIN_FILENO, TCSANOW, &vars->saved_termios);
 		execve(path_sep[i], command_arr, envp);
 		i++;
 	}
