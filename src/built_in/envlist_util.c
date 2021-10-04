@@ -119,7 +119,9 @@ t_envlist	*envlist_duplicate(t_envlist *envp)
 	new_env->name = ft_strjoin("declare -x ", temp);
 	free(temp);
 	if (current_env->value != NULL)
+	{
 		new_env->value = ft_strdup(current_env->value);
+	}
 	else
 		new_env->value = NULL;
 	new_env->next = NULL;
@@ -156,7 +158,7 @@ t_envlist	*envlist_sort_ascii(t_vars *vars)
 		if (ft_strcmp(current_env->name, current_env->next->name) > 0)
 		{
 			temp_name = current_env->name;
-			temp_value = current_env->name;
+			temp_value = current_env->value;
 			current_env->name = current_env->next->name;
 			current_env->value = current_env->next->value;
 			current_env->next->name = temp_name;
