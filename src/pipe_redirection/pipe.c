@@ -1,36 +1,25 @@
 #include "minishell.h"
 
-int	redirect_input(const char *file)
+pid_t	child_process(t_vars *vars, t_command *current_cmd)
 {
-	int	fd;
+	pid_t		child_pid;
+	
+	pipe(current_cmd->fd);
+	child_pid = fork();
+	if (pipe(current_cmd->fd) < 0)
+		perror("pipe");
+	dup2(current_cmd->fd[1], 1);
+	close(current_cmd->fd[0]);
+	close(current_cmd->fd[1]);
 
-	fd = open(file, O_RDONLY);
-	if (fd < 0)
-		perror((char *)file);
-	if (dup2(fd, STDIN_FILENO) == -1)
-		perror("dup2");
-	close(fd);
-	return (0);
+	return (child_pid);
 }
 
-int	redirect_output(const char *file)
-{
-	int	fd;
-
-	fd = open(file, O_CREAT | O_WRONLY, 0644);
-	if (fd < 0)
-		perror((char *)file);
-	if (dup2(fd, STDOUT_FILENO) == -1)
-		perror("dup2");
-	close(fd);
-	return (0);
-}
-
-int	pipe_flow(int *fd, int inout)
-{
-	if (dup2(fd[inout], inout) == -1)
-		perror("dup2");
-	close(fd[0]);
-	close(fd[1]);
-	return (0);
-}
+// int	pipe_flow(int *fd, int inout)
+// {
+// 	if (dup2(fd[inout], inout) == -1)
+// 		perror("dup2");
+// 	close(fd[0]);
+// 	close(fd[1]);
+// 	return (0);
+// }

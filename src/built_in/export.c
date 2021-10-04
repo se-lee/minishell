@@ -14,6 +14,14 @@ static int	format_is_valid(char *str)
 	return (FALSE);
 }
 
+// static int	var_is_new(t_vars *vars)
+// {
+// 	t_envlist *current_env;
+
+// 	current_env = vars->envp;
+
+// }
+
 static void	add_new_var_to_list(t_vars *vars, char *new_var)
 {
 	t_envlist *current_env;
@@ -39,14 +47,11 @@ static char	*get_var_name(char *var_str)
 			break ;
 		i++;
 	}
-printf("i: %d\n", i);
 	var_name = ft_substr(var_str, 0, i);
-printf("var_name: %s\n", var_name);
 	return (var_name);
 }
 
 // unset var then re-add the variable
-
 static void	rewrite_value(t_vars *vars, t_token *current_token, char *var_name)
 {
 	t_envlist	*current_env;
@@ -77,7 +82,6 @@ void	builtin_export(t_vars *vars, t_token *current_token)
 	{
 		var_str = current_token->buffer.str;
 		var_name = get_var_name(var_str);
-printf("var_str: %s\n", var_str);
 		if (getenv(var_name) == NULL)
 			add_new_var_to_list(vars, var_str);
 		else if (getenv(var_name) != NULL)

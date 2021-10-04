@@ -43,6 +43,8 @@ struct s_token {
 };
 
 struct s_envlist {
+	char		*name;
+	char		*value;
 	char		*str;
 	t_envlist	*next;
 };
@@ -52,6 +54,7 @@ struct s_command {
 	int			pipe;
 	int			redirect_right;
 	int			redirect_left;
+	int			fd[2];
 	t_command	*next;
 };
 
@@ -97,8 +100,6 @@ t_envlist	*envlist_duplicate(t_envlist *envp);
 t_envlist	*envlist_sort_ascii(t_vars *vars);
 
 /* pipe */
-int	redirect_input(const char *file);
-int	redirect_output(const char *file);
 int	pipe_flow(int *fd, int inout);
 
 #endif

@@ -69,6 +69,7 @@ static char	**get_command_path(t_vars *vars, char *command)
 	return (path_sep);
 }
 
+/*
 void	execute_other_cmd(t_vars *vars, char **envp)
 {
 	t_token	*current_token;
@@ -88,9 +89,78 @@ void	execute_other_cmd(t_vars *vars, char **envp)
 	}
 	perror(command_arr[0]);
 }
+*/
 
-//i dont like this name; rename later
-void	run_command(t_vars *vars, char **command, t_token *current_token, char **envp)
+int		envlist_count(t_vars *vars)
+{
+	int		count;
+	t_envlist	*current_envlist;
+
+	current_envlist = vars->envp;
+	count = 0;
+	while (current_envlist)
+	{
+		count++;
+		current_envlist = current_envlist->next;
+	}
+	return (count);
+}
+
+char **envlist_to_char_array(t_vars *vars)
+{
+	char	**env_arr;
+	char	*temp;
+	t_envlist	*current_envlist;
+	int		i;
+
+	i = 0;
+	env_arr = protected_malloc((envlist_count(vars) + 1), sizeof(char *));
+	if (current_envlist)
+	{
+		temp = ft_strjoin(current_envlist->name, "=");
+		env_arr[i] = ft_strjoin(temp, current_envlist->value);
+		free(temp);
+		i++;
+		current_envlist = current_envlist->next;
+	}
+	env_arr[i] = NULL;
+	return (env_arr);
+}
+
+void	execute_other_cmd(t_vars *vars, t_command *current_cmd)
+{
+	t_token	*current_token;
+	char	**env;
+	char	**path_sep;
+	int		i;
+
+	current_token = vars->first;
+	path_sep = get_command_path(vars, current_cmd->command[0]);
+	env = envlist_to_char_array(vars);
+	i = 0;
+	while (path_sep[i])
+	{
+		execve(path_sep[i], current_cmd->command, env);
+		i++;
+	}
+	perror(current_cmd->command[0]);
+}
+
+int		command_is_builtin(char **command)
+{
+	if ((ft_strcmp(command[0], "cd") == 0)
+		|| (ft_strcmp(command[0], "echo") == 0)
+		|| (ft_strcmp(command[0], "env") == 0)
+		|| (ft_strcmp(command[0], "exit") == 0)
+		|| (ft_strcmp(command[0], "export") == 0)
+		|| (ft_strcmp(command[0], "pwd") == 0)
+		|| (ft_strcmp(command[0], "unset") == 0))
+		return (TRUE);
+	else
+		return (FALSE);
+}
+
+void		run_command_builtin(t_vars *vars, char **command, t_token *current_token, char **envp)
 {
 	if (ft_strcmp(command[0], "cd") == 0)
 		builtin_cd(vars, current_token, envp);
@@ -106,18 +176,31 @@ void	run_command(t_vars *vars, char **command, t_token *current_token, char **en
 		builtin_pwd();
 	else if (ft_strcmp(command[0], "unset") == 0)
 		builtin_unset(vars, current_token);
-	else
-		execute_other_cmd(vars, envp);
 }
 
 // envp argument to be removed later
-void	child_process(t_vars *vars, char **command, t_token *current_token, char **envp, int fd[2])
+void	child_one(t_vars *vars, t_command *current_cmd, t_token *current_token, char **env, int fd[2])
 {
-	dup2(fd[0 ], 0);
+	dup2(fd[1], 1);
 	close(fd[0]);
 	close(fd[1]);
-	run_command(vars, command, current_token, envp);
+	if (command_is_builtin(current_cmd->command) == TRUE)
+		run_command_builtin(vars, current_cmd->command, current_token, env);
+	else
+		execute_other_cmd(vars, current_cmd);
 }
+
+void	child_two(t_vars *vars, t_command *current_cmd, t_token *current_token, char **env, int fd[2])
+{
+	dup2(fd[0], 0);
+	close(fd[0]);
+	close(fd[1]);
+	if (command_is_builtin(current_cmd->command) == TRUE)
+		run_command_builtin(vars, current_cmd->command, current_token, env);
+	else
+		execute_other_cmd(vars, current_cmd);
+}
+
 /*
 pid_t	child_process(int no_av, int in, int fds[2], t_pipex *pipex)
 {
@@ -145,22 +228,59 @@ pid_t	child_process(int no_av, int in, int fds[2], t_pipex *pipex)
 
 void	execute_command(t_vars *vars, char **envp)
 {
-	char	**command;
-	t_token	*current_token;
+	t_command	*current_cmd;
+	t_token		*current_token;
 	int		fd[2];
+	int		fd2[2];
 	int		child1;
+	int		child2;
 	int		status;
-
-	command = vars->cmd->command;
-	current_token = vars->first;
-	pipe(fd);
-	if (pipe(fd) < 0)
-		perror("pipe");
-	child1 = fork();
-	if (child1 < 0)
-		perror("fork");
-	if (child1 == 0)
-		child_process(vars, command, current_token, envp, fd);
 	
-	waitpid(child1, &status, 0);
+	current_token = vars->first;
+	current_cmd = vars->cmd;
+printf("pipe: %d\n", current_cmd->pipe);
+	if (command_is_builtin(current_cmd->command) == FALSE || current_cmd->pipe == 1)
+	{
+printf("cmd[0]: %s\n", current_cmd->command[0]);
+printf("builtin: %d\n", command_is_builtin(current_cmd->command));
+		pipe(fd);
+		if (pipe(fd) < 0)
+			perror("pipe");
+		child1 = fork();
+		if (child1 < 0)
+			perror("fork");
+		if (child1 == 0)
+			child_one(vars, current_cmd, current_token, envp, fd);
+	}
+	else
+		run_command_builtin(vars, current_cmd->command, current_token, envp);
+	// if (child1)
+	// 	waitpid(child1, &status, 0);
 }
+
+// void	execute_command(t_vars *vars, char **envp)
+// {
+// 	t_token *current_token;
+// 	int	fd[2][2];
+// 	int		child1;
+// 	int		child2;
+// 	int		status;
+	
+// 	current_token = vars->first;
+// 	pipe(fd[0]);
+// 	if (pipe(fd[0]) < 0)
+// 		perror("pipe");
+// 	child1 = fork();
+// 	if (child1 < 0)
+// 		perror("fork");
+// 	if (child1 == 0)
+// 		child_one(vars, vars->cmd->command, current_token, envp, &fd[2]);
+// 	if (vars->cmd->pipe == 1)
+// 	{
+// 		child2 = fork();
+// 		if (child2 == 0)
+// 		child_two(vars, vars->cmd->command, current_token, envp, &fd[2]);
+// 	}
+// 	waitpid(child1, &status, 0);
+// 	waitpid(child1, &status, 0);
+// }
