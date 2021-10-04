@@ -71,7 +71,6 @@ struct s_vars {
 int		ft_isspecial(char c);
 int		ft_isupper(char c);
 int		ft_piperedirect(int token_type);
-void	*protected_malloc(size_t count, size_t size);
 void	add_char(t_token *token, char c);
 void	update_token(t_token *token, char *var, char *value);
 char	*replace(char *full, char *placeholder, char *real);
@@ -89,7 +88,7 @@ void	builtin_export(t_vars *vars, t_token *current_token);
 void	builtin_unset(t_vars *vars, t_token *current_token);
 void	builtin_pwd(void);
 
-void	execute_command(t_vars *vars, char **envp);
+void	execute_command(t_vars *vars);
 
 /* built-in: envlist utils */
 void		envlist_create(t_vars *vars, char **envp);
@@ -100,6 +99,12 @@ t_envlist	*envlist_duplicate(t_envlist *envp);
 t_envlist	*envlist_sort_ascii(t_vars *vars);
 
 /* pipe */
-int	pipe_flow(int *fd, int inout);
+int		pipe_flow(int *fd, int inout);
+
+
+/* miscellaneous utils */
+void	ft_append(char **a, char *str);
+void	*protected_malloc(size_t count, size_t size);
+
 
 #endif
