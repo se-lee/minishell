@@ -1,7 +1,5 @@
 #include "minishell.h"
 
-// unset should delete both from envlist and real env
-
 void	envlist_delete_first(t_vars *vars, t_envlist *current_env)
 {
 	t_envlist *temp;
@@ -24,11 +22,11 @@ void	envlist_delete_first(t_vars *vars, t_envlist *current_env)
 		vars->envp = NULL;
 	}
 }
-	//	A B C (remove B)
+
 void	envlist_delete_var(t_vars *vars, t_envlist  *current_env)
 {
 	t_envlist *temp;
-
+	
 	if (current_env->next->next == NULL)
 	{
 		free(current_env->next->name);
@@ -64,12 +62,10 @@ void	builtin_unset(t_vars *vars, t_token *current_token)
 	{
 		while (current_env->next)
 		{
-			if (ft_strncmp(current_env->next->name, var_to_unset, ft_strlen(var_to_unset)) == 0)
-			{
-				// printf("%s\n", current_env->next->name);
+			if (ft_strncmp(current_env->next->name, var_to_unset, ft_strlen(var_to_unset) + 1) == 0)
 				envlist_delete_var(vars, current_env);
-			}
-			current_env = current_env->next;
+			if (current_env->next)
+				current_env = current_env->next;
 		}
 	}	
 }

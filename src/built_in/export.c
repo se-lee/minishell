@@ -14,14 +14,6 @@ static int	format_is_valid(char *str)
 	return (FALSE);
 }
 
-// static int	var_is_new(t_vars *vars)
-// {
-// 	t_envlist *current_env;
-
-// 	current_env = vars->envp;
-
-// }
-
 static void	add_new_var_to_list(t_vars *vars, char *new_var)
 {
 	t_envlist *current_env;
@@ -29,43 +21,12 @@ static void	add_new_var_to_list(t_vars *vars, char *new_var)
 	current_env = vars->envp;
 	while (current_env->next != NULL)
 		current_env = current_env->next;
-	current_env->next = malloc(sizeof(t_envlist));
+	current_env->next = protected_malloc(1, sizeof(t_envlist));
 	current_env = current_env->next;
 	current_env->name = env_separation(new_var, 0);
 	current_env->value = env_separation(new_var, 1);
 	current_env->next = NULL;
 }
-
-static char	*get_var_name(char *var_str)
-{
-	int		i;
-	char	*var_name;
-
-	i = 0;
-	while (var_str[i])
-	{
-		if (var_str[i] == '=')
-			break ;
-		i++;
-	}
-	var_name = ft_substr(var_str, 0, i);
-	return (var_name);
-}
-
-// static void	rewrite_value(t_vars *vars, t_token *current_token, char *var_name)
-// {
-// 	t_envlist	*current_env;
-// 	int			var_name_len;
-
-// 	var_name_len = ft_strlen(var_name);
-// 	current_env = vars->envp;
-// 	while (current_env)
-// 	{
-// 		if (ft_strncmp(current_env->str, var_name, var_name_len) == 0)
-// 			current_env->str = current_token->buffer.str;
-// 		current_env = current_env->next;
-// 	}
-// }
 
 void	builtin_export(t_vars *vars, t_token *current_token)
 {

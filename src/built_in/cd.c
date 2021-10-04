@@ -70,7 +70,7 @@ char	*find_pwd(t_vars *vars)
 	return (NULL);
 }
 
-void	builtin_cd(t_vars *vars, t_token *current_token, char **envp)
+void	builtin_cd(t_vars *vars, t_token *current_token)
 {
 	char	*path;
 	char	*path_temp;
