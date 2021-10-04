@@ -56,14 +56,14 @@ void	envlist_create(t_vars *vars, char **envp)
 		current_envlist->next = NULL;
 		i++;
 	}
-	// current_envlist = vars->envp;
-	// while (current_envlist && ft_strncmp(current_envlist->str, "OLDPWD=", 7) != 0)
-	// 	current_envlist = current_envlist->next;
-	// if (current_envlist && ft_strncmp(current_envlist->str, "OLDPWD=", 7) == 0)
-	// {
-	// 	free(current_envlist->str);
-	// 	current_envlist->str = ft_strjoin_char("OLDPWD=", ' ');
-	// }
+	current_envlist = vars->envp;
+	while (current_envlist && ft_strncmp(current_envlist->name, "OLDPWD", 7) != 0)
+		current_envlist = current_envlist->next;
+	if (current_envlist && ft_strncmp(current_envlist->name, "OLDPWD", 7) == 0)
+	{
+		free(current_envlist->value);
+		current_envlist->value = NULL;
+	}
 }
 
 void	envlist_free(t_envlist *to_free)
@@ -95,8 +95,13 @@ void	envlist_print_all(t_envlist *envp)
 		if (current_env->value)
 		{
 			printf("%s=", current_env->name);
-			printf("%s\n", current_env->value);
+			if (ft_strncmp(current_env->value, "", 2) == 0)
+				printf("\"\"\n");
+			else
+				printf("%s\n", current_env->value);
 		}
+		else
+			printf("%s\n", current_env->name);
 		current_env = current_env->next;
 	}
 	if (current_env->value)
