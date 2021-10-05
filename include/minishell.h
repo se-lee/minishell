@@ -101,10 +101,8 @@ t_envlist	*envlist_sort_ascii(t_vars *vars);
 /* pipe */
 int		pipe_flow(int *fd, int inout);
 
-
 /* miscellaneous utils */
 void	ft_append(char **a, char *str);
 void	*protected_malloc(size_t count, size_t size);
-
 
 #endif

@@ -1,13 +1,13 @@
 #include "minishell.h"
 
-char	*get_env_value(t_vars *vars, char *env_name)
+char	*get_env_value(t_envlist *envp, char *env_name)
 {
 	t_envlist *current_env;
 	char	*value;
 
-	current_env = vars->envp;
+	current_env = envp;
 	value = NULL;
-	while (current_env->next)
+	while (current_env)
 	{
 		if (ft_strcmp(current_env->name, env_name) == 0 && current_env->value)
 			value = ft_strdup(current_env->value);
@@ -16,37 +16,47 @@ char	*get_env_value(t_vars *vars, char *env_name)
 	return (value);
 }
 
-char	**get_command_path(t_vars *vars, char *command)
+char	*get_command_path(t_envlist *envp, char *command)
 {
-	t_envlist	*current_env;
 	char		**path_sep;
 	char		*path;
 	int			i;
 
-	path = get_env_value(vars, "PATH");
-printf("path:%s\n", path);
+	path = get_env_value(envp, "PATH");
+//printf("path:%s\n", path);
 	if (path == NULL)
+	{
 		perror("path invalid");
+		free(path);
+	}
 	path_sep = ft_split(path, ':');
+	free(path);
 	i = 0;
-	while (path_sep[i] != NULL)
+	while (path_sep[i])
 	{
 		ft_append(&path_sep[i], "/");
 		ft_append(&path_sep[i], command);
-printf("path_sep[%d]: %s\n", i, path_sep[i]);
+//printf("path_sep:%s\n", path_sep[i]);
+		if (access(path_sep[i], X_OK) == 0)
+		{
+			path = path_sep[i];
+			return(path);  //<!> the path_sep[i] after this will remain unfree-ed <!>
+		}
+		free(path_sep[i]);
 		i++;
 	}
-	return (path_sep);
+	perror("invalid path");
+	return (NULL);
 }
 
-int		envlist_count(t_vars *vars)
+int		envlist_count(t_envlist *envp)
 {
 	int		count;
 	t_envlist	*current_env;
 
-	current_env = vars->envp;
+	current_env = envp;
 	count = 0;
-	while (current_env->next)
+	while (current_env)
 	{
 		count++;
 		current_env = current_env->next;
@@ -54,7 +64,7 @@ int		envlist_count(t_vars *vars)
 	return (count);
 }
 
-char **envlist_to_char_array(t_vars *vars)
+char **envlist_to_char_array(t_envlist *envp)
 {
 	char	**env_arr;
 	char	*temp;
@@ -62,15 +72,15 @@ char **envlist_to_char_array(t_vars *vars)
 	int		i;
 
 	i = 0;
-	current_env = vars->envp;
-	env_arr = protected_malloc((envlist_count(vars) + 1), sizeof(char *));
-	while (current_env->next)
+	current_env = envp;
+	env_arr = protected_malloc((envlist_count(envp) + 1), sizeof(char *));
+	while (current_env)
 	{
 		env_arr[i] = ft_strjoin(current_env->name, "=");
 		if (current_env->value)
 			ft_append(&env_arr[i], current_env->value);
-		i++;
 		current_env = current_env->next;
+		i++;
 	}
 	env_arr[i] = NULL;
 	return (env_arr);
@@ -111,46 +121,51 @@ void	run_command_builtin(t_vars *vars, t_token *current_token, t_command *curren
 		builtin_unset(vars, current_token);
 }
 
-void	run_command_non_builtin(t_vars *vars, t_command *current_cmd, char *const env[])
+void	run_command_non_builtin(t_envlist *envlist, t_command *current_cmd, char **env)
 {
-	char	**path_sep;
-	int		i;
+	char	*path;
 
-printf("cmd:%s\n", current_cmd->command[0]);
-	path_sep = get_command_path(vars, current_cmd->command[0]);
-	i = 0;
-	while (path_sep[i])
-	{
-		execve(path_sep[i], current_cmd->command, env);
-		i++;
-	}
-//	perror(current_cmd->command[0]);
+	path = get_command_path(envlist, current_cmd->command[0]);
+// printf("path:%s\n", path);
+// for(int i = 0; current_cmd->command[i]; i++)
+// 		printf("cmd[%d]:%s\n", i, current_cmd->command[i]);
+	if (execve(path, current_cmd->command, env) < 0)
+		perror("execution failed");
 }
 
-void	child_one(t_vars *vars, t_command *current_cmd, t_token *current_token, char *const *env, int fd[2])
+void	child_one(t_vars *vars, t_command *current_cmd, t_token *current_token, 
+		int fd[2], char **env)
 {
+	t_envlist *envlist;
+
 	dup2(fd[1], 1);
 	close(fd[0]);
 	close(fd[1]);
+
+	envlist = vars->envp;
 	if (command_is_builtin(current_cmd->command) == TRUE)
-		run_command_builtin(vars, current_token, current_cmd);
+		run_command_builtin(vars, current_token, current_cmd); // <!> to be merged Adam's changes
 	else
-		run_command_non_builtin(vars, current_cmd, env);
+		run_command_non_builtin(envlist, current_cmd, env);
 }
 
-void	child_two(t_vars *vars, t_command *current_cmd, t_token *current_token, char *const *env, int fd[2])
+void	child_two(t_vars *vars, t_command *current_cmd, t_token *current_token,
+		int fd[2], char **env)
 {
+	t_envlist	*envlist;
+
 	dup2(fd[0], 0);
 	close(fd[0]);
 	close(fd[1]);
+
+	envlist = vars->envp;
 	if (command_is_builtin(current_cmd->command) == TRUE)
-		run_command_builtin(vars, current_token, current_cmd);
+		run_command_builtin(vars, current_token, current_cmd); // <!> to be merged Adam's changes
 	else
-		run_command_non_builtin(vars, current_cmd, env);
+		run_command_non_builtin(envlist, current_cmd, env);
 }
 
-/*
-pid_t	child_process(int no_av, int in, int fds[2], t_pipex *pipex)
+/* pid_t	child_process(int no_av, int in, int fds[2], t_pipex *pipex)
 {
 	pid_t	child;
 
@@ -177,6 +192,7 @@ pid_t	child_process(int no_av, int in, int fds[2], t_pipex *pipex)
 void	test_function_print_envarr(char **env, t_vars *vars)
 {
 	int	i = 0;
+	printf("\n--------------[CHAR ** ENV]----------------\n");
 	while (env[i])
 	{
 		printf("env[%d]:%s\n", i, env[i]);
@@ -184,25 +200,23 @@ void	test_function_print_envarr(char **env, t_vars *vars)
 	}
 	printf("\n--------------[LINKED LIST ENV]----------------\n");
 	envlist_print_all(vars->envp);
-	printf("\n--------------[LINKED LIST ENV]----------------\n");
-
+	printf("\n-----------------------------------------------\n");
 }
 
 void	execute_command(t_vars *vars)
 {
 	t_command	*current_cmd;
 	t_token		*current_token;
-	char *const *env;
+	char **env;
 	int		fd[2];
-	int		fd2[2];
-	int		child1;
-	int		child2;
+	pid_t	child1;
+	pid_t	child2;
 	int		status;
 	
-	env = envlist_to_char_array(vars);
 	current_token = vars->first;
 	current_cmd = vars->cmd;
-	if (command_is_builtin(current_cmd->command) == FALSE || current_cmd->pipe == 1)
+	env = envlist_to_char_array(vars->envp);
+	if (command_is_builtin(current_cmd->command) == FALSE || current_cmd->pipe > 0)
 	{
 		pipe(fd);
 		if (pipe(fd) < 0)
@@ -211,10 +225,12 @@ void	execute_command(t_vars *vars)
 		if (child1 < 0)
 			perror("fork");
 		if (child1 == 0)
-			child_one(vars, current_cmd, current_token, env, fd);
+			child_one(vars, current_cmd, current_token, fd, env);
 	}
 	else
 		run_command_builtin(vars, current_token, current_cmd);
 	if (child1)
 		waitpid(child1, &status, 0);
+	if (child2)
+		waitpid(child2, &status, 0);
 }
