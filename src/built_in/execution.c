@@ -14,13 +14,54 @@ char	*get_env_value(t_envlist *envp, char *env_name)
 		current_env = current_env->next;	
 	}
 	return (value);
+	result = ft_strjoin(*a, str);
+	free(*a);
+	*a = result;
+}
+
+int	count_number_str_in_list(t_vars *vars)
+{
+	int		count;
+	t_token	*index;
+
+	index = vars->first;
+	count = 0;
+	while (index)
+	{
+		if (index->token_type == WORD)
+			count++;
+		index = index->next;
+	}
+	return (count);
+}
+
+static char	**get_command(t_vars *vars, t_token *current_token)
+{
+	char	**command;
+	int		str_count;
+	int		i;
+
+	str_count = count_number_str_in_list(vars);
+	command = malloc(sizeof(char *) * (str_count + 1));
+	i = 0;
+	while (current_token && ft_piperedirect(current_token->token_type) == 0)
+	{
+		if (current_token->token_type == WORD)
+		{
+			command[i] = ft_strdup(current_token->buffer.str);
+			i++;
+		}
+		current_token = current_token->next;
+	}
+	command[i] = NULL;
+	return (command);
 }
 
 char	*get_command_path(t_envlist *envp, char *command)
 {
-	char		**path_sep;
-	char		*path;
-	int			i;
+	char	**path_sep;
+	char	*path;
+	int		i;
 
 	path = get_env_value(envp, "PATH");
 //printf("path:%s\n", path);
@@ -71,6 +112,9 @@ char **envlist_to_char_array(t_envlist *envp)
 	t_envlist	*current_env;
 	int		i;
 
+	current_token = vars->first;
+	command_arr = get_command(vars, current_token);
+	path_sep = get_command_path(vars, command_arr[0]);
 	i = 0;
 	current_env = envp;
 	env_arr = protected_malloc((envlist_count(envp) + 1), sizeof(char *));
@@ -80,6 +124,8 @@ char **envlist_to_char_array(t_envlist *envp)
 		if (current_env->value)
 			ft_append(&env_arr[i], current_env->value);
 		current_env = current_env->next;
+		tcsetattr(STDIN_FILENO, TCSANOW, &vars->saved_termios);
+		execve(path_sep[i], command_arr, envp);
 		i++;
 	}
 	env_arr[i] = NULL;
@@ -110,6 +156,16 @@ void	run_command_builtin(t_vars *vars, t_token *current_token, t_command *curren
 	else if (ft_strcmp(command[0], "echo") == 0)
 		builtin_echo(vars, current_token);
 	else if (ft_strcmp(command[0], "env") == 0)
+	char		*command;
+	t_command	*current_cmd;
+
+	command = vars->first->buffer.str;
+	current_token = vars->first;
+	if (ft_strcmp(command, "cd") == 0)
+		builtin_cd(vars, vars->cmd);
+	else if (ft_strcmp(command, "echo") == 0)
+		builtin_echo(vars, vars->cmd);
+	else if (ft_strcmp(command, "env") == 0)
 		builtin_env(vars);
 	else if (ft_strcmp(command[0], "exit") == 0)
 		builtin_exit();
@@ -259,6 +315,12 @@ printf("next cmd:%s\n", current_cmd->command[0]);
 			}
 		}
 	}
+	else if (ft_strcmp(command, "export") == 0)
+		builtin_export(vars, vars->cmd);
+	else if (ft_strcmp(command, "pwd") == 0)
+		builtin_pwd();
+	else if (ft_strcmp(command, "unset") == 0)
+		builtin_unset(vars, vars->cmd);
 	else
 		run_command_builtin(vars, current_token, current_cmd);
 	if (child1)

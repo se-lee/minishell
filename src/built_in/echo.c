@@ -24,27 +24,28 @@ int	echo_n(char *str)
 	return (1);
 }
 
-void	builtin_echo(t_vars *vars, t_token *current_token) 
+void	builtin_echo(t_vars *vars, t_command *current_cmd)
 {
 	int	n_option;
+	int	i;
 
 	n_option = 0;
-	current_token = current_token->next;
-	if (current_token && ft_piperedirect(current_token->token_type) == 0)
+	if (current_cmd && current_cmd->command[1])
 	{
-		if (current_token->buffer.str[0] == '-')
+		if (current_cmd->command[1][0] == '-')
 		{
-			while (echo_n(current_token->buffer.str) == 1)
+			i = 1;
+			while (echo_n(current_cmd->command[i]) == 1)
 			{
 				n_option = 1;
-				current_token = current_token->next;
+				i++;
 			}
 		}
-		while (current_token && ft_piperedirect(current_token->token_type) == 0)
+		while (current_cmd->command[i])
 		{
-			printf("%s", current_token->buffer.str);
-			current_token = current_token->next;
-			if (current_token && ft_piperedirect(current_token->token_type) == 0)
+			printf("%s", current_cmd->command[i]);
+			i++;
+			if (current_cmd->command[i])
 				printf(" ");
 		}
 	}

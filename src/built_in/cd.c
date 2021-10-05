@@ -19,11 +19,14 @@ char	*search_home(t_envlist	*envp)
 	return (home_path);
 }
 
-void	replace_pwd(t_vars *vars, t_envlist *current_envp, char *name, char *pwd)
+void	replace_pwd(t_vars *vars, t_envlist *current_envp,
+		char *name, char *pwd)
 {
-	while (current_envp && ft_strncmp(current_envp->name, name, (int)ft_strlen(name)) != 0)
+	while (current_envp && ft_strncmp(current_envp->name,
+			name, (int)ft_strlen(name)) != 0)
 		current_envp = current_envp->next;
-	if (current_envp && ft_strncmp(current_envp->name, name, (int)ft_strlen(name)) == 0)
+	if (current_envp && ft_strncmp(current_envp->name,
+			name, (int)ft_strlen(name)) == 0)
 	{
 		free(current_envp->value);
 		if (pwd != NULL)
@@ -70,19 +73,19 @@ char	*find_pwd(t_vars *vars)
 	return (NULL);
 }
 
-void	builtin_cd(t_vars *vars, t_token *current_token)
+void	builtin_cd(t_vars *vars, t_command *current_cmd)
 {
 	char	*path;
 	char	*path_temp;
 	char	*home;
 	char	*old_pwd;
 
-	current_token = current_token->next;
-	path_temp = current_token->buffer.str;
+	path_temp = current_cmd->command[1];
 	if (path_temp[0] == '~')
 	{
 		home = search_home(vars->envp);
-		path = ft_strjoin(home, ft_substr(path_temp, 1, ft_strlen(path_temp) - 1));
+		path = ft_strjoin(home,
+				ft_substr(path_temp, 1, ft_strlen(path_temp) - 1));
 		free(home);
 		chdir(path);
 		old_pwd = find_pwd(vars);

@@ -61,8 +61,7 @@ struct s_vars {
 	t_token			*first;
 	t_envlist		*envp;
 	t_command		*cmd;
-	struct	termios	t;
-	struct	termios	not_t;
+	struct termios	saved_termios;
 	int				return_value;
 	int				error;
 };
@@ -89,6 +88,27 @@ void	builtin_unset(t_vars *vars, t_token *current_token);
 void	builtin_pwd(void);
 
 void	execute_command(t_vars *vars);
+int			ft_isspecial(char c);
+int			ft_isupper(char c);
+int			ft_piperedirect(int token_type);
+void		*protected_malloc(size_t count, size_t size);
+void		add_char(t_token *token, char c);
+void		update_token(t_token *token, char *var, char *value);
+char		*replace(char *full, char *placeholder, char *real);
+void		replace_env(t_token *token);
+void		tokenization(t_vars *vars, char *str);
+void		parsing(t_vars *vars, char *str);
+void		ft_comandadd_back(t_token **alst, t_token *new);
+
+/* built-in commands */
+void		builtin_cd(t_vars *vars, t_command *current_cmd);
+void		builtin_echo(t_vars *vars, t_command *current_cmd);
+void		builtin_env(t_vars *vars);
+void		builtin_exit(void);
+void		builtin_export(t_vars *vars, t_command *current_cmd);
+void		builtin_unset(t_vars *vars, t_command *current_cmd);
+void		builtin_pwd(void);
+void		execute_command(t_vars *vars, char **envp);
 
 /* built-in: envlist utils */
 void		envlist_create(t_vars *vars, char **envp);
