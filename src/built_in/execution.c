@@ -134,11 +134,12 @@ void	run_command_non_builtin(t_envlist *envlist, t_command *current_cmd, char **
 }
 
 void	child_one(t_vars *vars, t_command *current_cmd, t_token *current_token, 
-		int fd[2], char **env)
+		int fd[2], int	fd2[2], char **env)
 {
 	t_envlist *envlist;
 
-	dup2(fd[1], 1);
+	dup2(fd[0], 0);
+	dup2(fd2[1], 1);
 	close(fd[0]);
 	close(fd[1]);
 
@@ -154,10 +155,10 @@ void	child_two(t_vars *vars, t_command *current_cmd, t_token *current_token,
 {
 	t_envlist	*envlist;
 
-	dup2(fd[0], 0);
+	dup2(fd[1], 1);
 	close(fd[0]);
 	close(fd[1]);
-
+	
 	envlist = vars->envp;
 	if (command_is_builtin(current_cmd->command) == TRUE)
 		run_command_builtin(vars, current_token, current_cmd); // <!> to be merged Adam's changes
@@ -203,12 +204,23 @@ void	test_function_print_envarr(char **env, t_vars *vars)
 	printf("\n-----------------------------------------------\n");
 }
 
+
+void	test_func_print_commands(t_command *current_cmd)
+{
+	while (current_cmd)
+	{
+		printf("cmd:%s\n", current_cmd->command[0]);
+		current_cmd = current_cmd->next;
+	}
+}
+
 void	execute_command(t_vars *vars)
 {
 	t_command	*current_cmd;
 	t_token		*current_token;
 	char **env;
 	int		fd[2];
+	int		fd2[2];
 	pid_t	child1;
 	pid_t	child2;
 	int		status;
@@ -216,21 +228,39 @@ void	execute_command(t_vars *vars)
 	current_token = vars->first;
 	current_cmd = vars->cmd;
 	env = envlist_to_char_array(vars->envp);
+
+test_func_print_commands(current_cmd);
+
 	if (command_is_builtin(current_cmd->command) == FALSE || current_cmd->pipe > 0)
 	{
-		pipe(fd);
-		if (pipe(fd) < 0)
-			perror("pipe");
-		child1 = fork();
-		if (child1 < 0)
-			perror("fork");
-		if (child1 == 0)
-			child_one(vars, current_cmd, current_token, fd, env);
+		while (current_cmd)
+		{
+			pipe(fd);
+			if (pipe(fd) < 0)
+				perror("pipe");
+			child1 = fork();
+			if (child1 < 0)
+				perror("fork");
+			if (child1 == 0)
+				child_one(vars, current_cmd, current_token, fd, fd2, env);
+		current_cmd = current_cmd->next;
+printf("next cmd:%s\n", current_cmd->command[0]);
+		current_token = current_token->next;
+			if (current_cmd->pipe > 0)
+			{
+				pipe(fd2);
+				if (pipe(fd2) < 0)
+					perror("pipe2");
+				child2 = fork();
+				if (child2 < 0)
+					perror("fork2");
+				if (child2 == 0)
+					child_two(vars, current_cmd, current_token, fd2, env);
+			}
+		}
 	}
 	else
 		run_command_builtin(vars, current_token, current_cmd);
 	if (child1)
 		waitpid(child1, &status, 0);
-	if (child2)
-		waitpid(child2, &status, 0);
 }

@@ -15,11 +15,11 @@ pid_t	child_process(t_vars *vars, t_command *current_cmd)
 	return (child_pid);
 }
 
-// int	pipe_flow(int *fd, int inout)
-// {
-// 	if (dup2(fd[inout], inout) == -1)
-// 		perror("dup2");
-// 	close(fd[0]);
-// 	close(fd[1]);
-// 	return (0);
-// }
+int	pipe_flow(int *fd, int inout)
+{
+	if (dup2(fd[inout], inout) == -1)
+		perror("dup2");
+	close(fd[0]);
+	close(fd[1]);
+	return (0);
+}
