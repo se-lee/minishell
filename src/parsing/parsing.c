@@ -137,7 +137,7 @@ void	fill_commands(t_vars *vars)
 		fill_command(current_token, current_cmd);
 		while (current_token && ft_piperedirect(current_token->token_type) == 0)
 			current_token = current_token->next;
-		while (current_token && ft_piperedirect(current_token->token_type) == 1)
+		if (current_token && ft_piperedirect(current_token->token_type) == 1)
 			current_token = current_token->next;
 	}
 }
