@@ -78,14 +78,13 @@ void		parsing(t_vars *vars, char *str);
 void		ft_comandadd_back(t_token **alst, t_token *new);
 
 /* built-in commands */
-void		builtin_cd(t_vars *vars, t_token *current_token);
-void		builtin_echo(t_vars *vars, t_token *current_token);
+void		builtin_cd(t_vars *vars, t_command *current_cmd);
+void		builtin_echo(t_vars *vars, t_command *current_cmd);
 void		builtin_env(t_vars *vars);
 void		builtin_exit(void);
-void		builtin_export(t_vars *vars, t_token *current_token);
-void		builtin_unset(t_vars *vars, t_token *current_token);
+void		builtin_export(t_vars *vars, t_command *current_cmd);
+void		builtin_unset(t_vars *vars, t_command *current_cmd);
 void		builtin_pwd(void);
-
 void		execute_command(t_vars *vars, char **envp);
 
 /* built-in: envlist utils */

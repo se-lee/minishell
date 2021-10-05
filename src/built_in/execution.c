@@ -89,25 +89,25 @@ void	execute_other_cmd(t_vars *vars, char **envp)
 
 void	execute_command(t_vars *vars, char **envp)
 {
-	char	*command;
-	t_token	*current_token;
+	char		*command;
+	t_command	*current_cmd;
 
 	command = vars->first->buffer.str;
 	current_token = vars->first;
 	if (ft_strcmp(command, "cd") == 0)
-		builtin_cd(vars, current_token);
+		builtin_cd(vars, vars->cmd);
 	else if (ft_strcmp(command, "echo") == 0)
-		builtin_echo(vars, current_token);
+		builtin_echo(vars, vars->cmd);
 	else if (ft_strcmp(command, "env") == 0)
 		builtin_env(vars);
 	else if (ft_strcmp(command, "exit") == 0)
 		builtin_exit();
 	else if (ft_strcmp(command, "export") == 0)
-		builtin_export(vars, current_token);
+		builtin_export(vars, vars->cmd);
 	else if (ft_strcmp(command, "pwd") == 0)
 		builtin_pwd();
 	else if (ft_strcmp(command, "unset") == 0)
-		builtin_unset(vars, current_token->next);
+		builtin_unset(vars, vars->cmd);
 	else
 		execute_other_cmd(vars, envp);
 }

@@ -106,6 +106,7 @@ void	fill_command(t_token *token, t_command *current_command)
 		i++;
 		current_token = current_token->next;
 	}
+	cmd[i] = NULL;
 	current_command->command = cmd;
 	add_piperedirect(current_token, current_command);
 }

@@ -46,15 +46,16 @@ void	envlist_delete_var(t_vars *vars, t_envlist *current_env)
 	}
 }
 
-void	builtin_unset(t_vars *vars, t_token *current_token)
+void	builtin_unset(t_vars *vars, t_command *current_cmd)
 {
 	char		*var_to_unset;
 	char		*var_str;
 	t_envlist	*current_env;
+	int			i;
 
-	if (!(current_token) || ft_piperedirect(current_token->token_type) == 1)
+	if (!(current_cmd))
 		return ;
-	var_to_unset = current_token->buffer.str;
+	var_to_unset = current_cmd->command[1];
 	current_env = vars->envp;
 	if (ft_strncmp(current_env->name, var_to_unset,
 			ft_strlen(var_to_unset)) == 0)

@@ -101,20 +101,26 @@ void	delete_env(t_envlist *envp, char *str)
 	}
 }
 
-void	builtin_export(t_vars *vars, t_token *current_token)
+void	builtin_export(t_vars *vars, t_command *current_cmd)
 {
 	char		*var_str;
 	char		*var_name;
 	char		*temp;
 	t_envlist	*sorted;
+	int			i;
 
-	current_token = current_token->next;
-	if (current_token && ft_piperedirect(current_token->token_type) == 0)
+	if (current_cmd && current_cmd->command[1])
 	{
-		var_str = current_token->buffer.str;
+		var_str = current_cmd->command[1];
 		if (ft_inenv(vars->envp, var_str) == 1)
 			delete_env(vars->envp, var_str);
 		add_new_var_to_list(vars, var_str);
+		i = 2;
+		while (current_cmd->command[i])
+		{
+			printf("export: '%s': not a valid identifier\n", current_cmd->command[i]);
+			i++;
+		}
 	}
 	else
 	{
