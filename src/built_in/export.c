@@ -111,14 +111,13 @@ void	builtin_export(t_vars *vars, t_command *current_cmd)
 
 	if (current_cmd && current_cmd->command[1])
 	{
-		var_str = current_cmd->command[1];
-		if (ft_inenv(vars->envp, var_str) == 1)
-			delete_env(vars->envp, var_str);
-		add_new_var_to_list(vars, var_str);
-		i = 2;
+		i = 1;
 		while (current_cmd->command[i])
 		{
-			printf("export: '%s': not a valid identifier\n", current_cmd->command[i]);
+			var_str = current_cmd->command[i];
+			if (ft_inenv(vars->envp, var_str) == 1)
+				delete_env(vars->envp, var_str);
+			add_new_var_to_list(vars, var_str);
 			i++;
 		}
 	}

@@ -19,7 +19,23 @@ char	*find_variable(char *str)
 	return (var);
 }
 
-void	replace_env(t_token *token)
+char    *get_env_value(t_envlist *envp, char *env_name)
+{
+    t_envlist *current_env;
+    char    *value;
+
+    current_env = envp;
+    value = NULL;
+    while (current_env)
+    {
+        if (ft_strcmp(current_env->name, env_name) == 0 && current_env->value)
+            value = ft_strdup(current_env->value);
+        current_env = current_env->next;    
+    }
+    return (value);
+}
+
+void	replace_env(t_envlist *envp, t_token *token)
 {
 	int		i;
 	char	*var;
@@ -31,7 +47,7 @@ void	replace_env(t_token *token)
 		if (token->buffer.str[i] == '$')
 		{
 			var = find_variable(&token->buffer.str[i]);
-			value = getenv(&var[1]);
+			value = get_env_value(envp, &var[1]);
 			update_token(token, var, value);
 			i = -1;
 		}
