@@ -32,7 +32,7 @@ static char	**get_command(t_vars *vars, t_token *current_token)
 	int		i;
 
 	str_count = count_number_str_in_list(vars);
-	command = malloc(sizeof(char *) * (str_count + 1));
+	command = protected_malloc(str_count + 1, sizeof(char *));
 	i = 0;
 	while (current_token && ft_piperedirect(current_token->token_type) == 0)
 	{

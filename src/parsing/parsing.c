@@ -118,11 +118,11 @@ char	**command_create(t_token *current_token, int i)
 			j = 0;
 			while (split_str[j])
 			{
-				printf("i = %d, j = %d, split_str = %s\n", i, j, split_str[j]);
 				cmd[i] = split_str[j];
 				j++;
 				i++;
 			}
+			free_array(split_str);
 		}
 		else
 			cmd[i] = ft_strdup(current_token->buffer.str);

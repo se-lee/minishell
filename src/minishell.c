@@ -9,7 +9,7 @@ void	free_token(t_token *token)
 	free(token);
 }
 
-void	free_struct(t_vars *vars)
+void	free_tokens(t_vars *vars)
 {
 	t_token	*current_token;
 	t_token	*next;
@@ -23,6 +23,39 @@ void	free_struct(t_vars *vars)
 	}
 	if (current_token)
 		free(current_token);
+}
+
+void	free_array(char	**array)
+{
+	int	i;
+
+	i = 0;
+	while (array[i])
+	{
+		free(array[i]);
+		i++;
+	}
+	free(array);
+}
+
+void	free_commands(t_vars *vars)
+{
+	t_command	*current_cmd;
+	t_command	*next;
+
+	current_cmd = vars->cmd;
+	while (current_cmd->next)
+	{
+		next = current_cmd->next;
+		free_array(current_cmd->command);
+		free(current_cmd);
+		current_cmd = next;
+	}
+	if (current_cmd)
+	{
+		free_array(current_cmd->command);
+		free(current_cmd);
+	}
 }
 
 void	set_termios(void)
@@ -42,7 +75,6 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	vars.error = 0;
 	envlist_create(&vars, envp);
 	tcgetattr(0, &vars.saved_termios);
 	set_termios();
@@ -51,12 +83,14 @@ int	main(int argc, char **argv, char **envp)
 	{
 		if (str[0])
 		{
+			vars.error = 0;
 			add_history(str);
 			parsing(&vars, str);
 			if (vars.error == 0)
 				execute_command(&vars, envp);
 			free(str);
-			free_struct(&vars);
+			free_tokens(&vars);
+			free_commands(&vars);
 		}
 		str = readline("minishell$ ");
 	}

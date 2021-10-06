@@ -1,19 +1,5 @@
 #include "minishell.h"
 
-static int	format_is_valid(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '=')
-			return (TRUE);
-		i++;
-	}
-	return (FALSE);
-}
-
 static void	add_new_var_to_list(t_vars *vars, char *new_var)
 {
 	t_envlist	*current_env;
@@ -54,20 +40,6 @@ t_envlist	*envlist_sort_ascii(t_vars *vars)
 	return (new_env);
 }
 
-int	ft_inenv(t_envlist *envp, char *str)
-{
-	t_envlist	*current_env;
-	char		*name;
-
-	current_env = envp;
-	name = env_separation(str, 0);
-	while(current_env && (ft_strncmp(current_env->name, name, ft_strlen(name) + 1) != 0))
-		current_env = current_env->next;
-	if (current_env)
-		return (1);
-	return (0);
-}
-
 void	delete_env(t_envlist *envp, char *str)
 {
 	t_envlist	*current_env;
@@ -76,7 +48,8 @@ void	delete_env(t_envlist *envp, char *str)
 
 	current_env = envp;
 	name = env_separation(str, 0);
-	if (current_env && (ft_strncmp(current_env->next->name, name, ft_strlen(name) + 1) == 0))
+	if (current_env && (ft_strncmp(current_env->next->name,
+				name, ft_strlen(name) + 1) == 0))
 	{
 		if (current_env->next)
 			envp = current_env->next;
@@ -88,7 +61,8 @@ void	delete_env(t_envlist *envp, char *str)
 	}
 	else
 	{
-		while(current_env->next && (ft_strncmp(current_env->next->name, name, ft_strlen(name) + 1) != 0))
+		while (current_env->next && (ft_strncmp(current_env->next->name,
+					name, (ft_strlen(name) + 1)) != 0))
 			current_env = current_env->next;
 		if (current_env->next)
 		{
@@ -98,6 +72,21 @@ void	delete_env(t_envlist *envp, char *str)
 			free(current_env->next);
 			current_env->next = temp;
 		}
+	}
+}
+
+void	export_while(t_vars *vars, char *command)
+{
+	char	*var_str;
+
+	if (export_syntax(command) == 0)
+		printf("export: %s: invalid token\n", command);
+	else
+	{
+		var_str = command;
+		if (ft_inenv(vars->envp, var_str) == 1)
+			delete_env(vars->envp, var_str);
+		add_new_var_to_list(vars, var_str);
 	}
 }
 
@@ -114,10 +103,7 @@ void	builtin_export(t_vars *vars, t_command *current_cmd)
 		i = 1;
 		while (current_cmd->command[i])
 		{
-			var_str = current_cmd->command[i];
-			if (ft_inenv(vars->envp, var_str) == 1)
-				delete_env(vars->envp, var_str);
-			add_new_var_to_list(vars, var_str);
+			export_while(vars, current_cmd->command[i]);
 			i++;
 		}
 	}

@@ -19,20 +19,20 @@ char	*find_variable(char *str)
 	return (var);
 }
 
-char    *get_env_value(t_envlist *envp, char *env_name)
+char	*get_env_value(t_envlist *envp, char *env_name)
 {
-    t_envlist *current_env;
-    char    *value;
+	t_envlist	*current_env;
+	char		*value;
 
-    current_env = envp;
-    value = NULL;
-    while (current_env)
-    {
-        if (ft_strcmp(current_env->name, env_name) == 0 && current_env->value)
-            value = ft_strdup(current_env->value);
-        current_env = current_env->next;    
-    }
-    return (value);
+	current_env = envp;
+	value = NULL;
+	while (current_env)
+	{
+		if (ft_strcmp(current_env->name, env_name) == 0 && current_env->value)
+			value = ft_strdup(current_env->value);
+		current_env = current_env->next;
+	}
+	return (value);
 }
 
 void	replace_env(t_envlist *envp, t_token *token)

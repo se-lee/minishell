@@ -1,10 +1,5 @@
 #include "minishell.h"
 
-// handle env variable (rewrite
-// cd ~
-// cd $___
-// cd ~ 1234 --> no error, go to ~
-
 char	*search_home(t_envlist	*envp)
 {
 	t_envlist	*current_envp;
@@ -96,7 +91,8 @@ void	builtin_cd(t_vars *vars, t_command *current_cmd)
 	{
 		path = path_temp;
 		old_pwd = find_pwd(vars);
-		chdir(path);
+		if (chdir(path) == -1)
+			perror("cd");
 		replace_pwds(vars, old_pwd);
 	}
 }

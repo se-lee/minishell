@@ -14,9 +14,10 @@ SRCS =	minishell.c						\
 		built_in/pwd.c					\
 		built_in/unset.c				\
 		built_in/execution.c			\
-		built_in/envlist_util.c
+		built_in/envlist_util.c			\
+		built_in/export_utils.c
 
-GCCF = gcc -g -fsanitize=address #-Wall -Wextra -Werror
+GCCF = gcc -g #-fsanitize=address #-Wall -Wextra -Werror
 
 READLINE = -lreadline -L /Users/acusanno/.brew/opt/readline/lib -I/Users/acusanno/.brew/opt/readline/include
 

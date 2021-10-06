@@ -126,9 +126,7 @@ t_envlist	*envlist_duplicate(t_envlist *envp)
 	new_env->name = ft_strjoin("declare -x ", temp);
 	free(temp);
 	if (current_env->value != NULL)
-	{
 		new_env->value = ft_strdup(current_env->value);
-	}
 	else
 		new_env->value = NULL;
 	new_env->next = NULL;

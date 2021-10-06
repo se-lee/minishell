@@ -77,6 +77,11 @@ void		tokenization(t_vars *vars, char *str);
 void		parsing(t_vars *vars, char *str);
 void		ft_comandadd_back(t_token **alst, t_token *new);
 
+/* built-in utils */
+int			format_is_valid(char *str);
+int			ft_inenv(t_envlist *envp, char *str);
+int			export_syntax(char *str);
+
 /* built-in commands */
 void		builtin_cd(t_vars *vars, t_command *current_cmd);
 void		builtin_echo(t_vars *vars, t_command *current_cmd);
@@ -95,6 +100,7 @@ void		envlist_print_all(t_envlist *envp);
 t_envlist	*envlist_duplicate(t_envlist *envp);
 t_envlist	*envlist_sort_ascii(t_vars *vars);
 
+void		free_array(char	**array);
 /* pipe */
 
 #endif
