@@ -61,5 +61,4 @@ int	main(int argc, char **argv, char **envp)
 		str = readline("minishell$ ");
 	}
 	printf("exit\n");
-	return (0);
 }

@@ -87,6 +87,18 @@ void	execute_other_cmd(t_vars *vars, char **envp)
 	perror(command_arr[0]);
 }
 
+void	print_commands(t_command *cmd)
+{
+	int	i;
+
+	i = 0;
+	while (cmd->command[i])
+	{
+		printf(">>%s<<\n", cmd->command[i]);
+		i++;
+	}
+}
+
 void	execute_command(t_vars *vars, char **envp)
 {
 	char		*command;
@@ -95,6 +107,7 @@ void	execute_command(t_vars *vars, char **envp)
 	current_cmd = vars->cmd;
 	while (current_cmd)
 	{
+		print_commands(current_cmd);
 		command = current_cmd->command[0];
 		if (ft_strcmp(command, "cd") == 0)
 			builtin_cd(vars, current_cmd);

@@ -30,11 +30,11 @@ void	builtin_echo(t_vars *vars, t_command *current_cmd)
 	int	i;
 
 	n_option = 0;
+	i = 1;
 	if (current_cmd && current_cmd->command[1] != NULL)
 	{
 		if (current_cmd->command[1][0] == '-')
 		{
-			i = 1;
 			while (echo_n(current_cmd->command[i]) == 1)
 			{
 				n_option = 1;

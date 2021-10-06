@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/26 09:20:31 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/31 10:06:32 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/10/06 09:49:55 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ char	**ft_split(char const *s, char c)
 			ft_strlcpy(str_tot[i++], start, s - start + 1);
 		}
 	}
-	str_tot[i] = 0;
+	str_tot[i] = NULL;
 	return (str_tot);
 }
 
