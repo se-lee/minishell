@@ -36,7 +36,7 @@ int	export_syntax(char *str)
 	i = 0;
 	while (str[i])
 	{
-		if (ft_isalnum(str[i]) != 1 && (str[i] != '-') && (str[i] != '_'))
+		if (ft_isalnum(str[i]) != 1 && (str[i] != '-') && (str[i] != '_') && (str[i] != '='))
 			return (0);
 		i++;
 	}

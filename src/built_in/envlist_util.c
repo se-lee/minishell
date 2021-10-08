@@ -100,7 +100,7 @@ void	envlist_print_all(t_envlist *envp)
 			if (ft_strncmp(current_env->value, "", 2) == 0)
 				printf("\"\"\n");
 			else
-				printf("%s\n", current_env->value);
+				printf("\"%s\"\n", current_env->value);
 		}
 		else
 			printf("%s\n", current_env->name);
