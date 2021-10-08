@@ -177,8 +177,8 @@ void	fill_commands(t_vars *vars)
 		}
 		else
 		{
+			current_cmd->next = protected_malloc(1, sizeof(t_command));
 			current_cmd = current_cmd->next;
-			current_cmd = protected_malloc(1, sizeof(t_command));
 			current_cmd->next = NULL;
 		}
 		fill_command(current_token, current_cmd);
@@ -186,6 +186,24 @@ void	fill_commands(t_vars *vars)
 			current_token = current_token->next;
 		if (current_token && ft_piperedirect(current_token->token_type) == 1)
 			current_token = current_token->next;
+	}
+}
+
+void	printf_commands(t_vars *vars)
+{
+	int			i;
+	t_command	*current_cmd;
+
+	current_cmd = vars->cmd;
+	while (current_cmd)
+	{
+		i = 0;
+		while (current_cmd->command[i])
+		{
+			printf("command[%d] = %s\n", i, current_cmd->command[i]);
+			i++;
+		}
+		current_cmd = current_cmd->next;
 	}
 }
 
@@ -212,5 +230,6 @@ void	parsing(t_vars *vars, char *str)
 		}
 	}
 	fill_commands(vars);
+	// printf_commands(vars);
 	return ;
 }
