@@ -34,9 +34,16 @@ int	export_syntax(char *str)
 	int	i;
 
 	i = 0;
+	while (str[i] && str[i] != '=')
+	{
+		if (ft_isalnum(str[i]) != 1 && (str[i] != '-') && (str[i] != '_'))
+			return (0);
+		i++;
+	}
 	while (str[i])
 	{
-		if (ft_isalnum(str[i]) != 1 && (str[i] != '-') && (str[i] != '_') && (str[i] != '='))
+		if (ft_isalnum(str[i]) != 1 && (str[i] != '-') && (str[i] != '_')
+				&& str[i] != '=' && str[i] != '.' && str[i] != '/' && str[i] != '?')
 			return (0);
 		i++;
 	}

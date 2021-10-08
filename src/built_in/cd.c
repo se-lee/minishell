@@ -56,6 +56,18 @@ void	replace_pwds(t_vars *vars, char *old_pwd)
 	replace_pwd(vars, current_envp, "PWD", pwd);
 }
 
+char	*find_old_pwd(t_vars *vars)
+{
+	t_envlist	*current_env;
+
+	current_env = vars->envp;
+	while (current_env && ft_strncmp(current_env->name, "OLDPWD", 7) != 0)
+		current_env = current_env->next;
+	if (current_env)
+		return (current_env->value);
+	return (NULL);
+}
+
 char	*find_pwd(t_vars *vars)
 {
 	t_envlist	*current_env;
@@ -76,16 +88,24 @@ void	builtin_cd(t_vars *vars, t_command *current_cmd)
 	char	*old_pwd;
 
 	path_temp = current_cmd->command[1];
-	if (path_temp[0] == '~')
+	if (ft_strncmp(path_temp, "~", 2) == 0)
 	{
 		home = search_home(vars->envp);
 		path = ft_strjoin(home,
 				ft_substr(path_temp, 1, ft_strlen(path_temp) - 1));
 		free(home);
 		chdir(path);
+		free(path);
 		old_pwd = find_pwd(vars);
 		replace_pwds(vars, old_pwd);
-		free(path);
+	}
+	else if (ft_strncmp(path_temp, "-", 2) == 0)
+	{
+		old_pwd = find_old_pwd(vars);
+		printf("%s\n", old_pwd);
+		chdir(old_pwd);
+		old_pwd = find_pwd(vars);
+		replace_pwds(vars, old_pwd);
 	}
 	else
 	{
