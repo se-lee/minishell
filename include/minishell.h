@@ -59,6 +59,7 @@ struct s_vars {
 	t_token			*first;
 	t_envlist		*envp;
 	t_command		*cmd;
+	int				*fd[2];
 	struct termios	saved_termios;
 	int				return_value;
 	int				error;
