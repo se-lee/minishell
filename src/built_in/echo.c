@@ -1,15 +1,5 @@
 #include "minishell.h"
 
-/*
-- [echo] with option -n
-when 'echo' is called with argument
-print the arguments 
-
-- show new line character with -n option
-- where to put spaces
-
-*/
-
 int	echo_n(char *str)
 {
 	int	i;

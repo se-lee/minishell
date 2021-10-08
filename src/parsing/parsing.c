@@ -125,13 +125,15 @@ void	fill_commands(t_vars *vars)
 		{
 			vars->cmd = protected_malloc(1, sizeof(t_command));
 			current_cmd = vars->cmd;
+			current_cmd->prev = NULL; // ADDED
 			current_cmd->next = NULL;
 			i++;
 		}
 		else
 		{
+			current_cmd->next = protected_malloc(1, sizeof(t_command));
+			current_cmd->next->prev = current_cmd;  // ADDED
 			current_cmd = current_cmd->next;
-			current_cmd = protected_malloc(1, sizeof(t_command));
 			current_cmd->next = NULL;
 		}
 		fill_command(current_token, current_cmd);
