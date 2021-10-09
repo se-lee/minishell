@@ -16,7 +16,8 @@ SRCS =	minishell.c						\
 		built_in/execution.c			\
 		built_in/envlist_utils.c		\
 		pipe_redirection/pipe.c			\
-		built_in/misc_utils.c			
+		built_in/misc_utils.c			\
+		built_in/test_functions.c
 
 GCCF = gcc -g -fsanitize=address #-Wall -Wextra -Werror
 

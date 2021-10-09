@@ -134,16 +134,18 @@ void	run_command_builtin(t_vars *vars, t_command *current_cmd)
 		builtin_unset(vars, current_cmd);
 }
 
-void	run_command_non_builtin(t_envlist *envlist, t_command *current_cmd, char **env)
+void	run_command_non_builtin(t_envlist *envlist, t_command *current_cmd)
 {
 	char	*path;
+	char	**env;
 
 	path = get_command_path(envlist, current_cmd->command[0]);
+	env = envlist_to_char_array(envlist);
 	if (execve(path, current_cmd->command, env) < 0)
 		perror("execution failed");
 }
 
-void	child_process(t_vars *vars, t_command *current_cmd, char **env)
+/*void	child_process(t_vars *vars, t_command *current_cmd, char **env)
 {
 	t_envlist	*envlist;
 	pid_t		child;
@@ -168,30 +170,7 @@ void	child_process(t_vars *vars, t_command *current_cmd, char **env)
 		else
 			run_command_non_builtin(envlist, current_cmd, env);
 	}
-}
-
-void	test_function_print_envarr(char **env, t_vars *vars)
-{
-	int	i = 0;
-	printf("\n--------------[CHAR ** ENV]----------------\n");
-	while (env[i])
-	{
-		printf("env[%d]:%s\n", i, env[i]);
-		i++;
-	}
-	printf("\n--------------[LINKED LIST ENV]----------------\n");
-	envlist_print_all(vars->envp);
-	printf("\n-----------------------------------------------\n");
-}
-
-void	test_func_print_commands(t_command *current_cmd)
-{
-	while (current_cmd)
-	{
-		printf("cmd:%s\n", current_cmd->command[0]);
-		current_cmd = current_cmd->next;
-	}
-}
+}*/
 
 int		count_command(t_command *cmd)
 {
@@ -208,75 +187,77 @@ int		count_command(t_command *cmd)
 	return (count);
 }
 
-/*
-void    child_processes(t_vars *vars)
+void    child_command(t_vars *vars, t_command *current_cmd, int in, int out)
 {
-    int            i;
-    t_command    *current_cmd;
-    int            child;
+	pid_t	child;
 
-    current_cmd = vars->cmd;
-    i = 0;
-    while (current_cmd)
-    {
-        if (current_cmd->pipe == 1)
-            pipe(vars->fd[i]);
-        if (vars->fd[i][0] < 0 || vars->fd[i][1])
-            return ;
-        child = fork();
-        if (child < 0)
-            return ;
-        else if (child == 0)
-            child_command(vars, i);
-        i++;
-    }
+	child = fork();
+		if (child < 0)
+		{
+			perror("fork");
+			return ;
+		}
+	if (child == 0)
+	{
+		if (in)
+		{
+			dup2(in, 0);
+			close(in);
+		}
+		if (out != 1) 
+		{
+			dup2(out, 1);
+			close(out);
+		}
+		if (command_is_builtin(current_cmd->command) == TRUE)
+			run_command_builtin(vars, current_cmd);
+		else
+		{
+			run_command_non_builtin(vars->envp, current_cmd);
+		}
+	}
 }
 
-void    child_command(t_vars *vars, t_command *current_cmd, int child_nb)
+void	child_processes(t_vars *vars, int cmd_count)
 {
-	if (child_nb == 0)
-	{
-	    // Dup input from vars->fd[0][0]
-	    // Close fd[0]
-	}
-	if (vars->fd[child_nb][0])
-	{
-	    // Dup output from vars->fd[i][1]
-	    // Close fd
-	}
-	else
-	{
-	    //Not dup output
-	}
-    // execve
-}
-*/
+	int		i;
+	t_command	*current_cmd;
+	int			in;
 
+	in = 0;
+	current_cmd = vars->cmd;
+	i = 0;
+	while (i < cmd_count - 1)
+	{
+//		if (current_cmd->pipe == 1)
+printf("i:%d\n", i);
+		pipe(vars->fd);
+		if (vars->fd < 0)
+		{
+			perror("pipe");
+			return ;
+		}
+		child_command(vars, current_cmd, in, vars->fd[1]);
+		close(vars->fd[1]);
+		in = vars->fd[0];
+		current_cmd = current_cmd->next;
+		i++;
+	}
+	child_command(vars, current_cmd, in, 1);
+}
 
 void	execute_command(t_vars *vars)
 {
 	t_command	*current_cmd;
-	char 		**env;
 	int			status;
 	int			cmd_count;
 	int			i = 0;
 
 	current_cmd = vars->cmd;
-	env = envlist_to_char_array(vars->envp);
+	cmd_count = count_command(vars->cmd);
+printf("cmd_count:%d\n", cmd_count);
 	if (command_is_builtin(current_cmd->command) == FALSE || current_cmd->pipe > 0)
-	{
-		cmd_count = count_command(vars->cmd);
-//	printf("cmd_count:%d\n",  cmd_count);
-		while (i < cmd_count)
-		{
-			if (pipe(current_cmd->fd) < 0)
-				perror("pipe");
-			child_process(vars, current_cmd, env);
-			if (current_cmd->next)
-				current_cmd = current_cmd->next;
-			i++;
-		}
-	}
+		child_processes(vars, cmd_count);
 	else
 		run_command_builtin(vars, current_cmd);
 }
