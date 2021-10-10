@@ -1,5 +1,14 @@
 #include "minishell.h"
 
+int	pipe_flow(int *fd, int inout)
+{
+	if (dup2(fd[inout], inout) == -1)
+		perror("dup2");
+	close(fd[0]);
+	close(fd[1]);
+	return (0);
+}
+
 pid_t	child_processes(t_vars *vars, int cmd_count)
 {
 	t_command	*current_cmd;
@@ -18,25 +27,13 @@ pid_t	child_processes(t_vars *vars, int cmd_count)
 		if (child == 0)
 		{
 			if (i == 0) //first commands
-			{
-				dup2(current_cmd->fd[1], 1);
-				close(current_cmd->fd[0]);
-				close(current_cmd->fd[1]);
-			}
+				pipe_flow(current_cmd->fd, OUT); // dup2(current_cmd->fd[1], 1);
 			else if (i == cmd_count - 1 && cmd_count != 1) //last command
+				pipe_flow(current_cmd->prev->fd, IN); //dup2(current_cmd->prev->fd[0], 0);
+			else //middle command(s)
 			{
-				dup2(current_cmd->prev->fd[0], 0);
-				close(current_cmd->prev->fd[0]);
-				close(current_cmd->prev->fd[1]);
-			}
-			else //middle command
-			{
-				dup2(current_cmd->prev->fd[0], 0);
-				dup2(current_cmd->prev->fd[1], 1);
-				close(current_cmd->fd[0]);
-				close(current_cmd->fd[1]);			
-				close(current_cmd->prev->fd[0]);
-				close(current_cmd->prev->fd[1]);			
+				pipe_flow(current_cmd->prev->fd, IN);//dup2(current_cmd->prev->fd[0], 0);
+				pipe_flow(current_cmd->fd, OUT);//dup2(current_cmd->fd[1], 1);
 			}
 			if (command_is_builtin(current_cmd->command) == TRUE)
 				run_command_builtin(vars, current_cmd);
@@ -50,11 +47,3 @@ pid_t	child_processes(t_vars *vars, int cmd_count)
 	return (child);
 }
 
-int	pipe_flow(int *fd, int inout)
-{
-	if (dup2(fd[inout], inout) == -1)
-		perror("dup2");
-	close(fd[0]);
-	close(fd[1]);
-	return (0);
-}

@@ -13,6 +13,9 @@
 # define TRUE	1
 # define FALSE	0
 
+# define IN		0
+# define OUT	1
+
 typedef struct s_vars		t_vars;
 typedef struct s_token		t_token;
 typedef struct s_string		t_string;
@@ -91,15 +94,15 @@ void		builtin_pwd(void);
 void		execute_command(t_vars *vars);
 
 /* execution */
-void	run_command_builtin(t_vars *vars, t_command *current_cmd);
-void	run_command_non_builtin(t_envlist *envlist, t_command *current_cmd);
-char	*get_env_value(t_envlist *envp, char *env_name);
-int		envlist_count(t_envlist *envp);
-char **envlist_to_char_array(t_envlist *envp);
+void		run_command_builtin(t_vars *vars, t_command *current_cmd);
+void		run_command_non_builtin(t_envlist *envlist, t_command *current_cmd);
+char		*get_env_value(t_envlist *envp, char *env_name);
+int			envlist_count(t_envlist *envp);
+char		**envlist_to_char_array(t_envlist *envp);
 
 /* pipe */
 int			pipe_flow(int *fd, int inout);
-pid_t	child_processes(t_vars *vars, int cmd_count);
+pid_t		child_processes(t_vars *vars, int cmd_count);
 
 
 /////////// utils /////////////
@@ -113,9 +116,9 @@ t_envlist	*envlist_duplicate(t_envlist *envp);
 t_envlist	*envlist_sort_ascii(t_vars *vars);
 
 /* command utils */
-char	*get_command_path(t_envlist *envp, char *command);
-int		count_command(t_command *cmd);
-int		command_is_builtin(char **command);
+char		*get_command_path(t_envlist *envp, char *command);
+int			count_command(t_command *cmd);
+int			command_is_builtin(char **command);
 
 /* miscellaneous utils */
 void		ft_append(char **a, char *str);
@@ -123,7 +126,7 @@ void		*protected_malloc(size_t count, size_t size);
 void		free_array(char **array);
 
 /* test functions to be removed later */
-void	test_function_print_envarr(char **env, t_envlist *envlist);
-void	test_func_print_commands(t_command *current_cmd);
+void		test_function_print_envarr(char **env, t_envlist *envlist);
+void		test_func_print_commands(t_command *current_cmd);
 
 #endif
