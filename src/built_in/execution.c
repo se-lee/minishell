@@ -186,7 +186,8 @@ int		count_command(t_command *cmd)
 	}
 	return (count);
 }
-
+/*
+arsene
 void    child_command(t_vars *vars, t_command *current_cmd, int in, int out)
 {
 	pid_t	child;
@@ -216,35 +217,111 @@ void    child_command(t_vars *vars, t_command *current_cmd, int in, int out)
 			run_command_non_builtin(vars->envp, current_cmd);
 		}
 	}
-}
+}*/
 
 void	child_processes(t_vars *vars, int cmd_count)
 {
-	int		i;
 	t_command	*current_cmd;
-	int			in;
+	t_envlist	*envlist;
+	int		i;
+	pid_t	child;
 
-	in = 0;
 	current_cmd = vars->cmd;
+	envlist = vars->envp;
 	i = 0;
-	while (i < cmd_count - 1)
+	while (i < cmd_count)
 	{
-//		if (current_cmd->pipe == 1)
-printf("i:%d\n", i);
-		pipe(vars->fd);
-		if (vars->fd < 0)
-		{
+		if (pipe(current_cmd->fd) < 0)
 			perror("pipe");
-			return ;
+		child = fork();
+		if (child == 0)
+		{
+			if (i == 0) //first commands
+			{
+				dup2(current_cmd->fd[1], 1);
+				close(current_cmd->fd[0]);
+				close(current_cmd->fd[1]);
+			}
+			else if (i == cmd_count - 1 && cmd_count != 1) //last command
+			{
+				dup2(current_cmd->prev->fd[0], 0);
+				close(current_cmd->prev->fd[0]);
+				close(current_cmd->prev->fd[1]);
+			}
+			else //middle command
+			{
+				dup2(current_cmd->prev->fd[0], 0);
+				dup2(current_cmd->prev->fd[1], 1);
+				close(current_cmd->fd[0]);
+				close(current_cmd->fd[1]);			
+				close(current_cmd->prev->fd[0]);
+				close(current_cmd->prev->fd[1]);			
+			}
+			if (command_is_builtin(current_cmd->command) == TRUE)
+				run_command_builtin(vars, current_cmd);
+			else
+				run_command_non_builtin(envlist, current_cmd);
 		}
-		child_command(vars, current_cmd, in, vars->fd[1]);
-		close(vars->fd[1]);
-		in = vars->fd[0];
-		current_cmd = current_cmd->next;
+		if (current_cmd->next)
+			current_cmd = current_cmd->next;
 		i++;
 	}
-	child_command(vars, current_cmd, in, 1);
+	waitpid(child, )
 }
+
+
+// void	child_processes(t_vars *vars, int cmd_count)
+// {
+// 	t_command	*current_cmd;
+// 	t_envlist	*envlist;
+// 	int		i;
+// 	pid_t	child;
+
+// 	current_cmd = vars->cmd;
+// 	envlist = vars->envp;
+// 	i = 0;
+// 	vars->fd = protected_malloc(cmd_count, sizeof(int *));
+// 	while(i < cmd_count - 1)
+// 	{
+// 		pipe(vars->fd[i]);
+// 	printf("fd[%d]:%d\n", i, vars->fd[i][0]);
+// 		i++;
+// 	}
+// 	i = 0;
+// 	while (i < cmd_count)
+// 	{
+// 		child = fork();
+// 		if (child == 0)
+// 		{
+// 			if (i == 0) //first commands
+// 			{
+// 				dup2(vars->fd[i][1], 1);
+// 				close(vars->fd[i][0]);
+// 				close(vars->fd[i][1]);
+// 			}
+// 			else if (i == cmd_count - 1) //last command
+// 			{
+// 				dup2(vars->fd[i - 1][0], 0);
+// 				close(vars->fd[i - 1][0]);
+// 				close(vars->fd[i - 1][1]);
+// 			}
+// 			else //middle command
+// 			{
+// 				dup2(vars->fd[i - 1][0], 0);
+// 				dup2(vars->fd[i][1], 1);
+// 				close(vars->fd[i][0]);
+// 				close(vars->fd[i][1]);			
+// 				close(vars->fd[i - 1][0]);
+// 				close(vars->fd[i - 1][1]);			
+// 			}
+// 			if (command_is_builtin(current_cmd->command) == TRUE)
+// 				run_command_builtin(vars, current_cmd);
+// 			else
+// 				run_command_non_builtin(envlist, current_cmd);
+// 		}
+// 		i++;
+// 	}
+// }
 
 void	execute_command(t_vars *vars)
 {
@@ -255,7 +332,6 @@ void	execute_command(t_vars *vars)
 
 	current_cmd = vars->cmd;
 	cmd_count = count_command(vars->cmd);
-printf("cmd_count:%d\n", cmd_count);
 	if (command_is_builtin(current_cmd->command) == FALSE || current_cmd->pipe > 0)
 		child_processes(vars, cmd_count);
 	else

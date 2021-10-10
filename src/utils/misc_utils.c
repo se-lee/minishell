@@ -23,3 +23,16 @@ void	*protected_malloc(size_t count, size_t size)
 	}
 	return (p);
 }
+
+void	free_array(char **array)
+{
+    int    i;
+
+    i = 0;
+    while (array[i])
+    {
+        free(array[i]);
+        i++;
+    }
+    free(array);
+}

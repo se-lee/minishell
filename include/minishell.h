@@ -53,7 +53,7 @@ struct s_command {
 	int			pipe;
 	int			redirect_right;
 	int			redirect_left;
-//	int			fd[2];
+	int			fd[2];
 	t_command	*prev;
 	t_command	*next;
 };
@@ -62,7 +62,7 @@ struct s_vars {
 	t_token			*first;
 	t_envlist		*envp;
 	t_command		*cmd;
-	int				fd[2];
+	// int				**fd;
 	struct termios	saved_termios;
 	int				return_value;
 	int				error;
@@ -104,6 +104,7 @@ int			pipe_flow(int *fd, int inout);
 /* miscellaneous utils */
 void		ft_append(char **a, char *str);
 void		*protected_malloc(size_t count, size_t size);
+void		free_array(char **array);
 
 /* test functions to be removed later */
 void	test_function_print_envarr(char **env, t_envlist *envlist);
