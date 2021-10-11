@@ -26,14 +26,14 @@ pid_t	child_processes(t_vars *vars, int cmd_count)
 		child = fork();
 		if (child == 0)
 		{
-			if (i == 0) //first commands
-				pipe_flow(current_cmd->fd, OUT); // dup2(current_cmd->fd[1], 1);
+			if (i == 0) //first command
+				pipe_flow(current_cmd->fd, OUT);
 			else if (i == cmd_count - 1 && cmd_count != 1) //last command
-				pipe_flow(current_cmd->prev->fd, IN); //dup2(current_cmd->prev->fd[0], 0);
+				pipe_flow(current_cmd->prev->fd, IN);
 			else //middle command(s)
 			{
-				pipe_flow(current_cmd->prev->fd, IN);//dup2(current_cmd->prev->fd[0], 0);
-				pipe_flow(current_cmd->fd, OUT);//dup2(current_cmd->fd[1], 1);
+				pipe_flow(current_cmd->prev->fd, IN);
+				pipe_flow(current_cmd->fd, OUT);
 			}
 			if (command_is_builtin(current_cmd->command) == TRUE)
 				run_command_builtin(vars, current_cmd);
