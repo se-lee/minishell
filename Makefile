@@ -6,6 +6,8 @@ SRCS =	minishell.c						\
 		parsing/parsing_utils.c			\
 		parsing/tokenization.c			\
 		parsing/tokenization_utils.c	\
+		parsing/misc_utils.c			\
+		parsing/envlist_utils.c			\
 		built_in/cd.c					\
 		built_in/echo.c					\
 		built_in/env.c					\
@@ -13,12 +15,10 @@ SRCS =	minishell.c						\
 		built_in/export.c				\
 		built_in/pwd.c					\
 		built_in/unset.c				\
-		cmd_exec/execution.c				\
+		cmd_exec/execution.c			\
 		cmd_exec/pipe.c					\
-		utils/misc_utils.c				\
-		utils/test_functions.c			\
-		utils/envlist_utils.c			\
-		utils/cmd_utils.c
+		cmd_exec/test_functions.c		\
+		cmd_exec/cmd_utils.c
 
 GCCF = gcc -g -fsanitize=address #-Wall -Wextra -Werror
 

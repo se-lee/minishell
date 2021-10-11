@@ -9,41 +9,62 @@ int	pipe_flow(int *fd, int inout)
 	return (0);
 }
 
-pid_t	child_processes(t_vars *vars, int cmd_count)
+void	child_processes(t_vars *vars, t_command *current_cmd, int i, int cmd_count)
 {
-	t_command	*current_cmd;
-	t_envlist	*envlist;
-	int		i;
 	pid_t	child;
 
-	current_cmd = vars->cmd;
-	envlist = vars->envp;
-	i = 0;
-	while (i < cmd_count)
-	{
-		if (pipe(current_cmd->fd) < 0)
+
+	if (pipe(current_cmd->fd) < 0)
 			perror("pipe");
-		child = fork();
-		if (child == 0)
-		{
+	child = fork();
+if (child < 0)
+		perror("fork");
+	if (child == 0)
+	{
 			if (i == 0) //first command
-				pipe_flow(current_cmd->fd, OUT);
-			else if (i == cmd_count - 1 && cmd_count != 1) //last command
-				pipe_flow(current_cmd->prev->fd, IN);
+			{
+	printf("1i:%d\n", i);
+	printf("1\n");
+				dup2(0, 0);
+				dup2(current_cmd->fd[1], 1);
+				close(current_cmd->fd[0]);
+				close(current_cmd->fd[1]);
+			}
+			else if (i == cmd_count - 1) //last command
+			{
+	printf("2i:%d\n", i);
+	printf("2\n");
+				dup2(1, 1);
+				dup2(current_cmd->prev->fd[1], 1);
+				close(current_cmd->prev->fd[0]);
+				close(current_cmd->prev->fd[1]);
+			}
 			else //middle command(s)
 			{
-				pipe_flow(current_cmd->prev->fd, IN);
-				pipe_flow(current_cmd->fd, OUT);
+	printf("3i:%d\n", i);
+	printf("3\n");
+				dup2(current_cmd->prev->fd[0], 0);
+				dup2(current_cmd->fd[1], 1);
+				close(current_cmd->prev->fd[0]);
+				close(current_cmd->prev->fd[1]);
+				close(current_cmd->fd[0]);
+				close(current_cmd->fd[1]);			
 			}
 			if (command_is_builtin(current_cmd->command) == TRUE)
+{
+printf("cmd:%s\n", current_cmd->command[0]);
 				run_command_builtin(vars, current_cmd);
+}
 			else
-				run_command_non_builtin(envlist, current_cmd);
+				run_command_non_builtin(vars->envp, current_cmd);
 		}
-		if (current_cmd->next)
-			current_cmd = current_cmd->next;
-		i++;
-	}
-	return (child);
+
+	// else
+	// {
+	// 	close(current_cmd->prev->fd[0]);
+	// 	close(current_cmd->prev->fd[1]);
+	// }
 }
 
+//the parent closes fd that are not used
+//

@@ -54,7 +54,8 @@ int	main(int argc, char **argv, char **envp)
 			add_history(str);
 			parsing(&vars, str);
 			if (vars.error == 0)
-				execute_command(&vars);
+				execute_pipe_commands(&vars);
+				// execute_command(&vars);
 			free(str);
 			free_struct(&vars);
 		}

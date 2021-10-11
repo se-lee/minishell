@@ -57,6 +57,7 @@ struct s_command {
 	int			redirect_right;
 	int			redirect_left;
 	int			fd[2];
+	// pid_t			pid; //add
 	t_command	*prev;
 	t_command	*next;
 };
@@ -102,10 +103,8 @@ char		**envlist_to_char_array(t_envlist *envp);
 
 /* pipe */
 int			pipe_flow(int *fd, int inout);
-pid_t		child_processes(t_vars *vars, int cmd_count);
-
-
-/////////// utils /////////////
+void	child_processes(t_vars *vars, t_command *current_cmd, int i, int cmd_count);
+void	execute_pipe_commands(t_vars *vars);
 
 /* envlist utils */
 void		envlist_create(t_vars *vars, char **envp);
