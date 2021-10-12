@@ -56,9 +56,6 @@ struct s_command {
 	int			pipe;
 	int			redirect_right;
 	int			redirect_left;
-	int			fd[2];
-	// pid_t			pid; //add
-	t_command	*prev;
 	t_command	*next;
 };
 
@@ -66,7 +63,6 @@ struct s_vars {
 	t_token			*first;
 	t_envlist		*envp;
 	t_command		*cmd;
-	// int				**fd;
 	struct termios	saved_termios;
 	int				return_value;
 	int				error;
@@ -115,7 +111,6 @@ char		*env_separation(char *str, int part);
 void		envlist_print_all(t_envlist *envp);
 t_envlist	*envlist_duplicate(t_envlist *envp);
 t_envlist	*envlist_sort_ascii(t_vars *vars);
-
 
 /* miscellaneous utils */
 void		ft_append(char **a, char *str);
