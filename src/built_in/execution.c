@@ -128,3 +128,54 @@ void	execute_command(t_vars *vars, char **envp)
 		current_cmd = current_cmd->next;
 	}
 }
+
+int	count_command(t_command *cmd)
+{
+	int			count;
+	t_command	*current_cmd;
+
+	current_cmd = cmd;
+	count = 0;
+	while (current_cmd)
+	{
+		count++;
+		current_cmd = current_cmd->next;
+	}
+	return (count);
+}
+
+void	launch_commands(t_vars *vars, int in, int out)
+{
+	pid_t	child;
+
+	child = fork();
+	if (child == 0)
+	{
+		
+	}
+	else
+	{
+		close(in);
+		close(out);
+	}
+}
+
+void	execute_pipe_commands(t_vars *vars)
+{
+	int	fd[2];
+	int	in;
+	int	out;
+	int	i;
+
+	i = 0;
+	out = 1;
+	in = 0;
+	while (i < count_command(vars->cmd) - 1)
+	{
+		pipe(fd);
+		launch_commands(vars, in, fd[1]);
+		in = fd[1];
+		i++;
+	}
+	launch_commands(vars, in, out);
+}

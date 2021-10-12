@@ -59,7 +59,8 @@ struct s_vars {
 	t_token			*first;
 	t_envlist		*envp;
 	t_command		*cmd;
-	int				*fd[2];
+	int				fd_in[2];
+	int				fd_out[2];
 	struct termios	saved_termios;
 	int				return_value;
 	int				error;
@@ -87,7 +88,7 @@ int			export_syntax(char *str);
 void		builtin_cd(t_vars *vars, t_command *current_cmd);
 void		builtin_echo(t_vars *vars, t_command *current_cmd);
 void		builtin_env(t_vars *vars);
-void		builtin_exit(void);
+void		builtin_exit(t_command *current_cmd);
 void		builtin_export(t_vars *vars, t_command *current_cmd);
 void		builtin_unset(t_vars *vars, t_command *current_cmd);
 void		builtin_pwd(void);
