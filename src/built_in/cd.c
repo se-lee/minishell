@@ -1,10 +1,5 @@
 #include "minishell.h"
 
-// handle env variable (rewrite
-// cd ~
-// cd $___
-// cd ~ 1234 --> no error, go to ~
-
 char	*search_home(t_envlist	*envp)
 {
 	t_envlist	*current_envp;

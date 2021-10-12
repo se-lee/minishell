@@ -1,21 +1,5 @@
 #include "minishell.h"
 
-char	*get_env_value(t_envlist *envp, char *env_name)
-{
-	t_envlist *current_env;
-	char	*value;
-
-	current_env = envp;
-	value = NULL;
-	while (current_env)
-	{
-		if (ft_strcmp(current_env->name, env_name) == 0 && current_env->value)
-			value = ft_strdup(current_env->value);
-		current_env = current_env->next;	
-	}
-	return (value);
-}
-
 int		envlist_count(t_envlist *envp)
 {
 	int		count;
@@ -29,28 +13,6 @@ int		envlist_count(t_envlist *envp)
 		current_env = current_env->next;
 	}
 	return (count);
-}
-
-char **envlist_to_char_array(t_envlist *envp)
-{
-	char	**env_arr;
-	char	*temp;
-	t_envlist	*current_env;
-	int		i;
-
-	i = 0;
-	current_env = envp;
-	env_arr = protected_malloc((envlist_count(envp) + 1), sizeof(char *));
-	while (current_env)
-	{
-		env_arr[i] = ft_strjoin(current_env->name, "=");
-		if (current_env->value)
-			ft_append(&env_arr[i], current_env->value);
-		current_env = current_env->next;
-		i++;
-	}
-	env_arr[i] = NULL;
-	return (env_arr);
 }
 
 void	run_command_builtin(t_vars *vars, t_command *current_cmd)
@@ -171,41 +133,3 @@ void	execute_pipe_commands(t_vars *vars)
 		}
 	}
 }
-
-
-/*
-void	execute_command(t_vars *vars)
-{
-	t_command	*current_cmd;
-	int			status;
-	pid_t		child;
-	int			cmd_count;
-	int			i;
-
-	current_cmd = vars->cmd;
-	cmd_count = count_command(vars->cmd);
-	i = 0;
-	if (command_is_builtin(current_cmd->command) == TRUE && !current_cmd->pipe)
-		run_command_builtin(vars, current_cmd);
-	else if (!current_cmd->pipe)
-	{
-		// child = fork();
-		// if (child == 0)
-			run_command_non_builtin(vars->envp, current_cmd);
-		// waitpid(child, &status, 0);
-	}
-	else
-	{
-		while (current_cmd)
-		{
-			// if (pipe(current_cmd->fd) < 0)
-			// 	perror("pipe");
-			child_processes(vars, current_cmd, i, cmd_count);
-			if (current_cmd->next)
-				current_cmd = current_cmd->next;
-			i++;
-		}
-	}
-	// waitpid(child, &status, 0);
-}
-*/

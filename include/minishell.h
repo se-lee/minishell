@@ -92,7 +92,6 @@ void		builtin_exit(void);
 void		builtin_export(t_vars *vars, t_command *current_cmd);
 void		builtin_unset(t_vars *vars, t_command *current_cmd);
 void		builtin_pwd(void);
-void		execute_command(t_vars *vars);
 
 /* execution */
 void		run_command_builtin(t_vars *vars, t_command *current_cmd);
@@ -100,11 +99,14 @@ void		run_command_non_builtin(t_envlist *envlist, t_command *current_cmd);
 char		*get_env_value(t_envlist *envp, char *env_name);
 int			envlist_count(t_envlist *envp);
 char		**envlist_to_char_array(t_envlist *envp);
+void		execute_pipe_commands(t_vars *vars);
 
-/* pipe */
-int			pipe_flow(int *fd, int inout);
-void	child_processes(t_vars *vars, t_command *current_cmd, int i, int cmd_count);
-void	execute_pipe_commands(t_vars *vars);
+/* command utils */
+char		*get_command_path(t_envlist *envp, char *command);
+int			count_command(t_command *cmd);
+int			command_is_builtin(char **command);
+char		*get_env_value(t_envlist *envp, char *env_name);
+char		**envlist_to_char_array(t_envlist *envp);
 
 /* envlist utils */
 void		envlist_create(t_vars *vars, char **envp);
@@ -114,10 +116,6 @@ void		envlist_print_all(t_envlist *envp);
 t_envlist	*envlist_duplicate(t_envlist *envp);
 t_envlist	*envlist_sort_ascii(t_vars *vars);
 
-/* command utils */
-char		*get_command_path(t_envlist *envp, char *command);
-int			count_command(t_command *cmd);
-int			command_is_builtin(char **command);
 
 /* miscellaneous utils */
 void		ft_append(char **a, char *str);

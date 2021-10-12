@@ -61,3 +61,41 @@ int		command_is_builtin(char **command)
 	else
 		return (FALSE);
 }
+
+char	*get_env_value(t_envlist *envp, char *env_name)
+{
+	t_envlist *current_env;
+	char	*value;
+
+	current_env = envp;
+	value = NULL;
+	while (current_env)
+	{
+		if (ft_strcmp(current_env->name, env_name) == 0 && current_env->value)
+			value = ft_strdup(current_env->value);
+		current_env = current_env->next;	
+	}
+	return (value);
+}
+
+char **envlist_to_char_array(t_envlist *envp)
+{
+	char	**env_arr;
+	char	*temp;
+	t_envlist	*current_env;
+	int		i;
+
+	i = 0;
+	current_env = envp;
+	env_arr = protected_malloc((envlist_count(envp) + 1), sizeof(char *));
+	while (current_env)
+	{
+		env_arr[i] = ft_strjoin(current_env->name, "=");
+		if (current_env->value)
+			ft_append(&env_arr[i], current_env->value);
+		current_env = current_env->next;
+		i++;
+	}
+	env_arr[i] = NULL;
+	return (env_arr);
+}

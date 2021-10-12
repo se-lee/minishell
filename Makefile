@@ -16,7 +16,6 @@ SRCS =	minishell.c						\
 		built_in/pwd.c					\
 		built_in/unset.c				\
 		cmd_exec/execution.c			\
-		cmd_exec/pipe.c					\
 		cmd_exec/test_functions.c		\
 		cmd_exec/cmd_utils.c
 

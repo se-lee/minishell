@@ -55,7 +55,6 @@ int	main(int argc, char **argv, char **envp)
 			parsing(&vars, str);
 			if (vars.error == 0)
 				execute_pipe_commands(&vars);
-				// execute_command(&vars);
 			free(str);
 			free_struct(&vars);
 		}
