@@ -70,5 +70,5 @@ void	builtin_unset(t_vars *vars, t_command *current_cmd)
 			if (current_env->next)
 				current_env = current_env->next;
 		}
-	}
+	}	
 }

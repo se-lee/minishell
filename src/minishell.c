@@ -25,19 +25,6 @@ void	free_tokens(t_vars *vars)
 		free(current_token);
 }
 
-void	free_array(char	**array)
-{
-	int	i;
-
-	i = 0;
-	while (array[i])
-	{
-		free(array[i]);
-		i++;
-	}
-	free(array);
-}
-
 void	free_commands(t_vars *vars)
 {
 	t_command	*current_cmd;
@@ -87,7 +74,7 @@ int	main(int argc, char **argv, char **envp)
 			add_history(str);
 			parsing(&vars, str);
 			if (vars.error == 0)
-				execute_command(&vars, envp);
+				execute_pipe_commands(&vars);
 			free(str);
 			free_tokens(&vars);
 			free_commands(&vars);

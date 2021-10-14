@@ -134,26 +134,60 @@ char	**command_create(t_token *current_token, int i)
 	return (cmd);
 }
 
+// void	fill_command(t_token *token, t_command *current_command)
+// {
+// 	int		i;
+// 	t_token	*current_token;
+// 	char	**cmd;
+
+// 	current_command->pipe = 0;
+// 	current_command->redirect_left = 0;
+// 	current_command->redirect_right = 0;
+// 	i = 0;
+// 	current_token = token;
+// 	while (current_token && ft_piperedirect(current_token->token_type) == 0)
+// 	{
+// 		if (current_token->token_type == WORD)
+// 			i += find_space(current_token->buffer.str);
+// 		i++;
+// 		current_token = current_token->next;
+// 	}
+// 	current_token = token;
+// 	cmd = command_create(current_token, i);
+// 	current_command->command = cmd; 
+// 	add_piperedirect(current_token, current_command);
+// }
+
 void	fill_command(t_token *token, t_command *current_command)
 {
 	int		i;
-	t_token	*current_token;
 	char	**cmd;
+	t_token	*current_token;
 
 	current_command->pipe = 0;
 	current_command->redirect_left = 0;
 	current_command->redirect_right = 0;
+	current_command->quotes = 0; // ADD
 	i = 0;
 	current_token = token;
 	while (current_token && ft_piperedirect(current_token->token_type) == 0)
 	{
-		if (current_token->token_type == WORD)
-			i += find_space(current_token->buffer.str);
 		i++;
 		current_token = current_token->next;
 	}
+	cmd = protected_malloc(i + 1, sizeof(char *));
+	i = 0;
 	current_token = token;
-	cmd = command_create(current_token, i);
+	while (current_token && ft_piperedirect(current_token->token_type) == 0)
+	{
+		cmd[i] = ft_strdup(current_token->buffer.str);
+		cmd[i] = remove_quotes(cmd[i], current_token->token_type);
+		i++;
+		if (current_token->token_type == QUOTE || current_token->token_type == SINGLE_QUOTE)
+			current_command->quotes = 1;
+		current_token = current_token->next;
+	}
+	cmd[i] = NULL;
 	current_command->command = cmd;
 	add_piperedirect(current_token, current_command);
 }
@@ -184,7 +218,7 @@ void	fill_commands(t_vars *vars)
 		fill_command(current_token, current_cmd);
 		while (current_token && ft_piperedirect(current_token->token_type) == 0)
 			current_token = current_token->next;
-		if (current_token && ft_piperedirect(current_token->token_type) == 1)
+		while (current_token && ft_piperedirect(current_token->token_type) == 1)
 			current_token = current_token->next;
 	}
 }
