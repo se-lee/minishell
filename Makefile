@@ -19,7 +19,7 @@ SRCS =	minishell.c						\
 		cmd_exec/test_functions.c		\
 		cmd_exec/cmd_utils.c
 
-GCCF = gcc -g -fsanitize=address #-Wall -Wextra -Werror
+GCCF = gcc -g3 -fsanitize=address# -Wall -Wextra -Werror
 
 READLINE = -lreadline -L/usr/local/lib -I/usr/local/include
 
