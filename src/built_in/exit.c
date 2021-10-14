@@ -27,3 +27,6 @@ void	builtin_exit(t_command *current_cmd)
 		}
 	}
 }
+// need to set exit status (echo $?)
+// print "exit" only when there is no pipe
+// if there is  pipe, don't print "exit"

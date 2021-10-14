@@ -1,5 +1,6 @@
 .vscode
 minishell
+*.txt
 
 ## Mlx related
 Makefile.gen
