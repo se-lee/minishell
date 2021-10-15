@@ -85,6 +85,18 @@ void	launch_commands(t_vars *vars, t_command *current_cmd, int in, int out)
 	}
 }
 
+void	print_commands(t_command *cmd)
+{
+	int	i;
+
+	i = 0;
+	while (cmd->command[i])
+	{
+		printf(">>%s<<\n", cmd->command[i]);
+		i++;
+	}
+}
+
 void	execute_pipe_commands(t_vars *vars)
 {
 	int			fd[2];
@@ -99,6 +111,8 @@ void	execute_pipe_commands(t_vars *vars)
 	in = 0;
 	current_cmd = vars->cmd;
 	i = 0;
+printf("cmd_count:%d\n", count_command(vars->cmd));
+printf("pipe:%d\n", current_cmd->pipe);
 	if (command_is_builtin(current_cmd->command) == TRUE && current_cmd->pipe == 0)
 		run_command_builtin(vars, current_cmd);
 	else if (current_cmd->pipe == 0)
@@ -110,8 +124,10 @@ void	execute_pipe_commands(t_vars *vars)
 	}
  	else
 	{
+printf("test\n");
 		while (i < count_command(vars->cmd) - 1)
 		{
+print_commands(current_cmd);
 			if (pipe(fd) < 0)
 				perror("pipe");
 			launch_commands(vars, current_cmd, in, fd[1]);

@@ -109,7 +109,7 @@ int			count_command(t_command *cmd);
 int			command_is_builtin(char **command);
 char		*get_env_value(t_envlist *envp, char *env_name);
 char		**envlist_to_char_array(t_envlist *envp);
-
+void		print_commands(t_command *cmd);
 /* envlist utils */
 void		envlist_create(t_vars *vars, char **envp);
 void		envlist_free(t_envlist *to_free);
