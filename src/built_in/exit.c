@@ -1,13 +1,13 @@
 #include "minishell.h"
 
-void	builtin_exit(t_command *current_cmd)
+void    builtin_exit(t_command *current_cmd)
 {
-	int	return_value;
+	int    return_value;
 
 	return_value = 0;
 	if (current_cmd->command[1] == NULL)
 	{
-		exit(return_value);
+	    exit(return_value);
 	}
 	// else if (current_cmd->command[1])
 	// {
@@ -22,11 +22,8 @@ void	builtin_exit(t_command *current_cmd)
 	// 		printf("exit: too many arguments\n");
 	// 	else
 	// 	{
-	// 		printf("exit : %s: numeric argument required\n");
+	// 		printf("exit : numeric argument required\n");
 	// 		exit(255);
 	// 	}
 	// }
 }
-// need to set exit status (echo $?)
-// print "exit" only when there is no pipe
-// if there is  pipe, don't print "exit"

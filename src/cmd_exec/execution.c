@@ -92,8 +92,7 @@ void	print_commands(t_command *cmd)
 	i = 0;
 	while (cmd->command[i])
 	{
-		// printf(">>%s<<\n", cmd->command[i]);
-		printf("%d:>>%s<<\n", i, cmd->command[i]);
+		printf(">>%s<<\n", cmd->command[i]);
 		i++;
 	}
 }
@@ -112,7 +111,6 @@ void	execute_pipe_commands(t_vars *vars)
 	in = 0;
 	current_cmd = vars->cmd;
 	i = 0;
-	print_commands(current_cmd);
 	if (command_is_builtin(current_cmd->command) == TRUE && current_cmd->pipe == 0)
 		run_command_builtin(vars, current_cmd);
 	else if (current_cmd->pipe == 0)
@@ -126,6 +124,7 @@ void	execute_pipe_commands(t_vars *vars)
 	{
 		while (i < count_command(vars->cmd) - 1)
 		{
+			print_commands(current_cmd);
 			if (pipe(fd) < 0)
 				perror("pipe");
 			launch_commands(vars, current_cmd, in, fd[1]);

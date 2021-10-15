@@ -68,7 +68,7 @@ char	*remove_quotes(char *original, int token_type)
 
 void	add_piperedirect(t_token *current_token, t_command *current_command)
 {
-	if (current_token && ft_piperedirect(current_token->token_type) == 1)
+	while (current_token && ft_piperedirect(current_token->token_type) == 1)
 	{
 		if (current_token->token_type == PIPE_SIGN)
 			current_command->pipe = 1;
@@ -118,7 +118,7 @@ char	**command_create(t_token *current_token, int i)
 			j = 0;
 			while (split_str[j])
 			{
-				cmd[i] = split_str[j];
+				cmd[i] = ft_strdup(split_str[j]);
 				j++;
 				i++;
 			}
@@ -172,6 +172,8 @@ void	fill_command(t_token *token, t_command *current_command)
 	current_token = token;
 	while (current_token && ft_piperedirect(current_token->token_type) == 0)
 	{
+		if (ft_piperedirect(current_token->token_type) == 0)
+			i += find_space(current_token->buffer.str);
 		i++;
 		current_token = current_token->next;
 	}
@@ -189,6 +191,9 @@ void	fill_command(t_token *token, t_command *current_command)
 	}
 	cmd[i] = NULL;
 	current_command->command = cmd;
+	current_token = token;
+	while (current_token && ft_piperedirect(current_token->token_type) == 0)
+		current_token = current_token->next;
 	add_piperedirect(current_token, current_command);
 }
 
