@@ -75,11 +75,14 @@ void	delete_env(t_envlist *envp, char *str)
 	}
 }
 
-void	export_while(t_vars *vars, char *command)
+void	export_while(t_vars *vars, char *command, int quotes)
 {
 	char	*var_str;
+	int		res;
 
-	if (export_syntax(command) == 0)
+	res = export_syntax(command, quotes);
+	printf("res:%d\n", res);
+	if (res == 0)
 		printf("export: %s: invalid token\n", command);
 	else
 	{
@@ -90,6 +93,8 @@ void	export_while(t_vars *vars, char *command)
 	}
 }
 
+/*
+// this is original
 void	builtin_export(t_vars *vars, t_command *current_cmd)
 {
 	char		*var_str;
@@ -103,7 +108,38 @@ void	builtin_export(t_vars *vars, t_command *current_cmd)
 		i = 1;
 		while (current_cmd->command[i])
 		{
+	printf("cmd[%d]:%s\n", i, current_cmd->command[i]);
 			export_while(vars, current_cmd->command[i]);
+			i++;
+		}
+	}
+	else
+	{
+		sorted = envlist_sort_ascii(vars);
+		envlist_print_all(sorted);
+		envlist_free(sorted);
+	}
+}
+*/
+
+// this is test version 
+void	builtin_export(t_vars *vars, t_command *current_cmd)
+{
+	char		*var_str;
+	char		*var_name;
+	char		*temp;
+	t_envlist	*sorted;
+	int			i;
+
+print_commands(current_cmd);
+
+	if (current_cmd && current_cmd->command[1])
+	{
+		i = 1;
+		while (current_cmd->command[i])
+		{
+printf("cmd[%d]:%s\n", i, current_cmd->command[i]);
+			export_while(vars, current_cmd->command[i], current_cmd->quotes);
 			i++;
 		}
 	}

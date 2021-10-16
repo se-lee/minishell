@@ -54,6 +54,7 @@ struct s_envlist {
 struct s_command {
 	char		**command;
 	int			pipe;
+	int			quotes; //ADD
 	int			redirect_right;
 	int			redirect_left;
 	t_command	*next;
@@ -85,7 +86,7 @@ void		ft_comandadd_back(t_token **alst, t_token *new);
 /* built-in utils */
 int			format_is_valid(char *str);
 int			ft_inenv(t_envlist *envp, char *str);
-int			export_syntax(char *str);
+int			export_syntax(char *str, int quotes);
 
 /* built-in commands */
 void		builtin_cd(t_vars *vars, t_command *current_cmd);
@@ -109,7 +110,7 @@ int			count_command(t_command *cmd);
 int			command_is_builtin(char **command);
 char		*get_env_value(t_envlist *envp, char *env_name);
 char		**envlist_to_char_array(t_envlist *envp);
-
+void		print_commands(t_command *cmd);
 /* envlist utils */
 void		envlist_create(t_vars *vars, char **envp);
 void		envlist_free(t_envlist *to_free);

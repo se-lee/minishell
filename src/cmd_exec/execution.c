@@ -43,8 +43,16 @@ void	run_command_non_builtin(t_envlist *envlist, t_command *current_cmd)
 	
 	env = envlist_to_char_array(envlist);
 	path = get_command_path(envlist, current_cmd->command[0]);
-	if (execve(path, current_cmd->command, env) < 0)
-		perror("execution failed");
+	if (path != NULL)
+	{
+		if (execve(path, current_cmd->command, env) < 0)
+			perror("execution failed");
+	}
+	else
+	{
+		perror("command not found");
+		exit(127);
+	}
 }
 
 void	launch_commands(t_vars *vars, t_command *current_cmd, int in, int out)
@@ -85,6 +93,19 @@ void	launch_commands(t_vars *vars, t_command *current_cmd, int in, int out)
 	}
 }
 
+
+void	print_commands(t_command *cmd)
+{
+	int	i;
+
+	i = 0;
+	while (cmd->command[i])
+	{
+		printf(">>%s<<\n", cmd->command[i]);
+		i++;
+	}
+}
+
 void	execute_pipe_commands(t_vars *vars)
 {
 	int			fd[2];
@@ -112,6 +133,7 @@ void	execute_pipe_commands(t_vars *vars)
 	{
 		while (i < count_command(vars->cmd) - 1)
 		{
+			print_commands(current_cmd);
 			if (pipe(fd) < 0)
 				perror("pipe");
 			launch_commands(vars, current_cmd, in, fd[1]);
@@ -121,7 +143,7 @@ void	execute_pipe_commands(t_vars *vars)
 		}
 		launch_commands(vars, current_cmd, in, out); //last command
 		i = 0;
-		while (i < count_command(vars->cmd)) //wait for all sons' pid)
+		while (i < count_command(vars->cmd))
 		{
 			wait(&status);
 			if (status == -1)
