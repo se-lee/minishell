@@ -12,7 +12,7 @@ char	*search_current_dir(char *command)
 	{
 printf("path1:%s\n", path);
 		temp = ft_strjoin_char(path, '/');
-		temp2 = ft_strjoin(temp, &command[2]);
+		temp2 = ft_strjoin(temp, command);
 printf("path1:%s\n", path);
 		free(temp);
 		if (access(temp2, X_OK) == 0)
@@ -38,11 +38,11 @@ char	*get_command_path(t_envlist *envp, char *command)
 	free(path);
 	i = 0;
 	if (ft_strncmp("./", command, 2) == 0)
-	{
+		path = search_current_dir(&command[2]);
+	else
 		path = search_current_dir(command);
-		if (path != NULL)
-			return (path);
-	}
+	if (path != NULL)
+		return (path);
 	while (path_sep[i])
 	{
 		ft_append(&path_sep[i], "/");
