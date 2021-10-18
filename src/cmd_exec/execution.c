@@ -46,11 +46,14 @@ void	run_command_non_builtin(t_envlist *envlist, t_command *current_cmd)
 	if (path != NULL)
 	{
 		if (execve(path, current_cmd->command, env) < 0)
-			perror("execution failed");
+		{
+			perror("");
+			exit(127);
+		}
 	}
 	else
 	{
-		perror("command not found");
+		perror("");
 		exit(127);
 	}
 }

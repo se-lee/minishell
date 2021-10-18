@@ -1,7 +1,5 @@
 #include "minishell.h"
 
-
-//check if the command starts with ./ and run this function only if it starts with ./
 char	*search_current_dir(char *command)
 {
 	char 	path[MAXPATHLEN];
@@ -10,10 +8,8 @@ char	*search_current_dir(char *command)
 
 	if (getcwd(path, MAXPATHLEN) != NULL)
 	{
-printf("path1:%s\n", path);
 		temp = ft_strjoin_char(path, '/');
 		temp2 = ft_strjoin(temp, command);
-printf("path1:%s\n", path);
 		free(temp);
 		if (access(temp2, X_OK) == 0)
 			return(temp2);
@@ -35,14 +31,12 @@ char	*get_command_path(t_envlist *envp, char *command)
 		free(path);
 	}
 	path_sep = ft_split(path, ':');
-	free(path);
-	i = 0;
-	if (ft_strncmp("./", command, 2) == 0)
+	path = NULL;
+	if (ft_strchr(command, '/') != 0)
+		path = ft_strdup(command);
+	else if (ft_strncmp("./", command, 2) == 0)
 		path = search_current_dir(&command[2]);
-	else
-		path = search_current_dir(command);
-	if (path != NULL)
-		return (path);
+	i = 0;
 	while (path_sep[i])
 	{
 		ft_append(&path_sep[i], "/");
@@ -55,9 +49,8 @@ char	*get_command_path(t_envlist *envp, char *command)
 		}
 		i++;
 	}
-	perror("invalid path");
 	free_array(path_sep);
-	return (NULL);
+	return (path);
 }
 
 int		count_command(t_command *cmd)
