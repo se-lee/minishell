@@ -43,8 +43,19 @@ void	run_command_non_builtin(t_envlist *envlist, t_command *current_cmd)
 	
 	env = envlist_to_char_array(envlist);
 	path = get_command_path(envlist, current_cmd->command[0]);
-	if (execve(path, current_cmd->command, env) < 0)
-		perror("execution failed");
+	if (path != NULL)
+	{
+		if (execve(path, current_cmd->command, env) < 0)
+		{
+			perror("");
+			exit(127);
+		}
+	}
+	else
+	{
+		perror("");
+		exit(127);
+	}
 }
 
 void	launch_commands(t_vars *vars, t_command *current_cmd, int in, int out)

@@ -74,11 +74,12 @@ struct s_vars {
 //Parsing fonctions
 int			ft_isspecial(char c);
 int			ft_isupper(char c);
+int			find_space(char *str);
 int			ft_piperedirect(int token_type);
 void		add_char(t_token *token, char c);
 void		update_token(t_token *token, char *var, char *value);
 char		*replace(char *full, char *placeholder, char *real);
-void		replace_env(t_vars *vars, t_token *token);
+t_token		*replace_env(t_vars *vars, t_token *token);
 void		tokenization(t_vars *vars, char *str);
 void		parsing(t_vars *vars, char *str);
 void		ft_comandadd_back(t_token **alst, t_token *new);

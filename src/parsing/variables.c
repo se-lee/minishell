@@ -19,21 +19,58 @@ char	*find_variable(char *str)
 	return (var);
 }
 
-void	token_cut(t_vars *vars, t_token *token)
+t_token	*token_cut(t_vars *vars, t_token *token)
 {
 	t_token	*current_token;
+	t_token	*temp_next;
+	int		i;
+	int		j;
 
+	i = 0;
+	temp_next = token->next;
 	current_token = vars->first;
-	while (current_token->next && current_token->next != token)
+	if (token == vars->first)
 	{
-		printf("current_token = %p, token = %p\n", current_token->next, token);
-		current_token = current_token->next;
+		vars->first = protected_malloc(1, sizeof(t_token));
+		current_token = vars->first;
+		current_token->next = NULL;
 	}
-	printf("FOUND IT\n");
-		printf("current_token = %p, token = %p\n", current_token->next, token);
+	else
+	{
+		while (current_token->next && current_token->next != token)
+			current_token = current_token->next;
+		current_token->next = protected_malloc(1, sizeof(t_token));
+		current_token = current_token->next;
+		current_token->next = NULL;
+	}
+	while (token->buffer.str[i] && token->buffer.str[i] == ' ')
+		i++;
+	j = i;
+	while (token->buffer.str[i])
+	{
+		while (token->buffer.str[i] && token->buffer.str[i] != ' ')
+			i++;
+		if (current_token->buffer.str != NULL)
+		{
+			current_token->next = protected_malloc(1, sizeof(t_token));
+			current_token = current_token->next;
+			current_token->next = NULL;
+		}
+		current_token->buffer.str = ft_strndup(&token->buffer.str[j], i - j);
+		printf("str = %s\n", current_token->buffer.str);
+		current_token->token_type = token->token_type;
+		current_token->buffer.len = ft_strlen(current_token->buffer.str);
+		while (token->buffer.str[i] && token->buffer.str[i] == ' ')
+			i++;
+		j = i;
+	}
+	current_token->next = temp_next;
+	free(token->buffer.str);
+	free(token);
+	return (temp_next);
 }
 
-void	replace_env(t_vars *vars, t_token *token)
+t_token *replace_env(t_vars *vars, t_token *token)
 {
 	int		i;
 	char	*var;
@@ -51,5 +88,10 @@ void	replace_env(t_vars *vars, t_token *token)
 		}
 		i++;
 	}
-	token_cut(vars, token);
+	if (find_space(token->buffer.str) != 0)
+	{
+		token = token_cut(vars, token);
+		return (token);
+	}
+	return (token->next);
 }
