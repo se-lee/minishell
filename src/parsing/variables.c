@@ -31,6 +31,7 @@ t_token	*token_cut(t_vars *vars, t_token *token)
 	current_token = vars->first;
 	if (token == vars->first)
 	{
+		vars->first = NULL;
 		vars->first = protected_malloc(1, sizeof(t_token));
 		current_token = vars->first;
 		current_token->next = NULL;
@@ -39,6 +40,7 @@ t_token	*token_cut(t_vars *vars, t_token *token)
 	{
 		while (current_token->next && current_token->next != token)
 			current_token = current_token->next;
+		current_token->next = NULL;
 		current_token->next = protected_malloc(1, sizeof(t_token));
 		current_token = current_token->next;
 		current_token->next = NULL;
@@ -50,7 +52,7 @@ t_token	*token_cut(t_vars *vars, t_token *token)
 	{
 		while (token->buffer.str[i] && token->buffer.str[i] != ' ')
 			i++;
-		if (current_token->buffer.str != NULL)
+		if (current_token == NULL)
 		{
 			current_token->next = protected_malloc(1, sizeof(t_token));
 			current_token = current_token->next;
