@@ -30,7 +30,8 @@ enum e_type
 	SINGLE_QUOTE,
 	PIPE_SIGN,
 	REDIRECT_RIGHT,
-	REDIRECT_LEFT
+	REDIRECT_LEFT,
+	SPACE
 };
 
 struct s_string {

@@ -134,31 +134,80 @@ char	**command_create(t_token *current_token, int i)
 	return (cmd);
 }
 
+int	array_len(char **array)
+{
+	int	i;
+
+	i = 0;
+	while (array[i] != NULL)
+		i++;
+	return (i);
+}
+
+char	**array_realloc(char **array, char *new_line)
+{
+	char	**new_array;
+	int		i;
+
+	i = 0;
+	new_array = protected_malloc(array_len(array) + 2, sizeof(char *));
+	while (array[i] != NULL)
+	{
+		new_array[i] = ft_strdup(array[i]);
+		i++;
+	}
+	new_array[i] = ft_strdup(new_line);
+	new_array[i + 1] = NULL;
+	i = 0;
+	while (array[i] != NULL)
+	{
+		free(array[i]);
+		i++;
+	}
+	free(array);
+	return(new_array);
+}
+
 void	fill_command(t_token *token, t_command *current_command)
 {
 	int		i;
 	t_token	*current_token;
 	char	**cmd;
+	char	*temp;
 
 	current_command->pipe = 0;
 	current_command->redirect_left = 0;
 	current_command->redirect_right = 0;
-	i = 0;
 	current_token = token;
+	if (current_token->token_type == SPACE)
+		current_token = current_token->next;
+	cmd = protected_malloc(2, sizeof(char *));
+	cmd[0] = ft_strdup(current_token->buffer.str);
+	cmd[1] = NULL;
+	i = 1;
 	while (current_token && ft_piperedirect(current_token->token_type) == 0)
 	{
-		if (ft_piperedirect(current_token->token_type) == 0)
-			i += find_space(current_token->buffer.str);
+		printf("token=%s\n", current_token->buffer.str);
+		while (current_token && ft_piperedirect(current_token->token_type) == 0
+			&& current_token->token_type != SPACE)
+		{
+			if (cmd[i] != NULL)
+			{
+				temp = ft_strjoin(cmd[i], current_token->buffer.str);
+				free(cmd[i]);
+				cmd[i] = ft_strdup(temp);
+				free(temp);
+			}
+			else
+				cmd = array_realloc(cmd, current_token->buffer.str);
+			printf("cmd[%d] = %s\n", i, cmd[i]);
+			current_token = current_token->next;
+		}
 		i++;
 		current_token = current_token->next;
 	}
-	current_token = token;
-	cmd = command_create(current_token, i);
-	current_command->command = cmd;
-	current_token = token;
-	while (current_token && ft_piperedirect(current_token->token_type) == 0)
-		current_token = current_token->next;
-	add_piperedirect(current_token, current_command);
+	if (current_token)
+		add_piperedirect(current_token, current_command);
 }
 
 void	fill_commands(t_vars *vars)
@@ -201,7 +250,7 @@ void	printf_commands(t_vars *vars)
 	while (current_cmd)
 	{
 		i = 0;
-		while (current_cmd->command[i])
+		while (current_cmd->command[i] != NULL)
 		{
 			printf("command[%d] = %s\n", i, current_cmd->command[i]);
 			i++;
@@ -233,6 +282,6 @@ void	parsing(t_vars *vars, char *str)
 		}
 	}
 	fill_commands(vars);
-	// printf_commands(vars);
+	printf_commands(vars);
 	return ;
 }

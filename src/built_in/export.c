@@ -79,15 +79,16 @@ void	export_while(t_vars *vars, char *command)
 {
 	char	*var_str;
 
-	if (export_syntax(command) == 0)
-		printf("export: %s: invalid token\n", command);
-	else
-	{
+	// if (export_syntax(command) == 0)
+	// 	printf("export: %s: invalid token\n", command);
+	// else
+	// {
+		printf("command=>>%s<<\n", command);
 		var_str = command;
 		if (ft_inenv(vars->envp, var_str) == 1)
 			delete_env(vars->envp, var_str);
 		add_new_var_to_list(vars, var_str);
-	}
+	// }
 }
 
 void	builtin_export(t_vars *vars, t_command *current_cmd)
