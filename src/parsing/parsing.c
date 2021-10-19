@@ -258,7 +258,7 @@ void	parsing(t_vars *vars, char *str)
 		{
 			if (current_token->token_type == WORD
 				|| current_token->token_type == QUOTE)
-				replace_env(vars->envp, current_token);
+				replace_env(vars, current_token);
 			current_token = current_token->next;
 		}
 		else

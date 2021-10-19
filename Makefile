@@ -18,16 +18,9 @@ SRCS =	minishell.c						\
 		built_in/unset.c				\
 		cmd_exec/execution.c			\
 		cmd_exec/test_functions.c		\
-<<<<<<< HEAD
 		cmd_exec/cmd_utils.c
 
-GCCF = gcc -g -fsanitize=address #-Wall -Wextra -Werror
-=======
-		cmd_exec/cmd_utils.c			\
-		built_in/export_utils.c			\
-
 GCCF = gcc -g3 -fsanitize=address# -Wall -Wextra -Werror
->>>>>>> 721131659ce783257624439df0a9cefd63eb54de
 
 READLINE = -lreadline -L/usr/local/lib -I/usr/local/include
 

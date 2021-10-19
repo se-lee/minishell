@@ -22,10 +22,10 @@ char	*get_command_path(t_envlist *envp, char *command)
 		if (access(path_sep[i], X_OK) == 0)
 		{
 			path = path_sep[i];
-			// free_array(path_sep);
+			free_array(path_sep);
 			return(path);
 		}
-		free(path_sep[i]);
+		// free(path_sep[i]);
 		i++;
 	}
 	perror("invalid path");
