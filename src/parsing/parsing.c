@@ -101,6 +101,9 @@ int	find_space(char *str)
 	return (j);
 }
 
+/*
+
+*/
 char	**command_create(t_token *current_token, int i)
 {
 	char	**cmd;
@@ -134,30 +137,6 @@ char	**command_create(t_token *current_token, int i)
 	return (cmd);
 }
 
-// void	fill_command(t_token *token, t_command *current_command)
-// {
-// 	int		i;
-// 	t_token	*current_token;
-// 	char	**cmd;
-
-// 	current_command->pipe = 0;
-// 	current_command->redirect_left = 0;
-// 	current_command->redirect_right = 0;
-// 	i = 0;
-// 	current_token = token;
-// 	while (current_token && ft_piperedirect(current_token->token_type) == 0)
-// 	{
-// 		if (current_token->token_type == WORD)
-// 			i += find_space(current_token->buffer.str);
-// 		i++;
-// 		current_token = current_token->next;
-// 	}
-// 	current_token = token;
-// 	cmd = command_create(current_token, i);
-// 	current_command->command = cmd; 
-// 	add_piperedirect(current_token, current_command);
-// }
-
 void	fill_command(t_token *token, t_command *current_command)
 {
 	int		i;
@@ -167,7 +146,7 @@ void	fill_command(t_token *token, t_command *current_command)
 	current_command->pipe = 0;
 	current_command->redirect_left = 0;
 	current_command->redirect_right = 0;
-	current_command->quotes = 0; // ADD
+	current_command->quotes = 0;
 	i = 0;
 	current_token = token;
 	while (current_token && ft_piperedirect(current_token->token_type) == 0)
@@ -227,37 +206,6 @@ void	fill_commands(t_vars *vars)
 			current_token = current_token->next;
 	}
 }
-
-// void	fill_commands(t_vars *vars)
-// {
-// 	int			i;
-// 	t_token		*current_token;
-// 	t_command	*current_cmd;
-
-// 	current_token = vars->first;
-// 	i = 0;
-// 	while (current_token)
-// 	{
-// 		if (i == 0)
-// 		{
-// 			vars->cmd = protected_malloc(1, sizeof(t_command));
-// 			current_cmd = vars->cmd;
-// 			current_cmd->next = NULL;
-// 			i++;
-// 		}
-// 		else
-// 		{
-// 			current_cmd->next = protected_malloc(1, sizeof(t_command));
-// 			current_cmd = current_cmd->next;
-// 			current_cmd->next = NULL;
-// 		}
-// 		fill_command(current_token, current_cmd);
-// 		while (current_token && ft_piperedirect(current_token->token_type) == 0)
-// 			current_token = current_token->next;
-// 		if (current_token && ft_piperedirect(current_token->token_type) == 1)
-// 			current_token = current_token->next;
-// 	}
-// }
 
 void	printf_commands(t_vars *vars)
 {

@@ -96,7 +96,6 @@ void	launch_commands(t_vars *vars, t_command *current_cmd, int in, int out)
 	}
 }
 
-
 void	print_commands(t_command *cmd)
 {
 	int	i;
