@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+// if command has < 
+
 int	redirect_input(const char *file)
 {
 	int	fd;
@@ -13,6 +15,7 @@ int	redirect_input(const char *file)
 	return (0);
 }
 
+//if command has > 
 int	redirect_output(const char *file)
 {
 	int	fd;

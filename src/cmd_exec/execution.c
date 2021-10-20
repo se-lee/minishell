@@ -1,5 +1,18 @@
 #include "minishell.h"
 
+/* remove this function later */
+void	print_commands(t_command *cmd)
+{
+	int	i;
+
+	i = 0;
+	while (cmd->command[i])
+	{
+		printf(">>%s<<\n", cmd->command[i]);
+		i++;
+	}
+}
+
 int		envlist_count(t_envlist *envp)
 {
 	int		count;
@@ -58,7 +71,23 @@ void	run_command_non_builtin(t_envlist *envlist, t_command *current_cmd)
 	}
 }
 
-void	launch_commands(t_vars *vars, t_command *current_cmd, int in, int out)
+void	fd_dup_and_close(int input, int output)
+{
+	if (input != 0)
+	{
+		if (dup2(input, 0) < 0)
+			perror("dup2");
+		close(input);
+	}
+	if (output != 1)
+	{
+		if (dup2(output, 1) < 0)
+			perror("dup2");
+		close(output);
+	}
+}
+
+void	launch_commands(t_vars *vars, t_command *current_cmd, int input, int output)
 {
 	pid_t	child;
 
@@ -67,18 +96,7 @@ void	launch_commands(t_vars *vars, t_command *current_cmd, int in, int out)
 		perror("fork");
 	if (child == 0)
 	{
-		if (in != 0)
-		{
-			if (dup2(in, 0) < 0)
-				perror("dup2");
-			close(in);
-		}
-		if (out != 1)
-		{
-			if (dup2(out, 1) < 0)
-				perror("dup2");
-			close(out);
-		}
+		fd_dup_and_close(input, output);
 		if (command_is_builtin(current_cmd->command) == TRUE)
 		{
 			run_command_builtin(vars, current_cmd);
@@ -89,37 +107,25 @@ void	launch_commands(t_vars *vars, t_command *current_cmd, int in, int out)
 	}
 	else
 	{
-		if (in != 0)
-			close(in);
-		if (out != 1)
-			close(out);
-	}
-}
-
-void	print_commands(t_command *cmd)
-{
-	int	i;
-
-	i = 0;
-	while (cmd->command[i])
-	{
-		printf(">>%s<<\n", cmd->command[i]);
-		i++;
+		if (input != 0)
+			close(input);
+		if (output != 1)
+			close(output);
 	}
 }
 
 void	execute_pipe_commands(t_vars *vars)
 {
 	int			fd[2];
-	int			in;
-	int			out;
+	int			input;
+	int			output;
 	int			i;
 	int			status;
 	pid_t		child;
 	t_command	*current_cmd;
 
-	out = 1;
-	in = 0;
+	output = 1;
+	input = 0;
 	current_cmd = vars->cmd;
 	i = 0;
 	if (command_is_builtin(current_cmd->command) == TRUE && current_cmd->pipe == 0)
@@ -135,15 +141,14 @@ void	execute_pipe_commands(t_vars *vars)
 	{
 		while (i < count_command(vars->cmd) - 1)
 		{
-			print_commands(current_cmd);
 			if (pipe(fd) < 0)
 				perror("pipe");
-			launch_commands(vars, current_cmd, in, fd[1]);
-			in = fd[0];
+			launch_commands(vars, current_cmd, input, fd[1]);
+			input = fd[0];
 			current_cmd = current_cmd->next;
 			i++;
 		}
-		launch_commands(vars, current_cmd, in, out); //last command
+		launch_commands(vars, current_cmd, input, output); //last command
 		i = 0;
 		while (i < count_command(vars->cmd))
 		{
@@ -157,3 +162,9 @@ void	execute_pipe_commands(t_vars *vars)
 		}
 	}
 }
+
+
+/* run commands that are without pipes (simple) */
+void	run_command_no_pipe();
+
+

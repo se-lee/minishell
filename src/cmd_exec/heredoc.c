@@ -33,8 +33,6 @@ int		heredoc_write(t_command *current_command, char *str)
 
 	if (pipe(fd) < 0)
 		return (-1);
-
-
 }
 
 int	here_doc(char *stop)
