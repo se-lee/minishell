@@ -101,6 +101,9 @@ int	find_space(char *str)
 	return (j);
 }
 
+/*
+
+*/
 char	**command_create(t_token *current_token, int i)
 {
 	char	**cmd;
@@ -134,30 +137,6 @@ char	**command_create(t_token *current_token, int i)
 	return (cmd);
 }
 
-// void	fill_command(t_token *token, t_command *current_command)
-// {
-// 	int		i;
-// 	t_token	*current_token;
-// 	char	**cmd;
-
-// 	current_command->pipe = 0;
-// 	current_command->redirect_left = 0;
-// 	current_command->redirect_right = 0;
-// 	i = 0;
-// 	current_token = token;
-// 	while (current_token && ft_piperedirect(current_token->token_type) == 0)
-// 	{
-// 		if (current_token->token_type == WORD)
-// 			i += find_space(current_token->buffer.str);
-// 		i++;
-// 		current_token = current_token->next;
-// 	}
-// 	current_token = token;
-// 	cmd = command_create(current_token, i);
-// 	current_command->command = cmd; 
-// 	add_piperedirect(current_token, current_command);
-// }
-
 void	fill_command(t_token *token, t_command *current_command)
 {
 	int		i;
@@ -167,7 +146,7 @@ void	fill_command(t_token *token, t_command *current_command)
 	current_command->pipe = 0;
 	current_command->redirect_left = 0;
 	current_command->redirect_right = 0;
-	current_command->quotes = 0; // ADD
+	current_command->quotes = 0;
 	i = 0;
 	current_token = token;
 	while (current_token && ft_piperedirect(current_token->token_type) == 0)
