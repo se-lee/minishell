@@ -4,6 +4,8 @@ void	builtin_pwd(void)
 {
 	char	path[MAXPATHLEN];
 
-	getcwd(path, MAXPATHLEN);
-	printf("%s\n", path);
+	if (getcwd(path, MAXPATHLEN) != NULL)
+		printf("%s\n", path);
+	else
+		perror("pwd");
 }

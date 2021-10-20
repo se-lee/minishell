@@ -26,13 +26,12 @@ void	*protected_malloc(size_t count, size_t size)
 
 void	free_array(char **array)
 {
-    int    i;
-
-    i = 0;
-    while (array[i])
-    {
-        free(array[i]);
-        i++;
-    }
-    free(array);
+	int	i;
+	i = 0;
+	while (array[i])
+	{
+		free(array[i]);
+		i++;
+	}
+	free(array);
 }

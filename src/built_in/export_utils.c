@@ -29,7 +29,7 @@ int	ft_inenv(t_envlist *envp, char *str)
 	return (0);
 }
 
-int	export_syntax(char *str)
+int	export_syntax(char *str, int quotes)
 {
 	int	i;
 
@@ -41,7 +41,7 @@ int	export_syntax(char *str)
 			return (0);
 		i++;
 	}
-	while (str[i])
+	while (str[i] && quotes == 0)
 	{
 		if (ft_isalnum(str[i]) != 1 && (str[i] != '-') && (str[i] != '_')
 				&& str[i] != '=' && str[i] != '.' && str[i] != '/' && str[i] != '?')

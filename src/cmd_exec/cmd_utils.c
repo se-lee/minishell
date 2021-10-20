@@ -1,5 +1,23 @@
 #include "minishell.h"
 
+char	*search_current_dir(char *command)
+{
+	char 	path[MAXPATHLEN];
+	char	*temp;
+	char	*temp2;
+
+	if (getcwd(path, MAXPATHLEN) != NULL)
+	{
+		temp = ft_strjoin_char(path, '/');
+		temp2 = ft_strjoin(temp, command);
+		free(temp);
+		if (access(temp2, X_OK) == 0)
+			return(temp2);
+		free(temp2);
+	}
+	return (NULL);
+}
+
 char	*get_command_path(t_envlist *envp, char *command)
 {
 	char	**path_sep;
@@ -13,7 +31,11 @@ char	*get_command_path(t_envlist *envp, char *command)
 		free(path);
 	}
 	path_sep = ft_split(path, ':');
-	free(path);
+	path = NULL;
+	if (ft_strchr(command, '/') != 0)
+		path = ft_strdup(command);
+	else if (ft_strncmp("./", command, 2) == 0)
+		path = search_current_dir(&command[2]);
 	i = 0;
 	while (path_sep[i])
 	{
@@ -21,16 +43,14 @@ char	*get_command_path(t_envlist *envp, char *command)
 		ft_append(&path_sep[i], command);
 		if (access(path_sep[i], X_OK) == 0)
 		{
-			path = path_sep[i];
-			// free_array(path_sep);
+			path = ft_strdup(path_sep[i]);
+			free_array(path_sep);
 			return(path);
 		}
-		free(path_sep[i]);
 		i++;
 	}
-	perror("invalid path");
 	free_array(path_sep);
-	return (NULL);
+	return (path);
 }
 
 int		count_command(t_command *cmd)
