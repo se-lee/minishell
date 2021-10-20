@@ -184,17 +184,17 @@ void	fill_command(t_token *token, t_command *current_command)
 	i = 0;
 	while (current_token && ft_piperedirect(current_token->token_type) == 0)
 	{
-		printf(">>%s<<\n", current_token->buffer.str);
-		printf("out_cmd[%d] = >>%s<<\n", i, cmd[i]);
+		// printf(">>%s<<\n", current_token->buffer.str);
+		// printf("out_cmd[%d] = >>%s<<\n", i, cmd[i]);
 		if (current_token->token_type != SPACE)
 		{
 			while (current_token && ft_piperedirect(current_token->token_type) == 0
 				&& current_token->token_type != SPACE)
 			{
-				printf("in_cmd[%d] = >>%s<<\n", i, cmd[i]);
+				// printf("in_cmd[%d] = >>%s<<\n", i, cmd[i]);
 				if (cmd[i] != NULL)
 				{
-					printf("if_cmd[%d] = >>%s<<\n", i, cmd[i]);
+					// printf("if_cmd[%d] = >>%s<<\n", i, cmd[i]);
 					current_token->buffer.str = remove_quotes(current_token->buffer.str, current_token->token_type);
 					temp = ft_strjoin(cmd[i], current_token->buffer.str);
 					free(cmd[i]);
@@ -203,7 +203,7 @@ void	fill_command(t_token *token, t_command *current_command)
 				}
 				else
 				{
-					printf("else_cmd[%d] = >>%s<<\n", i, cmd[i]);
+					// printf("else_cmd[%d] = >>%s<<\n", i, cmd[i]);
 					current_token->buffer.str = remove_quotes(current_token->buffer.str, current_token->token_type);
 					cmd = array_realloc(cmd, current_token->buffer.str);
 				}
@@ -212,7 +212,7 @@ void	fill_command(t_token *token, t_command *current_command)
 		}
 		if (current_token && current_token->token_type == SPACE)
 		{
-			printf("increment i:%d\n", i);
+			// printf("increment i:%d\n", i);
 			i++;
 		}
 		if (current_token && ft_piperedirect(current_token->token_type) == 0)
@@ -229,16 +229,22 @@ void	fill_commands(t_vars *vars)
 	t_token		*current_token;
 	t_command	*current_cmd;
 
-	current_token = vars->first;
-	while (current_token)
-	{
-		printf("token:>>%s<<\n", current_token->buffer.str);
-		current_token = current_token->next;
-	}
+	// current_token = vars->first;
+	// while (current_token)
+	// {
+	// 	printf("token:>>%s<<\n", current_token->buffer.str);
+	// 	current_token = current_token->next;
+	// }
 	current_token = vars->first;
 	i = 0;
 	while (current_token)
 	{
+		if (current_token->token_type == SPACE && current_token->next)
+		{
+			current_token = current_token->next;
+			while (current_token && ft_piperedirect(current_token->token_type) == 1)
+				current_token = current_token->next;
+		}
 		if (current_token->token_type != SPACE)
 		{
 			if (i == 0)
@@ -254,12 +260,12 @@ void	fill_commands(t_vars *vars)
 				current_cmd = current_cmd->next;
 				current_cmd->next = NULL;
 			}
+			fill_command(current_token, current_cmd);
+			while (current_token && ft_piperedirect(current_token->token_type) == 0)
+				current_token = current_token->next;
+			while (current_token && ft_piperedirect(current_token->token_type) == 1)
+				current_token = current_token->next;
 		}
-		fill_command(current_token, current_cmd);
-		while (current_token && ft_piperedirect(current_token->token_type) == 0)
-			current_token = current_token->next;
-		while (current_token && ft_piperedirect(current_token->token_type) == 1)
-			current_token = current_token->next;
 	}
 }
 
@@ -281,6 +287,30 @@ void	printf_commands(t_vars *vars)
 	}
 }
 
+int	check_error2(t_token *token)
+{
+	t_token	*current_token;
+	int		word;
+	int		piperedirect;
+
+	word = 0;
+	piperedirect = 0;
+	current_token = token;
+	while (current_token)
+	{
+		if (current_token->token_type == SPACE)
+			current_token = current_token->next;
+		if (ft_piperedirect(current_token->token_type) == 0)
+			word++;
+		if (ft_piperedirect(current_token->token_type) == 1)
+			piperedirect++;
+		if (piperedirect > 0 && word == 0)
+			return (-1);
+		current_token = current_token->next;
+	}
+	return (0);
+}
+
 void	parsing(t_vars *vars, char *str)
 {
 	t_token	*current_token;
@@ -289,7 +319,7 @@ void	parsing(t_vars *vars, char *str)
 	current_token = vars->first;
 	while (current_token)
 	{
-		if (check_error(current_token) == 0)
+		if (check_error(current_token) == 0 && check_error2(vars->first) == 0)
 		{
 			if (current_token->token_type == WORD
 				|| current_token->token_type == QUOTE)
@@ -305,6 +335,9 @@ void	parsing(t_vars *vars, char *str)
 		}
 	}
 	fill_commands(vars);
-	printf_commands(vars);
+	if (vars->error == 0)
+	{
+		printf_commands(vars);
+	}
 	return ;
 }
