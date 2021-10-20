@@ -94,8 +94,12 @@ t_token *replace_env(t_vars *vars, t_token *token)
 	}
 	if (find_space(token->buffer.str) != 0)
 	{
-		token = token_cut(vars, token);
-		return (token);
+		// printf("%s\n", token->buffer.str);
+		if (token->token_type == WORD)
+		{
+			token = token_cut(vars, token);
+			return (token);
+		}
 	}
 	return (token->next);
 }

@@ -235,6 +235,6 @@ void	parsing(t_vars *vars, char *str)
 		}
 	}
 	fill_commands(vars);
-	printf_commands(vars);
+	// printf_commands(vars);
 	return ;
 }
