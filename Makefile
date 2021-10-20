@@ -18,8 +18,7 @@ SRCS =	minishell.c						\
 		built_in/unset.c				\
 		cmd_exec/execution.c			\
 		cmd_exec/test_functions.c		\
-		cmd_exec/cmd_utils.c			\
-
+		cmd_exec/cmd_utils.c
 
 GCCF = gcc -g3 -fsanitize=address# -Wall -Wextra -Werror
 
