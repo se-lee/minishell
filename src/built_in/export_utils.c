@@ -36,21 +36,13 @@ int	export_syntax(char *str, int quotes)
 	i = 0;
 	while (str[i] && str[i] != '=')
 	{
-<<<<<<< HEAD
-printf("str1[%d]:%c\n", i, str[i]);
-		if ((ft_isalnum(str[i]) != 1 && (str[i] != '_')) 
-			|| (str[i] >= '0' && str[i] <= '9' && i == 0))
-=======
 		if ((ft_isalnum(str[i]) != 1 && (str[i] != '_'))
 				|| (str[i] >= '0' && str[i] <= '9' && i == 0))
->>>>>>> 721131659ce783257624439df0a9cefd63eb54de
 			return (0);
 		i++;
 	}
-printf("cmd_quote:%d\n", quotes);
 	while (str[i] && quotes == 0)
 	{
-printf("str2[%d]:%c\n", i, str[i]);
 		if (ft_isalnum(str[i]) != 1 && (str[i] != '-') && (str[i] != '_')
 				&& str[i] != '=' && str[i] != '.' && str[i] != '/' && str[i] != '?')
 			return (0);
