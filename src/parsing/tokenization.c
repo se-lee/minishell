@@ -74,6 +74,8 @@ int	token_identification(t_token *current_token, char *str)
 	i = 0;
 	if (ft_isspecial(str[0]) == FALSE)
 		i += token_word(current_token, str);
+	else if (str[0] == ' ')
+		i += token(current_token, str, ' ', SPACE);
 	else if (str[0] == '|')
 		i += token(current_token, str, '|', PIPE_SIGN);
 	else if (str[0] == '>')
@@ -95,8 +97,8 @@ void	tokenization(t_vars *vars, char *str)
 	i = 0;
 	while (str[i])
 	{
-		while (str[i] && str[i] == ' ')
-			i++;
+		// while (str[i] && str[i] == ' ')
+		// 	i++;
 		if (str[i] && i == 0)
 		{
 			vars->first = protected_malloc(1, sizeof(t_token));

@@ -41,10 +41,8 @@ int	export_syntax(char *str, int quotes)
 			return (0);
 		i++;
 	}
-printf("cmd_quote:%d\n", quotes);
 	while (str[i] && quotes == 0)
 	{
-printf("str2[%d]:%c\n", i, str[i]);
 		if (ft_isalnum(str[i]) != 1 && (str[i] != '-') && (str[i] != '_')
 				&& str[i] != '=' && str[i] != '.' && str[i] != '/' && str[i] != '?')
 			return (0);

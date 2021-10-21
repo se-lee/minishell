@@ -17,6 +17,7 @@
 # define OUT	1
 
 typedef struct s_vars		t_vars;
+typedef struct s_redirect	t_redirect;
 typedef struct s_token		t_token;
 typedef struct s_string		t_string;
 typedef struct s_envlist	t_envlist;
@@ -31,7 +32,8 @@ enum e_type
 	SINGLE_QUOTE,
 	PIPE_SIGN,
 	REDIRECT_RIGHT,
-	REDIRECT_LEFT
+	REDIRECT_LEFT,
+	SPACE
 };
 
 struct s_string {
@@ -52,6 +54,13 @@ struct s_envlist {
 	t_envlist	*next;
 };
 
+struct s_redirect {
+	char		*filename;
+	int			arrow_num;
+	int			cmd_num;
+	t_redirect	*next;
+};
+
 struct s_command {
 	char		**command;
 	int			pipe;
@@ -61,18 +70,12 @@ struct s_command {
 	t_command	*next;
 };
 
-struct s_redirect {
-	char		*filename;
-	int			arrrow_num;
-	t_redirect	*next;
-};
-
 struct s_vars {
 	t_token			*first;
 	t_envlist		*envp;
 	t_command		*cmd;
-	int				fd_in[2];
-	int				fd_out[2];
+	t_redirect		*in;
+	t_redirect		*out;
 	struct termios	saved_termios;
 	int				return_value;
 	int				error;
@@ -81,14 +84,16 @@ struct s_vars {
 //Parsing fonctions
 int			ft_isspecial(char c);
 int			ft_isupper(char c);
+int			find_space(char *str);
 int			ft_piperedirect(int token_type);
 void		add_char(t_token *token, char c);
 void		update_token(t_token *token, char *var, char *value);
 char		*replace(char *full, char *placeholder, char *real);
-void		replace_env(t_envlist *envp, t_token *token);
+t_token		*replace_env(t_vars *vars, t_token *token);
 void		tokenization(t_vars *vars, char *str);
 void		parsing(t_vars *vars, char *str);
 void		ft_comandadd_back(t_token **alst, t_token *new);
+char		*remove_quotes(char *original, int token_type);
 
 /* built-in utils */
 int			format_is_valid(char *str);
