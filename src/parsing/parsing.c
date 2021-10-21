@@ -291,24 +291,127 @@ int	check_error2(t_token *token)
 {
 	t_token	*current_token;
 	int		word;
-	int		piperedirect;
+	int		pipe;
+	int		redirect;
 
 	word = 0;
-	piperedirect = 0;
+	pipe = 0;
+	redirect = 0;
 	current_token = token;
 	while (current_token)
 	{
 		if (current_token->token_type == SPACE)
 			current_token = current_token->next;
 		if (ft_piperedirect(current_token->token_type) == 0)
+		{
 			word++;
-		if (ft_piperedirect(current_token->token_type) == 1)
-			piperedirect++;
-		if (piperedirect > 0 && word == 0)
+			pipe = 0;
+		}
+		if (current_token->token_type == PIPE_SIGN)
+			pipe++;
+		if (current_token->token_type == REDIRECT_LEFT
+			|| current_token->token_type == REDIRECT_RIGHT)
+			redirect++;
+		if (redirect == 1)
+		{
+			if (current_token->token_type == SPACE)
+				current_token = current_token->next;
+			if (ft_piperedirect(current_token->token_type) != 0)
+				return (-1);
+			redirect = 0;
+		}
+		if ((pipe == 1 && word == 0) || (pipe > 1))
 			return (-1);
 		current_token = current_token->next;
 	}
 	return (0);
+}
+
+t_token	*remove_token(t_vars *vars, t_token *token)
+{
+	t_token	*current_token;
+
+	if (vars->first == token)
+	{ 
+		vars->first = token->next;
+		free(token->buffer.str);
+		free(token);
+		return (vars->first);
+	}
+	else
+	{
+		current_token = vars->first;
+		while (current_token->next && current_token->next != token)
+			current_token = current_token->next;
+		current_token->next = token->next;
+		free(token->buffer.str);
+		free(token);
+		return (current_token->next);
+	}
+}
+
+t_token	*fill_inout(t_vars *vars, t_token *current_token, t_redirect *current_inout, int cmd_num)
+{
+	current_inout->arrow_num = current_token->buffer.len;
+	current_inout->cmd_num = cmd_num;
+	current_token = remove_token(vars, current_token);
+	if (current_token->token_type == SPACE)
+		current_token = remove_token(vars, current_token);
+	current_inout->filename = ft_strdup(current_token->buffer.str);
+	current_token = remove_token(vars, current_token);
+	return (current_token);
+}
+
+void	fill_redirect(t_vars *vars)
+{
+	t_token		*current_token;
+	t_redirect	*current_in;
+	t_redirect	*current_out;
+	int			cmd_num;
+
+	current_token = vars->first;
+	vars->in = NULL;
+	vars->out = NULL;
+	cmd_num = 0;
+	while (current_token)
+	{
+		if (current_token->token_type == PIPE_SIGN)
+			cmd_num++;
+		if (current_token->token_type == REDIRECT_LEFT)
+		{
+			if (vars->in == NULL)
+			{
+				vars->in = protected_malloc(1, sizeof(t_redirect));
+				current_in = vars->in;
+				current_in->next = NULL;
+			}
+			else
+			{
+				current_in->next = protected_malloc(1, sizeof(t_redirect));
+				current_in = current_in->next;
+				current_in->next = NULL;
+			}
+			current_token = fill_inout(vars, current_token, current_in, cmd_num);
+		}
+		else if (current_token->token_type == REDIRECT_RIGHT)
+		{
+			if (vars->out == NULL)
+			{
+				vars->out = protected_malloc(1, sizeof(t_redirect));
+				current_out = vars->out;
+				current_out->next = NULL;
+			}
+			else
+			{
+				current_out->next = protected_malloc(1, sizeof(t_redirect));
+				current_out = current_out->next;
+				current_out->next = NULL;
+			}
+			current_token = fill_inout(vars, current_token, current_out, cmd_num);
+		}
+		else
+			current_token = current_token->next;
+	}
 }
 
 void	parsing(t_vars *vars, char *str)
@@ -319,7 +422,7 @@ void	parsing(t_vars *vars, char *str)
 	current_token = vars->first;
 	while (current_token)
 	{
-		if (check_error(current_token) == 0 && check_error2(vars->first) == 0)
+		if (check_error(current_token) == 0)// && check_error2(vars->first) == 0)
 		{
 			if (current_token->token_type == WORD
 				|| current_token->token_type == QUOTE)
@@ -334,6 +437,7 @@ void	parsing(t_vars *vars, char *str)
 			break ;
 		}
 	}
+	fill_redirect(vars);
 	fill_commands(vars);
 	if (vars->error == 0)
 	{
