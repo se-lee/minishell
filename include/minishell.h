@@ -120,7 +120,7 @@ void		execute_pipe_commands(t_vars *vars);
 int			redirect_input(char *file);
 int			redirect_output_overwrite(char *file);
 int			redirect_output_append(char *file);
-void		redirection(t_command *current_cmd);
+void		redirection(t_vars *vars, t_command *current_cmd);
 
 /* command utils */
 char		*get_command_path(t_envlist *envp, char *command);

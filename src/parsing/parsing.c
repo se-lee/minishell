@@ -353,11 +353,14 @@ t_token	*remove_token(t_vars *vars, t_token *token)
 t_token	*fill_inout(t_vars *vars, t_token *current_token, t_redirect *current_inout, int cmd_num)
 {
 	current_inout->arrow_num = current_token->buffer.len;
+printf("arrow_num:%d\n", current_inout->arrow_num);
 	current_inout->cmd_num = cmd_num;
+printf("cmd_num:%d\n", current_inout->cmd_num);
 	current_token = remove_token(vars, current_token);
 	if (current_token->token_type == SPACE)
 		current_token = remove_token(vars, current_token);
 	current_inout->filename = ft_strdup(current_token->buffer.str);
+printf("filename:%s\n", current_inout->filename);
 	current_token = remove_token(vars, current_token);
 	return (current_token);
 }

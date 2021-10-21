@@ -54,12 +54,19 @@ int	redirect_output_append(char *file)
 	return (0);
 }
 
-void	redirection(t_command *current_cmd)
+void	redirection(t_vars *vars, t_command *current_cmd)
 {
+	t_redirect	*current_in;
+	t_redirect	*current_out;
+
+printf("current_cmd_left:%d\n", current_cmd->redirect_left);
+printf("current_cmd_right:%d\n", current_cmd->redirect_right);
 	if (current_cmd->redirect_left == 1)
-		redirect_input(current_cmd->next->command[0]);
+		redirect_input(current_in->filename);
 	else if (current_cmd->redirect_right == 1)
-		redirect_output_overwrite(current_cmd->next->command[0]);
+		redirect_output_overwrite(current_out->filename);
 	else if (current_cmd->redirect_right == 2)
-		redirect_output_append(current_cmd->next->command[0]);
+		redirect_output_append(current_out->filename);
+	current_in = current_in->next;
+	current_out = current_out->next;
 }
