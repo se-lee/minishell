@@ -1,8 +1,23 @@
 #include "minishell.h"
 
-// if command has < 
+/*
+command->redirect_left == 1 : input
+command->redirect_left == 2 : heredoc
 
-int	redirect_input(const char *file)
+command->redirect_right == 1 : output overwrite
+command->redirect_right == 2 : output append
+
+
+
+$ < test.txt cat : this should display the file
+
+amend >>
+heredoc <<
+
+*/
+
+// if command has < (REDIRET_LEFT)
+int	redirect_input(char *file)
 {
 	int	fd;
 
@@ -15,12 +30,15 @@ int	redirect_input(const char *file)
 	return (0);
 }
 
-//if command has > 
-int	redirect_output(const char *file)
+// the case where < input comes first
+int	
+
+// > (REDIRECT_RIGHT)
+int	redirect_output_overwrite(char *file)
 {
 	int	fd;
 
-	fd = open(file, O_CREAT | O_WRONLY, 0644);
+	fd = open(file, O_TRUNC | O_CREAT | O_WRONLY, 0644);
 	if (fd < 0)
 		perror((char *)file);
 	if (dup2(fd, STDOUT_FILENO) == -1)
@@ -28,3 +46,6 @@ int	redirect_output(const char *file)
 	close(fd);
 	return (0);
 }
+
+int	redirect_output_append(char *file);
+

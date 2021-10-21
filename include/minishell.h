@@ -20,6 +20,7 @@ typedef struct s_vars		t_vars;
 typedef struct s_token		t_token;
 typedef struct s_string		t_string;
 typedef struct s_envlist	t_envlist;
+typedef struct s_redirect	t_redirect;
 typedef struct s_command	t_command;
 typedef enum e_type			t_type;
 
@@ -58,6 +59,12 @@ struct s_command {
 	int			redirect_right;
 	int			redirect_left;
 	t_command	*next;
+};
+
+struct s_redirect {
+	char		*filename;
+	int			arrrow_num;
+	t_redirect	*next;
 };
 
 struct s_vars {
@@ -103,6 +110,10 @@ void		run_command_non_builtin(t_envlist *envlist, t_command *current_cmd);
 int			envlist_count(t_envlist *envp);
 char		**envlist_to_char_array(t_envlist *envp);
 void		execute_pipe_commands(t_vars *vars);
+
+/* redirection */
+int			redirect_input(char *file);
+int			redirect_output_overwrite(char *file);
 
 /* command utils */
 char		*get_command_path(t_envlist *envp, char *command);

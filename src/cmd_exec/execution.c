@@ -1,5 +1,6 @@
 #include "minishell.h"
 
+void	run_command_no_pipe(t_vars *vars, t_command *current_cmd);
 /* remove this function later */
 void	print_commands(t_command *cmd)
 {
@@ -122,22 +123,31 @@ void	execute_pipe_commands(t_vars *vars)
 	int			i;
 	int			status;
 	pid_t		child;
-	t_command	*current_cmd;
+	t_command	 *current_cmd;
 
 	output = 1;
 	input = 0;
 	current_cmd = vars->cmd;
 	i = 0;
 	if (command_is_builtin(current_cmd->command) == TRUE && current_cmd->pipe == 0)
+	{
 		run_command_builtin(vars, current_cmd);
+	}
 	else if (current_cmd->pipe == 0)
 	{
 		child = fork();
 		if (child == 0)
+		{
+printf("redirect:%d\n", current_cmd->redirect_left);
+			if (current_cmd->redirect_left == 1)
+				redirect_input(current_cmd->next->command[0]);
+			else if (current_cmd->redirect_right == 1)
+				redirect_output_overwrite(current_cmd->next->command[0]);
 			run_command_non_builtin(vars->envp, current_cmd);
+		}
 		waitpid(child, &status, 0);
 	}
- 	else
+ 	else //with pipes
 	{
 		while (i < count_command(vars->cmd) - 1)
 		{
@@ -163,8 +173,18 @@ void	execute_pipe_commands(t_vars *vars)
 	}
 }
 
+// /* run commands that are without pipes */
+// void	run_command_no_pipe(t_vars *vars, t_command *current_cmd)
+// {
+// 	pid_t	child;
 
-/* run commands that are without pipes (simple) */
-void	run_command_no_pipe();
-
-
+// 	if (command_is_builtin(current_cmd) == TRUE)
+// 		run_command_builtin(vars, current_cmd);
+// 	else
+// 	{
+// 		child = fork();
+// 		if (child == 0)
+// 			run_command_non_builtin(vars->envp, current_cmd);
+// 	}
+// 	waitpid(child, NULL, 0);
+// }
