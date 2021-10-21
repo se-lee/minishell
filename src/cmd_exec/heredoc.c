@@ -9,8 +9,6 @@ command->redirect_leftが2だったら→ヒアドッグ
 入力された内容を構造体に入れる？
 ダブル配列にする？
 
-１）まずは簡単なコマンド（パイプなし）
-
 [command] [<<] [delimiter]
 display prompt "> " (with space)
 
