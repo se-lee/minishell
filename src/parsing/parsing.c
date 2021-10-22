@@ -101,9 +101,6 @@ int	find_space(char *str)
 	return (j);
 }
 
-/*
-
-*/
 char	**command_create(t_token *current_token, int i)
 {
 	char	**cmd;
@@ -350,70 +347,6 @@ t_token	*remove_token(t_vars *vars, t_token *token)
 	}
 }
 
-t_token	*fill_inout(t_vars *vars, t_token *current_token, t_redirect *current_inout, int cmd_num)
-{
-	current_inout->arrow_num = current_token->buffer.len;
-	current_inout->cmd_num = cmd_num;
-	current_token = remove_token(vars, current_token);
-	if (current_token->token_type == SPACE)
-		current_token = remove_token(vars, current_token);
-	current_inout->filename = ft_strdup(current_token->buffer.str);
-	current_token = remove_token(vars, current_token);
-	return (current_token);
-}
-
-void	fill_redirect(t_vars *vars)
-{
-	t_token		*current_token;
-	t_redirect	*current_in;
-	t_redirect	*current_out;
-	int			cmd_num;
-
-	current_token = vars->first;
-	vars->in = NULL;
-	vars->out = NULL;
-	cmd_num = 0;
-	while (current_token)
-	{
-		if (current_token->token_type == PIPE_SIGN)
-			cmd_num++;
-		if (current_token->token_type == REDIRECT_LEFT)
-		{
-			if (vars->in == NULL)
-			{
-				vars->in = protected_malloc(1, sizeof(t_redirect));
-				current_in = vars->in;
-				current_in->next = NULL;
-			}
-			else
-			{
-				current_in->next = protected_malloc(1, sizeof(t_redirect));
-				current_in = current_in->next;
-				current_in->next = NULL;
-			}
-			current_token = fill_inout(vars, current_token, current_in, cmd_num);
-		}
-		else if (current_token->token_type == REDIRECT_RIGHT)
-		{
-			if (vars->out == NULL)
-			{
-				vars->out = protected_malloc(1, sizeof(t_redirect));
-				current_out = vars->out;
-				current_out->next = NULL;
-			}
-			else
-			{
-				current_out->next = protected_malloc(1, sizeof(t_redirect));
-				current_out = current_out->next;
-				current_out->next = NULL;
-			}
-			current_token = fill_inout(vars, current_token, current_out, cmd_num);
-		}
-		else
-			current_token = current_token->next;
-	}
-}
-
 void	parsing(t_vars *vars, char *str)
 {
 	t_token	*current_token;
@@ -437,11 +370,11 @@ void	parsing(t_vars *vars, char *str)
 			break ;
 		}
 	}
+	vars->in = NULL;
+	vars->out = NULL;
 	fill_redirect(vars);
 	fill_commands(vars);
 	if (vars->error == 0)
-	{
 		printf_commands(vars);
-	}
 	return ;
 }

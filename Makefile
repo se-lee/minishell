@@ -8,6 +8,7 @@ SRCS =	minishell.c						\
 		parsing/tokenization_utils.c	\
 		parsing/misc_utils.c			\
 		parsing/envlist_utils.c			\
+		parsing/redirect.c				\
 		built_in/cd.c					\
 		built_in/echo.c					\
 		built_in/env.c					\

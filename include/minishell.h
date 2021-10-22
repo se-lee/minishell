@@ -93,6 +93,8 @@ void		tokenization(t_vars *vars, char *str);
 void		parsing(t_vars *vars, char *str);
 void		ft_comandadd_back(t_token **alst, t_token *new);
 char		*remove_quotes(char *original, int token_type);
+void		fill_redirect(t_vars *vars);
+t_token		*remove_token(t_vars *vars, t_token *token);
 
 /* built-in utils */
 int			format_is_valid(char *str);
