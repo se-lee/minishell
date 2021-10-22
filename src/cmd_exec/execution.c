@@ -76,12 +76,14 @@ void	fd_dup_and_close(int input, int output)
 {
 	if (input != 0)
 	{
+printf("pipe test1\n");
 		if (dup2(input, 0) < 0)
 			perror("dup2");
 		close(input);
 	}
 	if (output != 1)
 	{
+printf("pipe test2\n");
 		if (dup2(output, 1) < 0)
 			perror("dup2");
 		close(output);
@@ -100,13 +102,14 @@ void	launch_commands(t_vars *vars, t_command *current_cmd, int input, int output
 		fd_dup_and_close(input, output);
 		if (command_is_builtin(current_cmd->command) == TRUE)
 		{
-			redirection(vars, current_cmd);
+			redirection(vars);
 			run_command_builtin(vars, current_cmd);
 			exit(0);
 		}
 		else
 		{
-			redirection(vars, current_cmd);
+			
+			redirection(vars);
 			run_command_non_builtin(vars->envp, current_cmd);
 		}
 	}
@@ -119,6 +122,7 @@ void	launch_commands(t_vars *vars, t_command *current_cmd, int input, int output
 	}
 }
 
+/* execution function called in the main */
 void	execute_pipe_commands(t_vars *vars)
 {
 	int			fd[2];
@@ -132,6 +136,7 @@ void	execute_pipe_commands(t_vars *vars)
 	output = 1;
 	input = 0;
 	current_cmd = vars->cmd;
+
 	i = 0;
 	if (!current_cmd->pipe)
 		run_command_no_pipe(vars, current_cmd);
@@ -141,13 +146,13 @@ void	execute_pipe_commands(t_vars *vars)
 		{
 			if (pipe(fd) < 0)
 				perror("pipe");
-			redirection(vars, current_cmd);
+			redirection(vars);
 			launch_commands(vars, current_cmd, input, fd[1]);
 			input = fd[0];
 			current_cmd = current_cmd->next;
 			i++;
 		}
-		redirection(vars, current_cmd);
+		redirection(vars);
 		launch_commands(vars, current_cmd, input, output); //last command
 		i = 0;
 		while (i < count_command(vars->cmd))
@@ -169,12 +174,12 @@ void	run_command_no_pipe(t_vars *vars, t_command *current_cmd)
 
 	if (command_is_builtin(current_cmd->command) == TRUE)
 	{
-		if (current_cmd->redirect_right > 0 || current_cmd->redirect_left > 0)
+		if (vars->in || vars->out)
 		{
 			child = fork();
 			if (child == 0)
 			{
-				redirection(vars, current_cmd);
+				redirection(vars);
 				run_command_builtin(vars, current_cmd);
 				exit(0);
 			}
@@ -187,7 +192,7 @@ void	run_command_no_pipe(t_vars *vars, t_command *current_cmd)
 		child = fork();
 		if (child == 0)
 		{
-			redirection(vars, current_cmd);
+			redirection(vars);
 			run_command_non_builtin(vars->envp, current_cmd);
 		}
 	}

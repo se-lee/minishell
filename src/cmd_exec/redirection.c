@@ -2,7 +2,7 @@
 
 /*
 command->redirect_left == 1 : input
-command->redirect_left == 2 : heredoc
+command->redirect_left == 2 : heredocz
 
 command->redirect_right == 1 : output overwrite
 command->redirect_right == 2 : output append
@@ -21,6 +21,7 @@ int	redirect_input(char *file)
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
 		perror(file);
+	printf("fd_in1:%d\n", fd);
 	if (dup2(fd, STDIN_FILENO) == -1)
 		perror("dup2");
 	close(fd);
@@ -36,6 +37,7 @@ int	redirect_output_overwrite(char *file)
 	fd = open(file, O_TRUNC | O_CREAT | O_WRONLY, 0644);
 	if (fd < 0)
 		perror(file);
+	printf("fd_out1:%d\n", fd);
 	if (dup2(fd, STDOUT_FILENO) == -1)
 		perror("dup2");
 	close(fd);
@@ -54,19 +56,26 @@ int	redirect_output_append(char *file)
 	return (0);
 }
 
-void	redirection(t_vars *vars, t_command *current_cmd)
+//void	redirection(t_vars *vars, t_command *current_cmd)
+void	redirection(t_vars *vars)
 {
 	t_redirect	*current_in;
 	t_redirect	*current_out;
 
-printf("current_cmd_left:%d\n", current_cmd->redirect_left);
-printf("current_cmd_right:%d\n", current_cmd->redirect_right);
-	if (current_cmd->redirect_left == 1)
+	current_in = vars->in;
+	current_out = vars->out;
+printf("redirecttion test\n");	
+	while (current_in)
+	{
 		redirect_input(current_in->filename);
-	else if (current_cmd->redirect_right == 1)
-		redirect_output_overwrite(current_out->filename);
-	else if (current_cmd->redirect_right == 2)
-		redirect_output_append(current_out->filename);
-	current_in = current_in->next;
-	current_out = current_out->next;
+		current_in = current_in->next;
+	}
+	while (current_out)
+	{
+		if (current_out->arrow_num == 1)
+			redirect_output_overwrite(current_out->filename);
+		else if (current_out->arrow_num == 2)
+			redirect_output_append(current_out->filename);
+		current_out = current_out->next;
+	}
 }
