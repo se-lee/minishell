@@ -6,6 +6,9 @@ command->redirect_leftが2だったら→ヒアドッグ
 << のあとにくる文字列と同じ文字列が入力されたら
 入力の読み込み終了
 
+Signals : ctrl-D
+
+
 */
 
 char	*get_delimiter(t_vars *vars)
@@ -21,7 +24,7 @@ char	*get_delimiter(t_vars *vars)
 	return (delimiter);
 }
 
-int		heredoc(t_vars *vars)
+void		heredoc(t_vars *vars)
 {
 	int		fd;
 	char	*delimiter;
@@ -38,14 +41,13 @@ printf("delimiter:%s\n", delimiter);
 		ft_putendl_fd(line, fd);
 		free(line);
 		line = readline("> ");
-
 	}
 	if (dup2(fd, STDOUT_FILENO) == -1)
 		perror("dup2");
 	close(fd);
-
-/*
+	exit(0);
+	return ;
+/*d
 remove temporary file after use (unlink function?)
 */
-	return (0);
 }

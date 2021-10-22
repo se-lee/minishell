@@ -121,7 +121,7 @@ int			redirect_input(char *file);
 int			redirect_output_overwrite(char *file);
 int			redirect_output_append(char *file);
 void		redirection(t_vars *vars);
-int			heredoc(t_vars *vars);
+void		heredoc(t_vars *vars);
 
 /* command utils */
 char		*get_command_path(t_envlist *envp, char *command);

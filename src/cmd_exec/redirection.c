@@ -1,14 +1,8 @@
 #include "minishell.h"
 
 /*
-command->redirect_left == 1 : input
-command->redirect_left == 2 : heredocz
-
-command->redirect_right == 1 : output overwrite
-command->redirect_right == 2 : output append
 
 $ < test.txt cat : this should display the file
-heredoc <<
 
 $ > test.txt: this should write nothing (empty file)
 -> falls in to loop... shell becomes dumb
@@ -22,7 +16,7 @@ int	redirect_input(char *file)
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
 		perror(file);
-	printf("fd_in1:%d\n", fd);
+printf("fd_in1:%d\n", fd);
 	if (dup2(fd, STDIN_FILENO) == -1)
 		perror("dup2");
 	close(fd);
@@ -55,21 +49,26 @@ int	redirect_output_append(char *file)
 	return (0);
 }
 
-//void	redirection(t_vars *vars, t_command *current_cmd)
 void	redirection(t_vars *vars)
 {
 	t_redirect	*current_in;
 	t_redirect	*current_out;
+	pid_t		child;
 
 	current_in = vars->in;
 	current_out = vars->out;
-printf("redirecttion test\n");	
 	while (current_in)
 	{
 		if (current_in->arrow_num == 1)
 			redirect_input(current_in->filename);
 		else if (current_in->arrow_num == 2)
+		{
+		printf("arrow_number:%d\n", current_in->arrow_num);
 			heredoc(vars);
+			redirect_input(".heredoc");
+		printf("---------\n");
+		// unlink(".heredoc");
+		}
 		current_in = current_in->next;
 	}
 	while (current_out)
