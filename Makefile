@@ -19,7 +19,8 @@ SRCS =	minishell.c						\
 		cmd_exec/execution.c			\
 		cmd_exec/test_functions.c		\
 		cmd_exec/cmd_utils.c			\
-		cmd_exec/redirection.c
+		cmd_exec/redirection.c			\
+		cmd_exec/heredoc.c
 
 GCCF = gcc -g -fsanitize=address# -Wall -Wextra -Werror
 

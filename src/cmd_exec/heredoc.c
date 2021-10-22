@@ -6,51 +6,46 @@ command->redirect_leftが2だったら→ヒアドッグ
 << のあとにくる文字列と同じ文字列が入力されたら
 入力の読み込み終了
 
-入力された内容を構造体に入れる？
-ダブル配列にする？
-
-[command] [<<] [delimiter]
-display prompt "> " (with space)
-
 */
 
-char	*get_delimiter(t_command *command)
+char	*get_delimiter(t_vars *vars)
 {
 	char	*delimiter;
-	if (current_command->command[0] != NULL)
-		delimiter = ft_strdup(current_command->command[0]);
+	t_redirect	*current_in;
+
+	current_in = vars->in;
+	if (current_in->arrow_num == 2 && current_in->filename)
+		delimiter = ft_strdup(current_in->filename);
 	else
 		delimiter = NULL;
 	return (delimiter);
 }
 
-int		heredoc_write(t_command *current_command, char *str)
+int		heredoc(t_vars *vars)
 {
-	int		fd[2];
-	int		ret;
+	int		fd;
+	char	*delimiter;
+	char	*line;
 
-	if (pipe(fd) < 0)
-		return (-1);
-}
-
-int	here_doc(char *stop)
-{
-	char *line;
-	int fd[2];
-
-	pipe(fd);
-	while (ft_get_next_line(0, &line))
+	fd = open(".heredoc", O_TRUNC | O_CREAT | O_WRONLY, 0644);
+	delimiter = get_delimiter(vars);
+printf("delimiter:%s\n", delimiter);
+	if (fd < 0)
+		perror("heredoc_file");
+	line = readline("> ");
+	while (ft_strcmp(line, delimiter))
 	{
-		if (ft_strcmp(line, stop))
-		{
-			write(fd[1], line, ft_strlen(line));
-			write(fd[1], "\n", 1);
-			free(line);
-		}
+		ft_putendl_fd(line, fd);
+		free(line);
+		line = readline("> ");
+
 	}
-	free(line);
-	close(fd[1]);
-	dup2(fd[0], 0);
-	close(fd[0]);
+	if (dup2(fd, STDOUT_FILENO) == -1)
+		perror("dup2");
+	close(fd);
+
+/*
+remove temporary file after use (unlink function?)
+*/
 	return (0);
 }

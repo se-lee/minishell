@@ -11,6 +11,7 @@ $ < test.txt cat : this should display the file
 heredoc <<
 
 $ > test.txt: this should write nothing (empty file)
+-> falls in to loop... shell becomes dumb
 
 */
 
@@ -27,8 +28,6 @@ int	redirect_input(char *file)
 	close(fd);
 	return (0);
 }
-
-int		redirect_heredoc(t_vars *vars);
 
 int	redirect_output_overwrite(char *file)
 {
@@ -67,7 +66,10 @@ void	redirection(t_vars *vars)
 printf("redirecttion test\n");	
 	while (current_in)
 	{
-		redirect_input(current_in->filename);
+		if (current_in->arrow_num == 1)
+			redirect_input(current_in->filename);
+		else if (current_in->arrow_num == 2)
+			heredoc(vars);
 		current_in = current_in->next;
 	}
 	while (current_out)
