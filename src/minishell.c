@@ -65,7 +65,7 @@ int	main(int argc, char **argv, char **envp)
 	envlist_create(&vars, envp);
 	tcgetattr(0, &vars.saved_termios);
 	set_termios();
-	str = readline("minishell$ ");
+	str = readline("\x1B[32mminishell$\x1B[0m: ");
 	while (str != NULL)
 	{
 		if (str[0])
@@ -79,7 +79,7 @@ int	main(int argc, char **argv, char **envp)
 			free_tokens(&vars);
 			free_commands(&vars);
 		}
-		str = readline("minishell$ ");
+		str = readline("\x1B[32mminishell$\x1B[0m: ");
 	}
 	printf("exit\n");
 }
