@@ -76,14 +76,12 @@ void	fd_dup_and_close(int input, int output)
 {
 	if (input != 0)
 	{
-printf("pipe test1\n");
 		if (dup2(input, 0) < 0)
 			perror("dup2");
 		close(input);
 	}
 	if (output != 1)
 	{
-printf("pipe test2\n");
 		if (dup2(output, 1) < 0)
 			perror("dup2");
 		close(output);

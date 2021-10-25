@@ -184,17 +184,16 @@ void	fill_command(t_token *token, t_command *current_command)
 	i = 0;
 	while (current_token && ft_piperedirect(current_token->token_type) == 0)
 	{
-		//printf("current_token:>>%s<<\n", current_token->buffer.str);
-		// printf("out_cmd[%d] = >>%s<<\n", i, cmd[i]);
+	// printf("out_cmd[%d] = >>%s<<\n", i, cmd[i]);
 		if (current_token->token_type != SPACE)
 		{
 			while (current_token && ft_piperedirect(current_token->token_type) == 0
 				&& current_token->token_type != SPACE)
 			{
-				printf("in_cmd[%d] = >>%s<<\n", i, cmd[i]);
+	// printf("in_cmd[%d] = >>%s<<\n", i, cmd[i]);
 				if (cmd[i] != NULL)
 				{
-					printf("if_cmd[%d] = >>%s<<\n", i, cmd[i]);
+	// printf("if_cmd[%d] = >>%s<<\n", i, cmd[i]);
 					current_token->buffer.str = remove_quotes(current_token->buffer.str, current_token->token_type);
 					temp = ft_strjoin(cmd[i], current_token->buffer.str);
 					free(cmd[i]);
@@ -229,12 +228,6 @@ void	fill_commands(t_vars *vars)
 	t_token		*current_token;
 	t_command	*current_cmd;
 
-	// current_token = vars->first;
-	// while (current_token)
-	// {
-	// 	printf("token:>>%s<<\n", current_token->buffer.str);
-	// 	current_token = current_token->next;
-	// }
 	current_token = vars->first;
 	i = 0;
 	while (current_token)
@@ -392,9 +385,8 @@ void	fill_redirect(t_vars *vars)
 				current_in->next = NULL;
 			}
 			current_token = fill_inout(vars, current_token, current_in, cmd_num);
-			// printf("in_cmd_num:%d\n", current_in->cmd_num);
-			// printf("in_arrow_num:%d\n", current_in->arrow_num);
-			// printf("in_filename:%s\n", current_in->filename);
+	// printf("in_cmd_num:%d\n", current_in->cmd_num);
+	// printf("in_filename:%s\n", current_in->filename);
 
 		}
 		else if (current_token->token_type == REDIRECT_RIGHT)
@@ -412,9 +404,9 @@ void	fill_redirect(t_vars *vars)
 				current_out->next = NULL;
 			}
 			current_token = fill_inout(vars, current_token, current_out, cmd_num);
-			// printf("out_cmd_num:%d\n", current_out->cmd_num);
+			printf("out_cmd_num:%d\n", current_out->cmd_num);
 			// printf("out_arrow_num:%d\n", current_out->arrow_num);
-			// printf("out_file:%s\n", current_out->filename);
+			printf("out_file:%s\n", current_out->filename);
 		}
 		else
 			current_token = current_token->next;
@@ -446,9 +438,5 @@ void	parsing(t_vars *vars, char *str)
 	}
 	fill_redirect(vars);
 	fill_commands(vars);
-	// if (vars->error == 0)
-	// {
-	// 	printf_commands(vars);
-	// }
 	return ;
 }

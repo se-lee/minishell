@@ -16,7 +16,6 @@ int	redirect_input(char *file)
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
 		perror(file);
-printf("fd_in1:%d\n", fd);
 	if (dup2(fd, STDIN_FILENO) == -1)
 		perror("dup2");
 	close(fd);
@@ -63,11 +62,9 @@ void	redirection(t_vars *vars)
 			redirect_input(current_in->filename);
 		else if (current_in->arrow_num == 2)
 		{
-		printf("arrow_number:%d\n", current_in->arrow_num);
-			heredoc(vars);
-			redirect_input(".heredoc");
-		printf("---------\n");
-		// unlink(".heredoc");
+			put_to_heredoc(current_in);
+			redirect_heredoc(current_in);
+		unlink(".heredoc");
 		}
 		current_in = current_in->next;
 	}

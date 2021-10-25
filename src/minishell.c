@@ -63,7 +63,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	envlist_create(&vars, envp);
-	tcgetattr(0, &vars.saved_termios);
+	tcgetattr(0, &vars.saved_termios); //changed to str="";
 	set_termios();
 	str = readline("minishell$ ");
 	while (str != NULL)
@@ -79,6 +79,7 @@ int	main(int argc, char **argv, char **envp)
 			free_tokens(&vars);
 			free_commands(&vars);
 		}
+		//set_termios();
 		str = readline("minishell$ ");
 	}
 	printf("exit\n");
