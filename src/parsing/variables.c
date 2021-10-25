@@ -47,7 +47,7 @@ t_token	*token_cut(t_vars *vars, t_token *token)
 		current_token = current_token->next;
 		current_token->next = NULL;
 	}
-	while (token->buffer.str[i] && token->buffer.str[i] == ' ')
+	while (token->buffer.str[i] && token->buffer.str[i] == ' ' && token->token_type == WORD)
 		i++;
 	j = i;
 	while (token->buffer.str[i])
@@ -92,7 +92,7 @@ t_token *replace_env(t_vars *vars, t_token *token)
 		}
 		i++;
 	}
-	if (find_space(token->buffer.str) != 0)
+	if (token->buffer.str && find_space(token->buffer.str) != 0)
 	{
 		// printf("%s\n", token->buffer.str);
 		if (token->token_type == WORD)

@@ -87,37 +87,20 @@ int	find_space(char *str)
 
 	i = 0;
 	j = 0;
+	if (str == NULL)
+		return (0);
 	while (str[i])
 	{
 		if (str[i] == ' ')
 		{
 			while (str[i] == ' ')
 				i++;
-			if (str[i] && str[i != ' '])
+			if (str[i] && str[i] != ' ')
 				j++;
 		}
 		i++;
 	}
 	return (j);
-}
-
-char	**command_create(t_token *current_token, int i)
-{
-	char	**cmd;
-	char	**split_str;
-	int		j;
-
-	cmd = protected_malloc(i + 1, sizeof(char *));
-	i = 0;
-	while (current_token && ft_piperedirect(current_token->token_type) == 0)
-	{
-		cmd[i] = ft_strdup(current_token->buffer.str);
-		cmd[i] = remove_quotes(cmd[i], current_token->token_type);
-		i++;
-		current_token = current_token->next;
-	}
-	cmd[i] = NULL;
-	return (cmd);
 }
 
 int	array_len(char **array)

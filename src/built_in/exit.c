@@ -9,6 +9,8 @@ void    builtin_exit(t_command *current_cmd)
 	{
 	    exit(return_value);
 	}
+	else
+		exit(return_value);
 	// else if (current_cmd->command[1])
 	// {
 	// 	if (ft_isalnum(current_cmd->command[1]) == 1 && current_cmd->command[2] == NULL)
