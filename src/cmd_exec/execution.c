@@ -122,6 +122,7 @@ void	execute_pipe_commands(t_vars *vars)
 	in = 0;
 	current_cmd = vars->cmd;
 	i = 0;
+	tcsetattr(STDIN_FILENO, TCSANOW, &vars->saved_termios);
 	if (command_is_builtin(current_cmd->command) == TRUE && current_cmd->pipe == 0)
 		run_command_builtin(vars, current_cmd);
 	else if (current_cmd->pipe == 0)

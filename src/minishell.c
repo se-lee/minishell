@@ -50,9 +50,18 @@ void	set_termios(void)
 	struct termios	termios;
 
 	tcgetattr(0, &termios);
-	termios.c_cc[VINTR] = 0;
+	termios.c_lflag &= ~ECHOCTL;
 	termios.c_cc[VQUIT] = 0;
 	tcsetattr(STDIN_FILENO, TCSANOW, &termios);
+}
+
+void	control_c(int sig)
+{
+	(void)sig;
+	printf("\n");
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -64,13 +73,12 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	envlist_create(&vars, envp);
 	tcgetattr(0, &vars.saved_termios);
-	set_termios();
-	str = readline("\x1B[32mminishell$\x1B[0m: ");
+	str = "";
 	while (str != NULL)
 	{
+		vars.error = 0;
 		if (str[0])
 		{
-			vars.error = 0;
 			add_history(str);
 			parsing(&vars, str);
 			if (vars.error == 0)
@@ -79,6 +87,8 @@ int	main(int argc, char **argv, char **envp)
 			free_tokens(&vars);
 			free_commands(&vars);
 		}
+		set_termios();
+		signal(SIGINT, control_c);
 		str = readline("\x1B[32mminishell$\x1B[0m: ");
 	}
 	printf("exit\n");

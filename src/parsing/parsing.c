@@ -171,7 +171,7 @@ void	fill_command(t_token *token, t_command *current_command)
 
 	initialize_command(current_command);
 	current_token = token;
-	if (current_token && current_token->token_type == SPACE)
+	if (current_token && current_token->token_type == SPACE_SIGN)
 		current_token = current_token->next;
 	cmd = protected_malloc(2, sizeof(char *));
 	current_token->buffer.str = remove_quotes(current_token->buffer.str, current_token->token_type);
@@ -183,10 +183,10 @@ void	fill_command(t_token *token, t_command *current_command)
 	{
 		// printf(">>%s<<\n", current_token->buffer.str);
 		// printf("out_cmd[%d] = >>%s<<\n", i, cmd[i]);
-		if (current_token->token_type != SPACE)
+		if (current_token->token_type != SPACE_SIGN)
 		{
 			while (current_token && ft_piperedirect(current_token->token_type) == 0
-				&& current_token->token_type != SPACE)
+				&& current_token->token_type != SPACE_SIGN)
 			{
 				// printf("in_cmd[%d] = >>%s<<\n", i, cmd[i]);
 				if (cmd[i] != NULL)
@@ -207,7 +207,7 @@ void	fill_command(t_token *token, t_command *current_command)
 				current_token = current_token->next;
 			}
 		}
-		if (current_token && current_token->token_type == SPACE)
+		if (current_token && current_token->token_type == SPACE_SIGN)
 		{
 			// printf("increment i:%d\n", i);
 			i++;
@@ -236,13 +236,13 @@ void	fill_commands(t_vars *vars)
 	i = 0;
 	while (current_token)
 	{
-		if (current_token->token_type == SPACE && current_token->next)
+		if (current_token->token_type == SPACE_SIGN && current_token->next)
 		{
 			current_token = current_token->next;
 			while (current_token && ft_piperedirect(current_token->token_type) == 1)
 				current_token = current_token->next;
 		}
-		if (current_token->token_type != SPACE)
+		if (current_token->token_type != SPACE_SIGN)
 		{
 			if (i == 0)
 			{
@@ -297,7 +297,7 @@ int	check_error2(t_token *token)
 	current_token = token;
 	while (current_token)
 	{
-		if (current_token->token_type == SPACE)
+		if (current_token->token_type == SPACE_SIGN)
 			current_token = current_token->next;
 		if (ft_piperedirect(current_token->token_type) == 0)
 		{
@@ -311,7 +311,7 @@ int	check_error2(t_token *token)
 			redirect++;
 		if (redirect == 1)
 		{
-			if (current_token->token_type == SPACE)
+			if (current_token->token_type == SPACE_SIGN)
 				current_token = current_token->next;
 			if (ft_piperedirect(current_token->token_type) != 0)
 				return (-1);
