@@ -11,7 +11,7 @@
 # include "../libft/libft.h"
 
 # define TRUE	1
-# define FALSE	0
+# define FALSE	0	
 
 # define IN		0
 # define OUT	1
@@ -115,6 +115,9 @@ void		run_command_non_builtin(t_envlist *envlist, t_command *current_cmd);
 int			envlist_count(t_envlist *envp);
 char		**envlist_to_char_array(t_envlist *envp);
 void		execute_pipe_commands(t_vars *vars);
+
+/* pipe */
+void	fd_dup_and_close(int input, int output);
 
 /* redirection */
 int			redirect_input(char *file);

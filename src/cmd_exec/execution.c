@@ -72,22 +72,6 @@ void	run_command_non_builtin(t_envlist *envlist, t_command *current_cmd)
 	}
 }
 
-void	fd_dup_and_close(int input, int output)
-{
-	if (input != 0)
-	{
-		if (dup2(input, 0) < 0)
-			perror("dup2");
-		close(input);
-	}
-	if (output != 1)
-	{
-		if (dup2(output, 1) < 0)
-			perror("dup2");
-		close(output);
-	}
-}
-
 void	launch_commands(t_vars *vars, t_command *current_cmd, int input, int output)
 {
 	pid_t	child;

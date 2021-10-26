@@ -1,14 +1,5 @@
 #include "minishell.h"
 
-/*
-
-$ < test.txt cat : this should display the file
-
-$ > test.txt: this should write nothing (empty file)
--> falls in to loop... shell becomes dumb
-
-*/
-
 int	redirect_input(char *file)
 {
 	int	fd;
@@ -64,7 +55,7 @@ void	redirection(t_vars *vars)
 		{
 			put_to_heredoc(current_in);
 			redirect_heredoc(current_in);
-		unlink(".heredoc");
+		// unlink(".heredoc");
 		}
 		current_in = current_in->next;
 	}
