@@ -3,7 +3,6 @@
 char	*get_delimiter(t_redirect *current_in)
 {
 	char	*delimiter;
-
 	if (current_in->filename == NULL)
 	{
 		perror("");
@@ -14,8 +13,6 @@ char	*get_delimiter(t_redirect *current_in)
 		delimiter = ft_strdup(current_in->filename);
 		return (delimiter);
 	}
-	// else
-	// 	delimiter = NULL;
 }
 
 int		put_to_heredoc(t_redirect *current_in)
@@ -25,13 +22,14 @@ int		put_to_heredoc(t_redirect *current_in)
 	char	*line;
 	pid_t	child;
 
-	delimiter = get_delimiter(current_in);
-	fd = open(".heredoc", O_TRUNC | O_CREAT | O_WRONLY, 0644);
-	if (fd < 0)
-		perror("heredoc_file");
+		fd = open(".heredoc", O_TRUNC | O_CREAT | O_WRONLY, 0644);
+	// printf("heredoc_fd:%d\n", fd);
+		if (fd < 0)
+			perror("heredoc_file");
 	child = fork();
 	if (child == 0)
 	{
+		delimiter = get_delimiter(current_in);
 		line = readline("> ");
 		while (ft_strcmp(line, delimiter))
 		{
@@ -61,3 +59,5 @@ int		redirect_heredoc(t_redirect *current_in)
 	close(fd);
 	return (0);
 }
+
+//wait for the child (heredoc)

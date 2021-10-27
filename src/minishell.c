@@ -63,9 +63,9 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	envlist_create(&vars, envp);
-	tcgetattr(0, &vars.saved_termios); //changed to str="";
+	tcgetattr(0, &vars.saved_termios); 
 	set_termios();
-	str = readline("minishell$ ");
+	str = readline("minishell$ "); //changed to str="";
 	while (str != NULL)
 	{
 		if (str[0])
