@@ -157,7 +157,9 @@ void	fill_command(t_token *token, t_command *current_command)
 	if (current_token && current_token->token_type == SPACE_SIGN)
 		current_token = current_token->next;
 	cmd = protected_malloc(2, sizeof(char *));
+		// printf(">>%s<<\n", current_token->buffer.str);
 	current_token->buffer.str = remove_quotes(current_token->buffer.str, current_token->token_type);
+		// printf(">>%s<<\n", current_token->buffer.str);
 	cmd[0] = ft_strdup(current_token->buffer.str);
 	cmd[1] = NULL;
 	current_token = current_token->next;
@@ -166,34 +168,34 @@ void	fill_command(t_token *token, t_command *current_command)
 	{
 		// printf(">>%s<<\n", current_token->buffer.str);
 		// printf("out_cmd[%d] = >>%s<<\n", i, cmd[i]);
-		if (current_token->token_type != SPACE_SIGN)
+		while (current_token && ft_piperedirect(current_token->token_type) == 0
+			&& current_token->token_type != SPACE_SIGN)
 		{
-			while (current_token && ft_piperedirect(current_token->token_type) == 0
-				&& current_token->token_type != SPACE_SIGN)
+			// printf("in_cmd[%d] = >>%s<<\n", i, cmd[i]);
+			if (cmd[i] != NULL)
 			{
-				// printf("in_cmd[%d] = >>%s<<\n", i, cmd[i]);
-				if (cmd[i] != NULL)
-				{
-					// printf("if_cmd[%d] = >>%s<<\n", i, cmd[i]);
-					current_token->buffer.str = remove_quotes(current_token->buffer.str, current_token->token_type);
-					temp = ft_strjoin(cmd[i], current_token->buffer.str);
-					free(cmd[i]);
-					cmd[i] = temp;
-					cmd[i + 1] = NULL;
-				}
-				else
-				{
-					// printf("else_cmd[%d] = >>%s<<\n", i, cmd[i]);
-					current_token->buffer.str = remove_quotes(current_token->buffer.str, current_token->token_type);
-					cmd = array_realloc(cmd, current_token->buffer.str);
-				}
-				current_token = current_token->next;
+				// printf("if_cmd[%d] = >>%s<<\n", i, cmd[i]);
+				current_token->buffer.str = remove_quotes(current_token->buffer.str, current_token->token_type);
+				temp = ft_strjoin(cmd[i], current_token->buffer.str);
+				free(cmd[i]);
+				cmd[i] = temp;
+				cmd[i + 1] = NULL;
+				// printf("if2_cmd[%d] = >>%s<<\n", i, cmd[i]);
 			}
+			else
+			{
+				// printf("else_cmd[%d] = >>%s<<\n", i, cmd[i]);
+				current_token->buffer.str = remove_quotes(current_token->buffer.str, current_token->token_type);
+				cmd = array_realloc(cmd, current_token->buffer.str);
+				// printf("else2_cmd[%d] = >>%s<<\n", i, cmd[i]);
+			}
+			current_token = current_token->next;
 		}
 		if (current_token && current_token->token_type == SPACE_SIGN)
 		{
 			// printf("increment i:%d\n", i);
 			i++;
+			// printf("increment i_after:%d\n", i);
 		}
 		if (current_token && ft_piperedirect(current_token->token_type) == 0)
 			current_token = current_token->next;
@@ -246,6 +248,8 @@ void	fill_commands(t_vars *vars)
 			while (current_token && ft_piperedirect(current_token->token_type) == 1)
 				current_token = current_token->next;
 		}
+		else
+			current_token = current_token->next;
 	}
 }
 

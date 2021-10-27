@@ -31,12 +31,15 @@ void	free_commands(t_vars *vars)
 	t_command	*next;
 
 	current_cmd = vars->cmd;
-	while (current_cmd->next)
+	if (current_cmd)
 	{
-		next = current_cmd->next;
-		free_array(current_cmd->command);
-		free(current_cmd);
-		current_cmd = next;
+		while (current_cmd->next)
+		{
+			next = current_cmd->next;
+			free_array(current_cmd->command);
+			free(current_cmd);
+			current_cmd = next;
+		}
 	}
 	if (current_cmd)
 	{
@@ -81,7 +84,7 @@ int	main(int argc, char **argv, char **envp)
 		{
 			add_history(str);
 			parsing(&vars, str);
-			if (vars.error == 0)
+			if (vars.error == 0 && vars.cmd != NULL)
 				execute_pipe_commands(&vars);
 			free(str);
 			free_tokens(&vars);

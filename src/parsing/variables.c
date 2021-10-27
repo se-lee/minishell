@@ -19,7 +19,31 @@ char	*find_variable(char *str)
 	return (var);
 }
 
-t_token	*token_cut(t_vars *vars, t_token *token)
+t_token	*token_malloc_first(t_vars *vars, t_token *token)
+{
+	t_token	*current_token;
+
+	current_token = vars->first;
+	if (token == vars->first)
+	{
+		vars->first = NULL;
+		vars->first = protected_malloc(1, sizeof(t_token));
+		current_token = vars->first;
+		current_token->next = NULL;
+	}
+	else
+	{
+		while (current_token->next && current_token->next != token)
+			current_token = current_token->next;
+		current_token->next = NULL;
+		current_token->next = protected_malloc(1, sizeof(t_token));
+		current_token = current_token->next;
+		current_token->next = NULL;
+	}
+	return (current_token);
+}
+
+t_token	*token_hell(t_vars *vars, t_token *token)
 {
 	t_token	*current_token;
 	t_token	*temp_next;
@@ -49,6 +73,7 @@ t_token	*token_cut(t_vars *vars, t_token *token)
 	}
 	while (token->buffer.str[i] && token->buffer.str[i] == ' ' && token->token_type == WORD)
 		i++;
+	//	if j != i -> need to add a token in the middle with token_type = SPACE_SIGN and len = i - j
 	j = i;
 	while (token->buffer.str[i])
 	{
@@ -79,6 +104,7 @@ t_token *replace_env(t_vars *vars, t_token *token)
 	int		i;
 	char	*var;
 	char	*value;
+	t_token	*current_token;
 
 	i = 0;
 	while (token->buffer.str[i])
@@ -94,10 +120,10 @@ t_token *replace_env(t_vars *vars, t_token *token)
 	}
 	if (token->buffer.str && find_space(token->buffer.str) != 0)
 	{
-		// printf("%s\n", token->buffer.str);
+		//	printf("%s\n", token->buffer.str);
 		if (token->token_type == WORD)
 		{
-			token = token_cut(vars, token);
+			token = token_hell(vars, token);
 			return (token);
 		}
 	}

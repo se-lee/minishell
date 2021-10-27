@@ -102,7 +102,10 @@ void	builtin_cd(t_vars *vars, t_command *current_cmd)
 	else if (ft_strncmp(path_temp, "-", 2) == 0)
 	{
 		old_pwd = find_old_pwd(vars);
-		printf("%s\n", old_pwd);
+		if (old_pwd != NULL)
+			printf("%s\n", old_pwd);
+		else
+			printf("OLDPWD not set\n");
 		chdir(old_pwd);
 		old_pwd = find_pwd(vars);
 		replace_pwds(vars, old_pwd);
