@@ -404,9 +404,6 @@ void	fill_redirect(t_vars *vars)
 				current_out->next = NULL;
 			}
 			current_token = fill_inout(vars, current_token, current_out, cmd_num);
-			printf("out_cmd_num:%d\n", current_out->cmd_num);
-			// printf("out_arrow_num:%d\n", current_out->arrow_num);
-			printf("out_file:%s\n", current_out->filename);
 		}
 		else
 			current_token = current_token->next;

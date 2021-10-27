@@ -22,9 +22,8 @@ int		put_to_heredoc(t_redirect *current_in)
 	char	*line;
 	pid_t	child;
 
-		fd = open(".heredoc", O_TRUNC | O_CREAT | O_WRONLY, 0644);
-	// printf("heredoc_fd:%d\n", fd);
-		if (fd < 0)
+	fd = open(".heredoc", O_TRUNC | O_CREAT | O_WRONLY, 0644);
+	if (fd < 0)
 			perror("heredoc_file");
 	child = fork();
 	if (child == 0)
@@ -39,13 +38,51 @@ int		put_to_heredoc(t_redirect *current_in)
 		}
 		if (dup2(fd, STDOUT_FILENO) == -1)
 			perror("dup2");
-		close(fd);
+		// close(fd);
 		exit(0);
 	}
 	else
 		waitpid(child, NULL, 0);
 	return (0);
 }
+
+/*
+int		put_to_heredoc(t_redirect *current_in)
+{
+	int		fd;
+	char	*delimiter;
+	char	*line;
+	int ret;
+
+		fd = open(".heredoc", O_TRUNC | O_CREAT | O_WRONLY, 0644);
+		line = ft_strdup("");
+		ret = 1;
+		if (fd < 0)
+			perror("heredoc_file");
+		delimiter = get_delimiter(current_in);
+		while (get_next_line(fd, &line) > 0)
+		{
+		printf("line:%s\n", line);
+			ft_putstr_fd("> ", 1);
+			ret = get_next_line(fd, &line);
+			if (ft_strcmp(line, delimiter) != 0)
+			{
+				ft_putstr_fd("> ", 1);
+				ft_putendl_fd(line, fd);
+			}
+			else
+			{
+				printf("break\n");
+				break ;
+			}
+			free(line);
+		}
+		if (dup2(fd, STDOUT_FILENO) == -1)
+			perror("dup2");
+		close(fd);
+		return (0);
+}
+*/
 
 int		redirect_heredoc(t_redirect *current_in)
 {
@@ -56,8 +93,6 @@ int		redirect_heredoc(t_redirect *current_in)
 		perror(".heredoc");
 	if (dup2(fd, STDIN_FILENO) == -1)
 		perror("dup2");
-	close(fd);
+	// close(fd);
 	return (0);
 }
-
-//wait for the child (heredoc)

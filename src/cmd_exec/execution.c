@@ -80,7 +80,8 @@ void	launch_commands(t_vars *vars, t_command *current_cmd, int input, int output
 		perror("fork");
 	if (child == 0)
 	{
-		redirection(vars);
+		if (vars->in || vars->out)
+			redirection(vars);
 		fd_dup_and_close(input, output);
 		if (command_is_builtin(current_cmd->command) == TRUE)
 		{
@@ -102,7 +103,49 @@ void	launch_commands(t_vars *vars, t_command *current_cmd, int input, int output
 	waitpid(child, NULL, 0);
 }
 
-/* execution function called in the main */
+// void	execute_pipe_commands(t_vars *vars)
+// {
+// 	int			fd[2];
+// 	int			input;
+// 	int			output;
+// 	int			i;
+// 	int			status;
+// 	pid_t		child;
+// 	t_command	 *current_cmd;
+
+// 	output = 1;
+// 	input = 0;
+// 	current_cmd = vars->cmd;
+// 	i = 0;
+// 	if (!current_cmd->pipe)
+// 		run_command_no_pipe(vars, current_cmd);
+//  	else
+// 	{
+// 		while (i < count_command(vars->cmd) - 1)
+// 		{
+// 			if (pipe(fd) < 0)
+// 				perror("pipe");
+// 			// redirection(vars);
+// 			launch_commands(vars, current_cmd, input, fd[1]); //fork
+// 			input = fd[0];
+// 			current_cmd = current_cmd->next;
+// 			i++;
+// 		}
+// 			launch_commands(vars, current_cmd, input, output); //last command
+// 		i = 0;
+// 		while (i < count_command(vars->cmd))
+// 		{
+// 			waitpid(child, &status, 0);
+// 			if (status == -1)
+// 			{
+// 				perror("wait");
+// 				return ;
+// 			}
+// 			i++;
+// 		}
+// 	}
+// }
+
 void	execute_pipe_commands(t_vars *vars)
 {
 	int			fd[2];
@@ -112,10 +155,14 @@ void	execute_pipe_commands(t_vars *vars)
 	int			status;
 	pid_t		child;
 	t_command	 *current_cmd;
+	t_redirect	*current_in;
+	t_redirect	*current_out;
 
 	output = 1;
 	input = 0;
 	current_cmd = vars->cmd;
+	current_in = vars->in;
+	current_out = vars->out;
 	i = 0;
 	if (!current_cmd->pipe)
 		run_command_no_pipe(vars, current_cmd);
@@ -125,18 +172,17 @@ void	execute_pipe_commands(t_vars *vars)
 		{
 			if (pipe(fd) < 0)
 				perror("pipe");
-			// redirection(vars);
-			launch_commands(vars, current_cmd, input, fd[1]);
+			redirection(vars);
+			launch_commands(vars, current_cmd, input, fd[1]); //fork
 			input = fd[0];
 			current_cmd = current_cmd->next;
 			i++;
 		}
-		// redirection(vars);
-		launch_commands(vars, current_cmd, input, output); //last command
+			launch_commands(vars, current_cmd, input, output); //last command
 		i = 0;
 		while (i < count_command(vars->cmd))
 		{
-			wait(&status);
+			waitpid(child, &status, 0);
 			if (status == -1)
 			{
 				perror("wait");
@@ -171,7 +217,8 @@ void	run_command_no_pipe(t_vars *vars, t_command *current_cmd)
 		child = fork();
 		if (child == 0)
 		{
-			redirection(vars);
+			if (vars->in || vars->out)
+				redirection(vars);
 			run_command_non_builtin(vars->envp, current_cmd);
 		}
 	}

@@ -9,7 +9,7 @@ int	redirect_input(char *file)
 		perror(file);
 	if (dup2(fd, STDIN_FILENO) == -1)
 		perror("dup2");
-	close(fd);
+	// close(fd);
 	return (0);
 }
 
@@ -20,10 +20,9 @@ int	redirect_output_overwrite(char *file)
 	fd = open(file, O_TRUNC | O_CREAT | O_WRONLY, 0644);
 	if (fd < 0)
 		perror(file);
-	printf("fd_out1:%d\n", fd);
 	if (dup2(fd, STDOUT_FILENO) == -1)
 		perror("dup2");
-	close(fd);
+	// close(fd);
 	return (0);
 }
 
@@ -35,7 +34,7 @@ int	redirect_output_append(char *file)
 		perror(file);
 	if (dup2(fd, STDOUT_FILENO) == -1)
 		perror ("dup2");
-	close (fd);
+	// close (fd);
 	return (0);
 }
 
@@ -43,7 +42,6 @@ void	redirection(t_vars *vars)
 {
 	t_redirect	*current_in;
 	t_redirect	*current_out;
-	pid_t		child;
 
 	current_in = vars->in;
 	current_out = vars->out;
@@ -55,7 +53,7 @@ void	redirection(t_vars *vars)
 		{
 			put_to_heredoc(current_in);
 			redirect_heredoc(current_in);
-		// unlink(".heredoc");
+			unlink(".heredoc");
 		}
 		current_in = current_in->next;
 	}
