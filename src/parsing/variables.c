@@ -19,6 +19,13 @@ char	*find_variable(char *str)
 	return (var);
 }
 
+void	malloc_token_next(t_token **current_token)
+{
+	(*current_token)->next = protected_malloc(1, sizeof(t_token));
+	(*current_token) = (*current_token)->next;
+	(*current_token)->next = NULL;
+}
+
 t_token	*token_malloc_first(t_vars *vars, t_token *token)
 {
 	t_token	*current_token;
@@ -36,9 +43,7 @@ t_token	*token_malloc_first(t_vars *vars, t_token *token)
 		while (current_token->next && current_token->next != token)
 			current_token = current_token->next;
 		current_token->next = NULL;
-		current_token->next = protected_malloc(1, sizeof(t_token));
-		current_token = current_token->next;
-		current_token->next = NULL;
+		malloc_token_next(&current_token);
 	}
 	return (current_token);
 }
@@ -52,45 +57,33 @@ t_token	*token_hell(t_vars *vars, t_token *token)
 	int		k;
 
 	i = 0;
+	j = 0;
 	k = 0;
 	temp_next = token->next;
-	current_token = vars->first;
-	if (token == vars->first)
-	{
-		vars->first = NULL;
-		vars->first = protected_malloc(1, sizeof(t_token));
-		current_token = vars->first;
-		current_token->next = NULL;
-	}
-	else
-	{
-		while (current_token->next && current_token->next != token)
-			current_token = current_token->next;
-		current_token->next = NULL;
-		current_token->next = protected_malloc(1, sizeof(t_token));
-		current_token = current_token->next;
-		current_token->next = NULL;
-	}
 	while (token->buffer.str[i] && token->buffer.str[i] == ' ' && token->token_type == WORD)
 		i++;
-	//	if j != i -> need to add a token in the middle with token_type = SPACE_SIGN and len = i - j
-	j = i;
 	while (token->buffer.str[i])
 	{
+		if (k == 0)
+			current_token = token_malloc_first(vars, token);
+		else
+			malloc_token_next(&current_token);
+		k++;
 		while (token->buffer.str[i] && token->buffer.str[i] != ' ')
 			i++;
-		if (k != 0)
-		{
-			current_token->next = protected_malloc(1, sizeof(t_token));
-			current_token = current_token->next;
-			current_token->next = NULL;
-		}
 		current_token->buffer.str = ft_strndup(&token->buffer.str[j], i - j);
 		current_token->token_type = token->token_type;
 		current_token->buffer.len = ft_strlen(current_token->buffer.str);
-		while (token->buffer.str[i] && token->buffer.str[i] == ' ')
+		j = i;
+		while (token->buffer.str[i] && token->buffer.str[i] == ' ' && token->token_type == WORD)
 			i++;
-		k++;
+		if (j != i && token->buffer.str[i])
+		{
+			malloc_token_next(&current_token);
+			current_token->token_type = SPACE_SIGN;
+			current_token->buffer.len = i - j;
+			current_token->buffer.str = ft_strndup(&token->buffer.str[j], i - j);
+		}
 		j = i;
 	}
 	current_token->next = temp_next;
