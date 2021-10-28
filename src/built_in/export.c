@@ -40,6 +40,13 @@ t_envlist	*envlist_sort_ascii(t_vars *vars)
 	return (new_env);
 }
 
+void	free_env(t_envlist *current_env)
+{
+	free(current_env->name);
+	free(current_env->value);
+	free(current_env);
+}
+
 void	delete_env(t_envlist *envp, char *str)
 {
 	t_envlist	*current_env;
@@ -55,9 +62,7 @@ void	delete_env(t_envlist *envp, char *str)
 			envp = current_env->next;
 		else
 			envp = NULL;
-		free(current_env->name);
-		free(current_env->value);
-		free(current_env);
+		free_env(current_env);
 	}
 	else
 	{
@@ -67,9 +72,7 @@ void	delete_env(t_envlist *envp, char *str)
 		if (current_env->next)
 		{
 			temp = current_env->next->next;
-			free(current_env->next->name);
-			free(current_env->next->value);
-			free(current_env->next);
+			free_env(current_env->next);
 			current_env->next = temp;
 		}
 	}

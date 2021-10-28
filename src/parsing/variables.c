@@ -99,8 +99,8 @@ t_token *replace_env(t_vars *vars, t_token *token)
 	char	*value;
 	t_token	*current_token;
 
-	i = 0;
-	while (token->buffer.str[i])
+	i = -1;
+	while (token->buffer.str[++i])
 	{
 		if (token->buffer.str[i] == '$')
 		{
@@ -109,7 +109,6 @@ t_token *replace_env(t_vars *vars, t_token *token)
 			update_token(token, var, value);
 			i = -1;
 		}
-		i++;
 	}
 	if (token->buffer.str && find_space(token->buffer.str) != 0)
 	{
