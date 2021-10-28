@@ -13,23 +13,16 @@ int	redirect_input(char *file)
 	return (0);
 }
 
-int	redirect_output_overwrite(char *file)
+int		redirect_out(t_redirect *current_out)
 {
-	int	fd;
+	int		fd;
+	char	*file;
 
-	fd = open(file, O_TRUNC | O_CREAT | O_WRONLY, 0644);
-	if (fd < 0)
-		perror(file);
-	if (dup2(fd, STDOUT_FILENO) == -1)
-		perror("dup2");
-	close(fd);
-	return (0);
-}
-
-int	redirect_output_append(char *file)
-{
-	int	fd;
-	fd = open(file, O_APPEND | O_CREAT | O_WRONLY, 0644);
+	file = current_out->filename;
+	if (current_out->arrow_num == 1)
+		fd = open(file, O_TRUNC | O_CREAT | O_WRONLY, 0644);
+	else if (current_out->arrow_num == 2)
+		fd = open(file, O_APPEND | O_CREAT | O_WRONLY, 0644);
 	if (fd < 0)
 		perror(file);
 	if (dup2(fd, STDOUT_FILENO) == -1)
@@ -37,6 +30,7 @@ int	redirect_output_append(char *file)
 	close (fd);
 	return (0);
 }
+
 
 void	redirection(t_vars *vars)
 {
@@ -59,10 +53,7 @@ void	redirection(t_vars *vars)
 	}
 	while (current_out)
 	{
-		if (current_out->arrow_num == 1)
-			redirect_output_overwrite(current_out->filename);
-		else if (current_out->arrow_num == 2)
-			redirect_output_append(current_out->filename);
+		redirect_out(current_out);
 		current_out = current_out->next;
 	}
 }
