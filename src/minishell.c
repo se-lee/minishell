@@ -73,10 +73,8 @@ int	main(int argc, char **argv, char **envp)
 			vars.error = 0;
 			add_history(str);
 			parsing(&vars, str);
-			printf("str1:%s\n", str);
 			if (vars.error == 0)
 				execute_pipe_commands(&vars);
-			printf("str2:%s\n", str);
 			free(str);
 			free_tokens(&vars);
 			free_commands(&vars);

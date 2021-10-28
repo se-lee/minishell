@@ -9,7 +9,7 @@ int	redirect_input(char *file)
 		perror(file);
 	if (dup2(fd, STDIN_FILENO) == -1)
 		perror("dup2");
-	// close(fd);
+	close(fd);
 	return (0);
 }
 
@@ -22,7 +22,7 @@ int	redirect_output_overwrite(char *file)
 		perror(file);
 	if (dup2(fd, STDOUT_FILENO) == -1)
 		perror("dup2");
-	// close(fd);
+	close(fd);
 	return (0);
 }
 
@@ -34,7 +34,7 @@ int	redirect_output_append(char *file)
 		perror(file);
 	if (dup2(fd, STDOUT_FILENO) == -1)
 		perror ("dup2");
-	// close (fd);
+	close (fd);
 	return (0);
 }
 
