@@ -77,6 +77,8 @@ int	main(int argc, char **argv, char **envp)
 	envlist_create(&vars, envp);
 	tcgetattr(0, &vars.saved_termios);
 	str = "";
+	vars.in = NULL;
+	vars.out = NULL;
 	while (str != NULL)
 	{
 		vars.error = 0;

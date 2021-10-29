@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: seoyounglee <seoyounglee@student.42lyon    +#+  +:+       +#+         #
+#    By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/24 16:54:06 by acusanno          #+#    #+#              #
-#    Updated: 2021/10/14 14:25:46 by seoyounglee      ###   ########lyon.fr    #
+#    Updated: 2021/10/28 09:30:32 by acusanno         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,7 +38,7 @@ RM			= rm -f
 
 HEADER		= ./libft.h
 
-CFLAGS		= -Wall -Wextra -Werror
+CFLAGS		= #-Wall -Wextra -Werror
 
 all:		${NAME}
 

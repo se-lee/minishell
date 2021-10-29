@@ -145,6 +145,22 @@ void	initialize_command(t_command *command)
 	command->quotes = 0;
 }
 
+char	**prepare_command(t_token *token, t_token *current_token, t_command *current_command)
+{
+	char	**cmd;
+
+	initialize_command(current_command);
+	current_token = token;
+	if (current_token && current_token->token_type == SPACE_SIGN)
+		current_token = current_token->next;
+	cmd = protected_malloc(2, sizeof(char *));
+	current_token->buffer.str = remove_quotes(current_token->buffer.str, current_token->token_type);
+	cmd[0] = ft_strdup(current_token->buffer.str);
+	cmd[1] = NULL;
+	current_token = current_token->next;
+	return (cmd);
+}
+
 void	fill_command(t_token *token, t_command *current_command)
 {
 	int		i;
@@ -152,57 +168,43 @@ void	fill_command(t_token *token, t_command *current_command)
 	char	*temp;
 	t_token	*current_token;
 
-	initialize_command(current_command);
-	current_token = token;
-	if (current_token && current_token->token_type == SPACE_SIGN)
-		current_token = current_token->next;
-	cmd = protected_malloc(2, sizeof(char *));
-		// printf(">>%s<<\n", current_token->buffer.str);
-	current_token->buffer.str = remove_quotes(current_token->buffer.str, current_token->token_type);
-		// printf(">>%s<<\n", current_token->buffer.str);
-	cmd[0] = ft_strdup(current_token->buffer.str);
-	cmd[1] = NULL;
-	current_token = current_token->next;
+	cmd = prepare_command(token, current_token, current_command);
 	i = 0;
 	while (current_token && ft_piperedirect(current_token->token_type) == 0)
 	{
-		// printf(">>%s<<\n", current_token->buffer.str);
-		// printf("out_cmd[%d] = >>%s<<\n", i, cmd[i]);
 		while (current_token && ft_piperedirect(current_token->token_type) == 0
 			&& current_token->token_type != SPACE_SIGN)
 		{
-			// printf("in_cmd[%d] = >>%s<<\n", i, cmd[i]);
 			if (cmd[i] != NULL)
 			{
-				// printf("if_cmd[%d] = >>%s<<\n", i, cmd[i]);
 				current_token->buffer.str = remove_quotes(current_token->buffer.str, current_token->token_type);
 				temp = ft_strjoin(cmd[i], current_token->buffer.str);
 				free(cmd[i]);
 				cmd[i] = temp;
 				cmd[i + 1] = NULL;
-				// printf("if2_cmd[%d] = >>%s<<\n", i, cmd[i]);
 			}
 			else
 			{
-				// printf("else_cmd[%d] = >>%s<<\n", i, cmd[i]);
 				current_token->buffer.str = remove_quotes(current_token->buffer.str, current_token->token_type);
 				cmd = array_realloc(cmd, current_token->buffer.str);
-				// printf("else2_cmd[%d] = >>%s<<\n", i, cmd[i]);
 			}
 			current_token = current_token->next;
 		}
 		if (current_token && current_token->token_type == SPACE_SIGN)
-		{
-			// printf("increment i:%d\n", i);
 			i++;
-			// printf("increment i_after:%d\n", i);
-		}
 		if (current_token && ft_piperedirect(current_token->token_type) == 0)
 			current_token = current_token->next;
 	}
 	if (current_token)
 		add_piperedirect(current_token, current_command);
 	current_command->command = cmd;
+}
+
+void	malloc_cmd_next(t_command **current_cmd)
+{
+	(*current_cmd)->next = protected_malloc(1, sizeof(t_token));
+	(*current_cmd) = (*current_cmd)->next;
+	(*current_cmd)->next = NULL;
 }
 
 void	fill_commands(t_vars *vars)
@@ -222,11 +224,7 @@ void	fill_commands(t_vars *vars)
 	while (current_token)
 	{
 		if (current_token->token_type == SPACE_SIGN && current_token->next)
-		{
 			current_token = current_token->next;
-			while (current_token && ft_piperedirect(current_token->token_type) == 1)
-				current_token = current_token->next;
-		}
 		if (current_token->token_type != SPACE_SIGN)
 		{
 			if (i == 0)
@@ -237,11 +235,7 @@ void	fill_commands(t_vars *vars)
 				i++;
 			}
 			else
-			{
-				current_cmd->next = protected_malloc(1, sizeof(t_command));
-				current_cmd = current_cmd->next;
-				current_cmd->next = NULL;
-			}
+				malloc_cmd_next(&current_cmd);
 			fill_command(current_token, current_cmd);
 			while (current_token && ft_piperedirect(current_token->token_type) == 0)
 				current_token = current_token->next;
@@ -357,11 +351,8 @@ void	parsing(t_vars *vars, char *str)
 			break ;
 		}
 	}
-	vars->in = NULL;
-	vars->out = NULL;
 	fill_redirect(vars);
 	fill_commands(vars);
 	if (vars->error == 0)
 		printf_commands(vars);
-	return ;
 }
