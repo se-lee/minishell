@@ -93,36 +93,6 @@ void	export_while(t_vars *vars, char *command, int quotes)
 	}
 }
 
-/*
-// this is original
-void	builtin_export(t_vars *vars, t_command *current_cmd)
-{
-	char		*var_str;
-	char		*var_name;
-	char		*temp;
-	t_envlist	*sorted;
-	int			i;
-
-	if (current_cmd && current_cmd->command[1])
-	{
-		i = 1;
-		while (current_cmd->command[i])
-		{
-	printf("cmd[%d]:%s\n", i, current_cmd->command[i]);
-			export_while(vars, current_cmd->command[i]);
-			i++;
-		}
-	}
-	else
-	{
-		sorted = envlist_sort_ascii(vars);
-		envlist_print_all(sorted);
-		envlist_free(sorted);
-	}
-}
-*/
-
-// this is test version 
 void	builtin_export(t_vars *vars, t_command *current_cmd)
 {
 	char		*var_str;
@@ -138,7 +108,7 @@ print_commands(current_cmd);
 		i = 1;
 		while (current_cmd->command[i])
 		{
-printf("cmd[%d]:%s\n", i, current_cmd->command[i]);
+			printf("cmd[%d]:%s\n", i, current_cmd->command[i]);
 			export_while(vars, current_cmd->command[i], current_cmd->quotes);
 			i++;
 		}
