@@ -27,7 +27,7 @@ void	run_command_builtin(t_vars *vars, t_command *current_cmd)
 	else if (ft_strcmp(command, "env") == 0)
 		builtin_env(vars);
 	else if (ft_strcmp(command, "exit") == 0)
-		builtin_exit(current_cmd);
+		builtin_exit(vars, current_cmd);
 	else if (ft_strcmp(command, "export") == 0)
 		builtin_export(vars, current_cmd);
 	else if (ft_strcmp(command, "pwd") == 0)

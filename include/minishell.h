@@ -105,7 +105,7 @@ int			export_syntax(char *str, int quotes);
 void		builtin_cd(t_vars *vars, t_command *current_cmd);
 void		builtin_echo(t_vars *vars, t_command *current_cmd);
 void		builtin_env(t_vars *vars);
-void		builtin_exit(t_command *current_cmd);
+void		builtin_exit(t_vars *vars, t_command *current_cmd);
 void		builtin_export(t_vars *vars, t_command *current_cmd);
 void		builtin_unset(t_vars *vars, t_command *current_cmd);
 void		builtin_pwd(void);

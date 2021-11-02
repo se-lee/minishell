@@ -1,31 +1,42 @@
 #include "minishell.h"
 
-void    builtin_exit(t_command *current_cmd)
+int	strisnum(char *str)
 {
-	int    return_value;
+	int	i;
 
-	return_value = 0;
-	if (current_cmd->command[1] == NULL)
+	i = 0;
+	if (str[i] == '-')
+		i++;
+	while (str[i])
 	{
-	    exit(return_value);
+		if (str[i] < '0' || str[i] > '9')
+			return (0);
+		i++;
 	}
-	else
-		exit(return_value);
-	// else if (current_cmd->command[1])
-	// {
-	// 	if (ft_isalnum(current_cmd->command[1]) == 1 && current_cmd->command[2] == NULL)
-	// 	{
-	// 		return_value = atoi(current_cmd->command[1]);
-	// 		if (current_cmd->pipe == 0)
-	// 			printf("exit\n");
-	// 		exit(return_value);
-	// 	}
-	// 	else if (ft_isalnum(current_cmd->command[1]) == 1 && current_cmd->command[2] != NULL)
-	// 		printf("exit: too many arguments\n");
-	// 	else
-	// 	{
-	// 		printf("exit : numeric argument required\n");
-	// 		exit(255);
-	// 	}
-	// }
+	return (1);
+}
+
+void    builtin_exit(t_vars *vars, t_command *current_cmd)
+{
+	if (current_cmd->command[1] == NULL)
+	    exit(vars->return_value);
+	else if (current_cmd->command[1])
+	{
+		if (strisnum(current_cmd->command[1]) == 1 && current_cmd->command[2] == NULL)
+		{
+			vars->return_value = atoi(current_cmd->command[1]);
+			if (vars->return_value > 255 || vars->return_value < 0)
+				vars->return_value = vars->return_value % 256;
+			if (current_cmd->pipe == 0)
+				printf("exit\n");
+			exit(vars->return_value);
+		}
+		else if (strisnum(current_cmd->command[1]) == 1 && current_cmd->command[2] != NULL)
+			printf("exit: too many arguments\n");
+		else
+		{
+			printf("exit : numeric argument required\n");
+			exit(255);
+		}
+	}
 }

@@ -168,7 +168,6 @@ void	fill_command(t_token *token, t_command *current_command)
 	char	*temp;
 	t_token	*current_token;
 
-	// cmd = prepare_command(token, current_token, current_command);
 	initialize_command(current_command);
 	current_token = token;
 	if (current_token && current_token->token_type == SPACE_SIGN)
@@ -178,6 +177,7 @@ void	fill_command(t_token *token, t_command *current_command)
 	cmd[0] = ft_strdup(current_token->buffer.str);
 	cmd[1] = NULL;
 	current_token = current_token->next;
+	// cmd = prepare_command(token, current_token, current_command);
 	i = 0;
 	while (current_token && ft_piperedirect(current_token->token_type) == 0)
 	{
