@@ -7,7 +7,7 @@ char	*get_delimiter(t_redirect *current_in)
 	char	*delimiter;
 	if (current_in->filename == NULL)
 	{
-		perror("");
+		("");
 		return (NULL);
 	}
 	else 
@@ -68,8 +68,65 @@ void		put_to_heredoc(t_redirect *current_in)
 	close(fd);
 }
 
-*/
 
+
+void	exec_heredoc(t_shell *shell, t_pars *parse, int fd)
+{
+	char	*line;
+	int		ret;
+	int		i;
+
+	i = 0;
+	ret = 1;
+	line = NULL;
+	while (ret && g_heredoc)
+	{
+		ft_putstr_fd("> ", shell->cmd.fd_stdout);
+		ret = ft_get_next_line(shell->cmd.fd_stdin, 2, &line);
+		if (g_heredoc && ft_strcmp(line, parse->next->value) != 0)
+			fill_file(line, fd);
+		else
+			break ;
+		free(line);
+		line = NULL;
+	}
+	if (line && g_heredoc)
+	{
+		free(line);
+		line = NULL;
+	}
+}
+
+f (child == 0)
+	{
+		delimiter = get_delimiter(current_in);
+		line = readline("> ");
+		while (line && ft_strcmp(line, delimiter))
+		{
+			ft_putendl_fd(line, fd);
+			free(line);
+			line = readline("> ");
+		}
+		if (dup2(fd, STDOUT_FILENO) == -1)
+			perror("dup2");
+		close(fd);
+		exit(0);
+	}
+	else
+		waitpid(child, NULL, 0);
+}
+
+while (ft_get_next_line(0, &line))
+	{
+		if (ft_strcmp(line, stop))
+		{
+			write(fd[1], line, ft_strlen(line));
+			write(fd[1], "\n", 1);
+			free(line);
+		}
+
+
+*/
 void		put_to_heredoc(t_redirect *current_in)
 {
 	int		fd;
@@ -84,6 +141,7 @@ void		put_to_heredoc(t_redirect *current_in)
 	ft_putstr_fd("> ", OUT);
 	while (get_next_line(IN, &line))
 	{
+		ft_putstr_fd("> ", OUT);
 		if (ft_strcmp(line, delimiter))
 		{
 			ft_putstr_fd("> ", OUT);
@@ -93,7 +151,7 @@ void		put_to_heredoc(t_redirect *current_in)
 		else
 			break ;
 		line = NULL;
-		free(line);
+		// free(line);
 	}
 	// if (dup2(fd, STDOUT_FILENO) == -1)
 	// 	perror("dup2");

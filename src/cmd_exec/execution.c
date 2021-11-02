@@ -68,7 +68,7 @@ void	run_command_non_builtin(t_envlist *envlist, t_command *current_cmd)
 	}
 	else
 	{
-		perror("");
+		printf("minishell: %s: command not found\n", current_cmd->command[0]);
 		free(path);
 		exit(127);
 	}

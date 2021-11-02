@@ -106,7 +106,6 @@ void	builtin_cd(t_vars *vars, t_command *current_cmd)
 	char	*old_pwd;
 
 	path_temp = current_cmd->command[1];
-printf("path_temp:%s\n", path_temp);
 	if (path_temp == NULL || ft_strncmp(path_temp, "~", 1) == 0)
 		cd_to_home(vars, current_cmd, path_temp);
 	else if (ft_strncmp(path_temp, "-", 2) == 0)
