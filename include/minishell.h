@@ -115,9 +115,10 @@ void		run_command_non_builtin(t_envlist *envlist, t_command *current_cmd);
 int			envlist_count(t_envlist *envp);
 char		**envlist_to_char_array(t_envlist *envp);
 void		execute_pipe_commands(t_vars *vars);
+void		launch_command(t_vars *vars, t_command *current_cmd, int input, int output);
 
 /* pipe */
-void	fd_dup_and_close(int input, int output);
+void		fd_dup_and_close(int input, int output);
 
 /* redirection */
 int			redirect_input(char *file);
@@ -125,8 +126,11 @@ int			redirect_output_overwrite(char *file);
 int			redirect_output_append(char *file);
 void		redirection(t_vars *vars);
 // void		heredoc(t_redirect *current_in);
-int		put_to_heredoc(t_redirect *current_in);
+void		put_to_heredoc(t_redirect *current_in);
+// void		put_to_heredoc(t_vars *vars);
 int			redirect_heredoc(t_redirect *current_in);
+int			heredoc_count(t_vars *vars);
+int			ft_get_next_line(int fd, char **line);
 
 /* command utils */
 char		*get_command_path(t_envlist *envp, char *command);

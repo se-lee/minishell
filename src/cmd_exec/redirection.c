@@ -31,11 +31,11 @@ int		redirect_out(t_redirect *current_out)
 	return (0);
 }
 
-
 void	redirection(t_vars *vars)
 {
 	t_redirect	*current_in;
 	t_redirect	*current_out;
+	pid_t		child;
 
 	current_in = vars->in;
 	current_out = vars->out;
@@ -45,9 +45,9 @@ void	redirection(t_vars *vars)
 			redirect_input(current_in->filename);
 		else if (current_in->arrow_num == 2)
 		{
-			put_to_heredoc(current_in);
+			// put_to_heredoc(current_in);
 			redirect_heredoc(current_in);
-			unlink(".heredoc");
+			// unlink(".heredoc");
 		}
 		current_in = current_in->next;
 	}
