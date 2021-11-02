@@ -41,11 +41,13 @@ int	export_syntax(char *str, int quotes)
 			return (0);
 		i++;
 	}
+	if (i == 0)
+		return (0);
 	while (str[i] && quotes == 0)
 	{
 		if (ft_isalnum(str[i]) != 1 && (str[i] != '-') && (str[i] != '_') && (str[i] != ' ')
 				&& str[i] != '=' && str[i] != '.' && str[i] != '/' && str[i] != '?'
-				&& str[i] != '\'' && str[i] != '"')
+				&& str[i] != '\'' && str[i] != '"' && str[i] != ':')
 			return (0);
 		i++;
 	}

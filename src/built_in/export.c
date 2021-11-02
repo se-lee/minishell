@@ -104,8 +104,7 @@ void	builtin_export(t_vars *vars, t_command *current_cmd)
 	t_envlist	*sorted;
 	int			i;
 
-print_commands(current_cmd);
-
+	print_commands(current_cmd);
 	if (current_cmd && current_cmd->command[1])
 	{
 		i = 1;
