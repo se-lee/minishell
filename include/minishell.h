@@ -130,7 +130,6 @@ void		put_to_heredoc(t_redirect *current_in);
 // void		put_to_heredoc(t_vars *vars);
 int			redirect_heredoc(t_redirect *current_in);
 int			heredoc_count(t_vars *vars);
-int			ft_get_next_line(int fd, char **line);
 
 /* command utils */
 char		*get_command_path(t_envlist *envp, char *command);
