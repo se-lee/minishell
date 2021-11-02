@@ -79,6 +79,7 @@ int	main(int argc, char **argv, char **envp)
 	str = "";
 	vars.in = NULL;
 	vars.out = NULL;
+	vars.return_value = 0;
 	while (str != NULL)
 	{
 		vars.error = 0;

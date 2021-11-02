@@ -24,7 +24,7 @@ char	*get_command_path(t_envlist *envp, char *command)
 	char	*path;
 	int		i;
 
-	path = get_env_value(envp, "PATH");
+	path = get_env_value(envp, "PATH", 0);
 	if (path == NULL)
 	{
 		perror("path invalid");
@@ -82,7 +82,7 @@ int		command_is_builtin(char **command)
 		return (FALSE);
 }
 
-char	*get_env_value(t_envlist *envp, char *env_name)
+char	*get_env_value(t_envlist *envp, char *env_name, int return_value)
 {
 	t_envlist *current_env;
 	char	*value;
@@ -95,6 +95,8 @@ char	*get_env_value(t_envlist *envp, char *env_name)
 			value = ft_strdup(current_env->value);
 		current_env = current_env->next;	
 	}
+	if (ft_strcmp(env_name, "?") == 0)
+		value = ft_itoa(return_value);
 	return (value);
 }
 

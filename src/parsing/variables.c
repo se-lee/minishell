@@ -105,7 +105,7 @@ t_token *replace_env(t_vars *vars, t_token *token)
 		if (token->buffer.str[i] == '$')
 		{
 			var = find_variable(&token->buffer.str[i]);
-			value = get_env_value(vars->envp, &var[1]);
+			value = get_env_value(vars->envp, &var[1], vars->return_value);
 			update_token(token, var, value);
 			i = -1;
 		}

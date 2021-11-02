@@ -121,7 +121,7 @@ void		execute_pipe_commands(t_vars *vars);
 char		*get_command_path(t_envlist *envp, char *command);
 int			count_command(t_command *cmd);
 int			command_is_builtin(char **command);
-char		*get_env_value(t_envlist *envp, char *env_name);
+char		*get_env_value(t_envlist *envp, char *env_name, int return_value);
 char		**envlist_to_char_array(t_envlist *envp);
 void		print_commands(t_command *cmd);
 /* envlist utils */
