@@ -31,6 +31,7 @@ int		redirect_out(t_redirect *current_out)
 	return (0);
 }
 
+
 void	redirection(t_vars *vars)
 {
 	t_redirect	*current_in;
@@ -44,11 +45,7 @@ void	redirection(t_vars *vars)
 		if (current_in->arrow_num == 1)
 			redirect_input(current_in->filename);
 		else if (current_in->arrow_num == 2)
-		{
-			// put_to_heredoc(current_in);
 			redirect_heredoc(current_in);
-			// unlink(".heredoc");
-		}
 		current_in = current_in->next;
 	}
 	while (current_out)

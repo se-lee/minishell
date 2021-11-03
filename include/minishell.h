@@ -129,7 +129,8 @@ void		redirection(t_vars *vars);
 void		put_to_heredoc(t_redirect *current_in);
 // void		put_to_heredoc(t_vars *vars);
 int			redirect_heredoc(t_redirect *current_in);
-int			heredoc_count(t_vars *vars);
+int			count_heredoc(t_vars *vars);
+void		multiple_heredoc(t_vars *vars);
 
 /* command utils */
 char		*get_command_path(t_envlist *envp, char *command);

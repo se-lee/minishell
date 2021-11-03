@@ -121,9 +121,11 @@ void	execute_pipe_commands(t_vars *vars)
 	current_cmd = vars->cmd;
 	current_in = vars->in;
 	i = 0;
-// put into while
-	if (heredoc_count(vars) > 0) 	// check heredoc here and if there is at least one heredoc, create .heredoc file here
-		put_to_heredoc(current_in);
+	// put into while
+	// if (heredoc_count(vars) > 0) 	// check heredoc here and if there is at least one heredoc, create .heredoc file here
+	// 	put_to_heredoc(current_in);
+	if (count_heredoc(vars) > 0)
+		multiple_heredoc(vars);
 	if (!current_cmd->pipe)
 		run_command_no_pipe(vars, current_cmd);
  	else
