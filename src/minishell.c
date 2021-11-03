@@ -67,6 +67,22 @@ void	control_c(int sig)
 	rl_redisplay();
 }
 
+void	sigmain(int sig)
+{
+	if (sig == SIGQUIT)
+		printf("Quit: 3\n");
+	else
+		printf("\n");
+}
+
+void	sigchild(int sig)
+{
+	if (sig == SIGINT)
+		exit(130);
+	else
+		exit(131);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_vars			vars;

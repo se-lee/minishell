@@ -6,11 +6,11 @@ char	*find_variable(char *str)
 	char	*var;
 
 	i = 0;
-	while (str[i] && str[i] != ' ' && str[i] != '"')
+	while (str[i] && str[i] != ' ' && str[i] != '"' && str[i] != '\'')
 		i++;
 	var = protected_malloc((i + 1), sizeof(char));
 	i = 0;
-	while (str[i] && str[i] != ' ' && str[i] != '"')
+	while (str[i] && str[i] != ' ' && str[i] != '"' && str[i] != '\'')
 	{
 		var[i] = str[i];
 		i++;

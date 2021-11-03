@@ -137,6 +137,10 @@ void		ft_append(char **a, char *str);
 void		*protected_malloc(size_t count, size_t size);
 void		free_array(char **array);
 
+/* Signals*/
+void	sigchild(int sig);
+void	sigmain(int sig);
+
 /* test functions to be removed later */
 void		test_function_print_envarr(char **env, t_envlist *envlist);
 void		test_func_print_commands(t_command *current_cmd);

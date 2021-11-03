@@ -67,6 +67,8 @@ void	launch_commands(t_vars *vars, t_command *current_cmd, int in, int out)
 		perror("fork");
 	if (child == 0)
 	{
+		signal(SIGINT, sigchild);
+		signal(SIGQUIT, sigchild);
 		if (in != 0)
 		{
 			if (dup2(in, 0) < 0)
@@ -89,6 +91,8 @@ void	launch_commands(t_vars *vars, t_command *current_cmd, int in, int out)
 	}
 	else
 	{
+		signal(SIGINT, sigmain);
+		signal(SIGQUIT, sigmain);
 		if (in != 0)
 			close(in);
 		if (out != 1)
@@ -129,7 +133,13 @@ void	execute_pipe_commands(t_vars *vars)
 	{
 		child = fork();
 		if (child == 0)
+		{
+			signal(SIGINT, sigchild);
+			signal(SIGQUIT, sigchild);
 			run_command_non_builtin(vars->envp, current_cmd);
+		}
+		signal(SIGINT, sigmain);
+		signal(SIGQUIT, sigmain);
 		waitpid(child, &status, 0);
 	}
  	else
