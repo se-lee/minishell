@@ -63,7 +63,7 @@ void	multiple_heredoc(t_vars *vars)
 	t_redirect	*current_in;
 
 	current_in = vars->in;
-	while (current_in)//i < heredoc_count)
+	while (current_in)
 	{
 		if (current_in->arrow_num == 2)
 			put_to_heredoc(current_in);

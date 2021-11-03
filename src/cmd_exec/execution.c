@@ -82,17 +82,17 @@ void	launch_commands(t_vars *vars, t_command *current_cmd, int input, int output
 		perror("fork");
 	if (child == 0)
 	{
-		// redirection(vars); //if redirection is put here, multiple delimiters are needed to end heredoc	
+		redirection(vars); //if redirection is put here, multiple delimiters are needed to end heredoc	
 		fd_dup_and_close(input, output);
 		if (command_is_builtin(current_cmd->command) == TRUE)
 		{
 			run_command_builtin(vars, current_cmd);
-			// exit(0);
+			exit(0);
 		}
 		else
 		{
 			run_command_non_builtin(vars->envp, current_cmd);
-			// exit(0);
+			exit(0);
 		}
 	}
 	else
@@ -114,16 +114,12 @@ void	execute_pipe_commands(t_vars *vars)
 	int			status;
 	pid_t		child;
 	t_command	*current_cmd;
-	t_redirect	*current_in;
 
 	output = 1;
 	input = 0;
 	current_cmd = vars->cmd;
-	current_in = vars->in;
 	i = 0;
-	// put into while
-	// if (heredoc_count(vars) > 0) 	// check heredoc here and if there is at least one heredoc, create .heredoc file here
-	// 	put_to_heredoc(current_in);
+
 	if (count_heredoc(vars) > 0)
 		multiple_heredoc(vars);
 	if (!current_cmd->pipe)
@@ -132,7 +128,7 @@ void	execute_pipe_commands(t_vars *vars)
 	{
 		while (i < count_command(vars->cmd) - 1)
 		{
-			redirection(vars); //if there is a heredoc, it quits the whole program after execution
+			// redirection(vars);
 			if (pipe(fd) < 0)
 				perror("pipe");
 			launch_commands(vars, current_cmd, input, fd[1]); //fork
@@ -140,7 +136,7 @@ void	execute_pipe_commands(t_vars *vars)
 			current_cmd = current_cmd->next;
 			i++;
 		}
-			redirection(vars);
+			// redirection(vars);
 			launch_commands(vars, current_cmd, input, output); //last command
 		i = 0;
 		while (i < count_command(vars->cmd))
@@ -160,7 +156,6 @@ void	run_command_no_pipe(t_vars *vars, t_command *current_cmd)
 {
 	pid_t	child;
 
-// 	redirection(vars); // --> here doesnt work. quits the entire program after closing heredoc
 	if (command_is_builtin(current_cmd->command) == TRUE)
 	{
 		if (vars->in || vars->out)
@@ -188,15 +183,18 @@ void	run_command_no_pipe(t_vars *vars, t_command *current_cmd)
 	waitpid(child, NULL, 0);
 }
 
-// void	execution(t_vars *vars)
-// {
-// 	t_command	*current_cmd;
+/*
+void	execution(t_vars *vars)
+{
+	t_command	*current_cmd;
+	t_redire
 
-// 	if (heredoc_count(vars) > 0)
-// 		put_to_heredoc(vars); // Revise
-// 	if (!current_cmd->pipe)
-// 		run_command_no_pipe(vars, current_cmd);
-// 	else if (current_cmd->pipe)
-// 		run_command_with_pipe(vars, current_cmd); //create this function;
+	if (heredoc_count(vars) > 0)
+		put_to_heredoc(vars); // Revise
+	if (!current_cmd->pipe)
+		run_command_no_pipe(vars, current_cmd);
+	else if (current_cmd->pipe)
+		run_command_with_pipe(vars, current_cmd); //create this function;
 
-// }
+}
+*/
