@@ -53,10 +53,7 @@ void		put_to_heredoc(t_redirect *current_in)
 			free(line);
 		}
 		else
-		{
-			printf("break\n");
 			break ;
-		}
 	}
 	close(fd);
 }
