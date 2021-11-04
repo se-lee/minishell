@@ -1,6 +1,5 @@
 #include "minishell.h"
 
-void	run_command_no_pipe(t_vars *vars, t_command *current_cmd);
 /* remove this function later */
 void	print_commands(t_command *cmd)
 {
@@ -74,7 +73,8 @@ void	run_command_non_builtin(t_envlist *envlist, t_command *current_cmd)
 	}
 }
 
-void	launch_commands(t_vars *vars, t_command *current_cmd, int input, int output)
+/* new version */
+void	launch_commands(t_vars *vars, t_command *current_cmd, int input, int output, int to_close)
 {
 	pid_t	child;
 	child = fork();
@@ -82,8 +82,10 @@ void	launch_commands(t_vars *vars, t_command *current_cmd, int input, int output
 		perror("fork");
 	if (child == 0)
 	{
-		redirection(vars); //if redirection is put here, multiple delimiters are needed to end heredoc	
+		redirection(vars);
 		fd_dup_and_close(input, output);
+		if (to_close)// if to_close is not 0
+			close(to_close);
 		if (command_is_builtin(current_cmd->command) == TRUE)
 		{
 			run_command_builtin(vars, current_cmd);
@@ -102,55 +104,7 @@ void	launch_commands(t_vars *vars, t_command *current_cmd, int input, int output
 		if (output != 1)
 			close(output);
 	}
-		waitpid(child, NULL, 0);
 }
-
-void	execute_pipe_commands(t_vars *vars)
-{
-	int			fd[2];
-	int			input;
-	int			output;
-	int			i;
-	int			status;
-	pid_t		child;
-	t_command	*current_cmd;
-
-	output = 1;
-	input = 0;
-	current_cmd = vars->cmd;
-	i = 0;
-
-	if (count_heredoc(vars) > 0)
-		multiple_heredoc(vars);
-	if (!current_cmd->pipe)
-		run_command_no_pipe(vars, current_cmd);
- 	else
-	{
-		while (i < count_command(vars->cmd) - 1)
-		{
-			// redirection(vars);
-			if (pipe(fd) < 0)
-				perror("pipe");
-			launch_commands(vars, current_cmd, input, fd[1]); //fork
-			input = fd[0];
-			current_cmd = current_cmd->next;
-			i++;
-		}
-			// redirection(vars);
-			launch_commands(vars, current_cmd, input, output); //last command
-		i = 0;
-		while (i < count_command(vars->cmd))
-		{
-			waitpid(child, &status, 0);
-			if (status == -1)
-			{
-				perror("wait");
-				return ;
-			}
-			i++;
-		}
-	}
-} 
 
 void	run_command_no_pipe(t_vars *vars, t_command *current_cmd)
 {
@@ -183,18 +137,44 @@ void	run_command_no_pipe(t_vars *vars, t_command *current_cmd)
 	waitpid(child, NULL, 0);
 }
 
-/*
-void	execution(t_vars *vars)
+void	execute_pipe_commands(t_vars *vars)
 {
+	int			input;
+	int			output;
+	int			i;
+	pid_t		child;
 	t_command	*current_cmd;
-	t_redire
+	int			to_close;
 
-	if (heredoc_count(vars) > 0)
-		put_to_heredoc(vars); // Revise
+	output = 1;
+	input = 0;
+	current_cmd = vars->cmd;
+	i = 0;
+	to_close = 0;
+	if (count_heredoc(vars) > 0)
+		multiple_heredoc(vars);
 	if (!current_cmd->pipe)
 		run_command_no_pipe(vars, current_cmd);
-	else if (current_cmd->pipe)
-		run_command_with_pipe(vars, current_cmd); //create this function;
-
-}
-*/
+ 	else
+	{
+		while (i < count_command(vars->cmd) - 1)
+		{
+			if (pipe(current_cmd->fd) < 0)
+				perror("pipe");
+			if (!to_close)
+				to_close = current_cmd->fd[0];
+			launch_commands(vars, current_cmd, input, current_cmd->fd[1], to_close);
+			to_close = 0;
+			input = current_cmd->fd[0];
+			current_cmd = current_cmd->next;
+			i++;
+		}
+			launch_commands(vars, current_cmd, input, output, to_close); //last command
+		i = 0;
+		while (i < count_command(vars->cmd))
+		{
+			waitpid(child, NULL, 0);
+			i++;
+		}
+	}
+} 

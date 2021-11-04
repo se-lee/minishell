@@ -67,6 +67,7 @@ struct s_command {
 	int			quotes; //ADD
 	int			redirect_right;
 	int			redirect_left;
+	int			fd[2]; // 11/3 ADD
 	t_command	*next;
 };
 
@@ -119,6 +120,7 @@ void		launch_command(t_vars *vars, t_command *current_cmd, int input, int output
 
 /* pipe */
 void		fd_dup_and_close(int input, int output);
+int			pipe_flow(int *fd, int inout);
 
 /* redirection */
 int			redirect_input(char *file);
