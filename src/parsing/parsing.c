@@ -38,8 +38,10 @@ int	check_error(t_token *token)
 		return (-1);
 	if (ft_piperedirect(token->token_type) == 1 && token->buffer.len > 2)
 		return (-1);
-	if (ft_piperedirect(token->token_type) == 1
+	if (token->next && (token->token_type) == 1
 		&& ft_piperedirect(token->next->token_type) == 1)
+		return (-1);
+	if ((token->token_type == REDIRECT_LEFT || token->token_type == REDIRECT_RIGHT) && token->next == NULL)
 		return (-1);
 	return (0);
 }
@@ -348,7 +350,7 @@ t_token	*fill_inout(t_vars *vars, t_token *current_token, t_redirect *current_in
 	current_inout->arrow_num = current_token->buffer.len;
 	current_inout->cmd_num = cmd_num;
 	current_token = remove_token(vars, current_token);
-	if (current_token->token_type == SPACE)
+	if (current_token && current_token->token_type == SPACE)
 		current_token = remove_token(vars, current_token);
 	current_inout->filename = ft_strdup(current_token->buffer.str);
 	current_token = remove_token(vars, current_token);

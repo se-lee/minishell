@@ -37,10 +37,10 @@ void		put_to_heredoc(t_redirect *current_in)
 	char	*delimiter;
 	char	*line;
 
+	delimiter = get_delimiter(current_in);
 	fd = open(".heredoc", O_TRUNC | O_CREAT | O_WRONLY, 0644);
 	if (fd < 0)
 		perror("heredoc_file");
-	delimiter = get_delimiter(current_in);
 	line = NULL;
 	ft_putstr_fd("> ", OUT);
 	while (get_next_line(IN, &line))

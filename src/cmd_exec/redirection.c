@@ -40,17 +40,19 @@ void	redirection(t_vars *vars)
 
 	current_in = vars->in;
 	current_out = vars->out;
-		while (current_in)
-		{
-			if (current_in->arrow_num == 1)
-				redirect_input(current_in->filename);
-			else if (current_in->arrow_num == 2)
-				redirect_heredoc(current_in);
-			current_in = current_in->next;
-		}
-		while (current_out)
-		{
-			redirect_out(current_out);
-			current_out = current_out->next;
-		}
+	while (current_in)
+	{
+		if (current_in->arrow_num == 1)
+			redirect_input(current_in->filename);
+		else if (current_in->arrow_num == 2)
+			redirect_heredoc(current_in);
+		current_in = current_in->next;
+	}
+	while (current_out)
+	{
+		redirect_out(current_out);
+		current_out = current_out->next;
+	}
+	if (count_heredoc(vars) > 0)
+		unlink(".heredoc");
 }

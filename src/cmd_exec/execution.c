@@ -84,7 +84,7 @@ void	launch_commands(t_vars *vars, t_command *current_cmd, int input, int output
 	{
 		redirection(vars);
 		fd_dup_and_close(input, output);
-		if (to_close)// if to_close is not 0
+		if (to_close) // to close fd[0] every time
 			close(to_close);
 		if (command_is_builtin(current_cmd->command) == TRUE)
 		{
