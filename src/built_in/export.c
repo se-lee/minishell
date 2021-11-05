@@ -115,7 +115,7 @@ void	builtin_export(t_vars *vars, t_command *current_cmd)
 			i++;
 		}
 	}
-	else
+	else if (vars->envp != NULL)
 	{
 		sorted = envlist_sort_ascii(vars);
 		envlist_print_all(sorted);
