@@ -53,7 +53,7 @@ char	*get_command_path(t_envlist *envp, char *command)
 	return (path);
 }
 
-int	ount_command(t_command *cmd)
+int	count_command(t_command *cmd)
 {
 	int			count;
 	t_command	*current_cmd;
@@ -103,7 +103,6 @@ char	*get_env_value(t_envlist *envp, char *env_name, int return_value)
 char	**envlist_to_char_array(t_envlist *envp)
 {
 	char		**env_arr;
-	char		*temp;
 	t_envlist	*current_env;
 	int			i;
 

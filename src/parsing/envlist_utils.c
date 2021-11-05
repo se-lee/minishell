@@ -24,7 +24,7 @@ char	*env_separation(char *str, int part)
 	if (str[i] && part == 1)
 	{
 		new_str = protected_malloc(ft_strlen(str) - i + 1, sizeof(char));
-		while (i < ft_strlen(str))
+		while (i < (int)ft_strlen(str))
 		{
 			new_str[j] = str[i + 1];
 			j++;

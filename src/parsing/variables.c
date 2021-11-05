@@ -97,7 +97,6 @@ t_token	*replace_env(t_vars *vars, t_token *token)
 	int		i;
 	char	*var;
 	char	*value;
-	t_token	*current_token;
 
 	i = -1;
 	while (token->buffer.str[++i])

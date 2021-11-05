@@ -55,7 +55,7 @@ char	*remove_quotes(char *original, int token_type)
 	if (token_type == QUOTE || token_type == SINGLE_QUOTE)
 	{
 		new = protected_malloc(ft_strlen(original), sizeof(char));
-		while (i < (ft_strlen(original) - 2))
+		while (i < (int)(ft_strlen(original) - 2))
 		{
 			new[i] = original[i + 1];
 			i++;

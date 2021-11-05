@@ -36,7 +36,7 @@ void	run_command_builtin(t_vars *vars, t_command *current_cmd)
 	if (ft_strcmp(command, "cd") == 0)
 		builtin_cd(vars, current_cmd);
 	else if (ft_strcmp(command, "echo") == 0)
-		builtin_echo(vars, current_cmd);
+		builtin_echo(current_cmd);
 	else if (ft_strcmp(command, "env") == 0)
 		builtin_env(vars);
 	else if (ft_strcmp(command, "exit") == 0)
@@ -115,6 +115,7 @@ void	run_command_no_pipe(t_vars *vars, t_command *current_cmd)
 {
 	pid_t	child;
 
+	child = 0;
 	if (command_is_builtin(current_cmd->command) == TRUE)
 	{
 		if (vars->in || vars->out)
@@ -151,6 +152,7 @@ void	execute_pipe_commands(t_vars *vars)
 	t_command	*current_cmd;
 	int			to_close;
 
+	child = 0;
 	output = 1;
 	input = 0;
 	current_cmd = vars->cmd;

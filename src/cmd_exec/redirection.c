@@ -19,6 +19,7 @@ int	redirect_out(t_redirect *current_out)
 	char	*file;
 
 	file = current_out->filename;
+	fd = -1;
 	if (current_out->arrow_num == 1)
 		fd = open(file, O_TRUNC | O_CREAT | O_WRONLY, 0644);
 	else if (current_out->arrow_num == 2)
@@ -35,7 +36,6 @@ void	redirection(t_vars *vars)
 {
 	t_redirect	*current_in;
 	t_redirect	*current_out;
-	pid_t		child;
 
 	current_in = vars->in;
 	current_out = vars->out;
@@ -44,7 +44,7 @@ void	redirection(t_vars *vars)
 		if (current_in->arrow_num == 1)
 			redirect_input(current_in->filename);
 		else if (current_in->arrow_num == 2)
-			redirect_heredoc(current_in);
+			redirect_heredoc();
 		current_in = current_in->next;
 	}
 	while (current_out)

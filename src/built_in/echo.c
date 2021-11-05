@@ -14,7 +14,7 @@ int	echo_n(char *str)
 	return (1);
 }
 
-void	builtin_echo(t_vars *vars, t_command *current_cmd)
+void	builtin_echo(t_command *current_cmd)
 {
 	int	n_option;
 	int	i;

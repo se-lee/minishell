@@ -23,7 +23,7 @@ void	envlist_delete_first(t_vars *vars, t_envlist *current_env)
 	}
 }
 
-void	envlist_delete_var(t_vars *vars, t_envlist *current_env)
+void	envlist_delete_var(t_envlist *current_env)
 {
 	t_envlist	*temp;
 
@@ -49,7 +49,6 @@ void	envlist_delete_var(t_vars *vars, t_envlist *current_env)
 void	builtin_unset(t_vars *vars, t_command *current_cmd)
 {
 	char		*var_to_unset;
-	char		*var_str;
 	t_envlist	*current_env;
 	int			i;
 
@@ -69,7 +68,7 @@ void	builtin_unset(t_vars *vars, t_command *current_cmd)
 			{
 				if (ft_strncmp(current_env->next->name, var_to_unset,
 						ft_strlen(var_to_unset) + 1) == 0)
-					envlist_delete_var(vars, current_env);
+					envlist_delete_var(current_env);
 				if (current_env->next)
 					current_env = current_env->next;
 			}

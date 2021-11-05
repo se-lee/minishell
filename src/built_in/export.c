@@ -98,9 +98,6 @@ void	export_while(t_vars *vars, char *command, int quotes)
 
 void	builtin_export(t_vars *vars, t_command *current_cmd)
 {
-	char		*var_str;
-	char		*var_name;
-	char		*temp;
 	t_envlist	*sorted;
 	int			i;
 

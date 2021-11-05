@@ -72,7 +72,7 @@ void	multiple_heredoc(t_vars *vars)
 	}
 }
 
-int	redirect_heredoc(t_redirect *current_in)
+int	redirect_heredoc(void)
 {
 	int		fd;
 

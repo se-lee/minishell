@@ -105,7 +105,7 @@ int			export_syntax(char *str, int quotes);
 
 /* built-in commands */
 void		builtin_cd(t_vars *vars, t_command *current_cmd);
-void		builtin_echo(t_vars *vars, t_command *current_cmd);
+void		builtin_echo(t_command *current_cmd);
 void		builtin_env(t_vars *vars);
 void		builtin_exit(t_vars *vars, t_command *current_cmd);
 void		builtin_export(t_vars *vars, t_command *current_cmd);
@@ -131,7 +131,7 @@ void		redirection(t_vars *vars);
 // void		heredoc(t_redirect *current_in);
 void		put_to_heredoc(t_redirect *current_in);
 // void		put_to_heredoc(t_vars *vars);
-int			redirect_heredoc(t_redirect *current_in);
+int			redirect_heredoc(void);
 int			count_heredoc(t_vars *vars);
 void		multiple_heredoc(t_vars *vars);
 
