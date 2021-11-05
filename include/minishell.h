@@ -33,7 +33,7 @@ enum e_type
 	PIPE_SIGN,
 	REDIRECT_RIGHT,
 	REDIRECT_LEFT,
-	SPACE
+	SPACE_SIGN
 };
 
 struct s_string {
