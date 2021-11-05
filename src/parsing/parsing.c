@@ -38,8 +38,10 @@ int	check_error(t_token *token)
 		return (-1);
 	if (ft_piperedirect(token->token_type) == 1 && token->buffer.len > 2)
 		return (-1);
-	if (ft_piperedirect(token->token_type) == 1
+	if (token->next && (token->token_type) == 1
 		&& ft_piperedirect(token->next->token_type) == 1)
+		return (-1);
+	if ((token->token_type == REDIRECT_LEFT || token->token_type == REDIRECT_RIGHT) && token->next == NULL)
 		return (-1);
 	return (0);
 }
@@ -211,7 +213,7 @@ void	fill_command(t_token *token, t_command *current_command)
 
 void	malloc_cmd_next(t_command **current_cmd)
 {
-	(*current_cmd)->next = protected_malloc(1, sizeof(t_token));
+	(*current_cmd)->next = protected_malloc(1, sizeof(t_command));
 	(*current_cmd) = (*current_cmd)->next;
 	(*current_cmd)->next = NULL;
 }
@@ -222,12 +224,6 @@ void	fill_commands(t_vars *vars)
 	t_token		*current_token;
 	t_command	*current_cmd;
 
-	// current_token = vars->first;
-	// while (current_token)
-	// {
-	// 	printf("token:>>%s<<\n", current_token->buffer.str);
-	// 	current_token = current_token->next;
-	// }
 	current_token = vars->first;
 	i = 0;
 	while (current_token)

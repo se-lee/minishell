@@ -88,6 +88,24 @@ char	*find_pwd(t_vars *vars)
 	return (NULL);
 }
 
+void	cd_to_home(t_vars *vars, t_command *current_cmd, char *path_temp)
+{
+	char	*home;
+	char	*path;
+
+	home = search_home(vars->envp);
+	if (path_temp == NULL)
+		path = ft_strdup(home);
+	else if (ft_strncmp(path_temp, "~", 1) == 0)
+		path = ft_strjoin(home,
+				ft_substr(path_temp, 1, ft_strlen(path_temp) - 1));
+	free(home);
+	chdir(path);
+	free(path);
+	replace_pwds(vars, find_pwd(vars));
+}
+
+
 void	builtin_cd(t_vars *vars, t_command *current_cmd)
 {
 	char	*path;
@@ -96,17 +114,8 @@ void	builtin_cd(t_vars *vars, t_command *current_cmd)
 	char	*old_pwd;
 
 	path_temp = current_cmd->command[1];
-	if (ft_strncmp(path_temp, "~", 1) == 0)
-	{
-		home = search_home(vars->envp);
-		path = ft_strjoin(home,
-				ft_substr(path_temp, 1, ft_strlen(path_temp) - 1));
-		free(home);
-		chdir(path);
-		free(path);
-		old_pwd = find_pwd(vars);
-		replace_pwds(vars, old_pwd);
-	}
+	if (path_temp == NULL || ft_strncmp(path_temp, "~", 1) == 0)
+		cd_to_home(vars, current_cmd, path_temp);
 	else if (ft_strncmp(path_temp, "-", 2) == 0)
 	{
 		old_pwd = find_old_pwd(vars);

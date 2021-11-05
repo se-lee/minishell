@@ -11,7 +11,7 @@
 # include "../libft/libft.h"
 
 # define TRUE	1
-# define FALSE	0
+# define FALSE	0	
 
 # define IN		0
 # define OUT	1
@@ -21,6 +21,7 @@ typedef struct s_redirect	t_redirect;
 typedef struct s_token		t_token;
 typedef struct s_string		t_string;
 typedef struct s_envlist	t_envlist;
+typedef struct s_redirect	t_redirect;
 typedef struct s_command	t_command;
 typedef enum e_type			t_type;
 
@@ -66,6 +67,7 @@ struct s_command {
 	int			quotes; //ADD
 	int			redirect_right;
 	int			redirect_left;
+	int			fd[2]; // 11/3 ADD
 	t_command	*next;
 };
 
@@ -116,6 +118,22 @@ void		run_command_non_builtin(t_envlist *envlist, t_command *current_cmd);
 int			envlist_count(t_envlist *envp);
 char		**envlist_to_char_array(t_envlist *envp);
 void		execute_pipe_commands(t_vars *vars);
+void		launch_command(t_vars *vars, t_command *current_cmd, int input, int output);
+
+/* pipe */
+void		fd_dup_and_close(int input, int output);
+
+/* redirection */
+int			redirect_input(char *file);
+int			redirect_output_overwrite(char *file);
+int			redirect_output_append(char *file);
+void		redirection(t_vars *vars);
+// void		heredoc(t_redirect *current_in);
+void		put_to_heredoc(t_redirect *current_in);
+// void		put_to_heredoc(t_vars *vars);
+int			redirect_heredoc(t_redirect *current_in);
+int			count_heredoc(t_vars *vars);
+void		multiple_heredoc(t_vars *vars);
 
 /* command utils */
 char		*get_command_path(t_envlist *envp, char *command);
@@ -124,6 +142,7 @@ int			command_is_builtin(char **command);
 char		*get_env_value(t_envlist *envp, char *env_name, int return_value);
 char		**envlist_to_char_array(t_envlist *envp);
 void		print_commands(t_command *cmd);
+
 /* envlist utils */
 void		envlist_create(t_vars *vars, char **envp);
 void		envlist_free(t_envlist *to_free);

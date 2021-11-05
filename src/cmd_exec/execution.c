@@ -1,5 +1,18 @@
 #include "minishell.h"
 
+/* remove this function later */
+void	print_commands(t_command *cmd)
+{
+	int	i;
+
+	i = 0;
+	while (cmd->command[i])
+	{
+		printf(">>%s<<\n", cmd->command[i]);
+		i++;
+	}
+}
+
 int		envlist_count(t_envlist *envp)
 {
 	int		count;
@@ -48,20 +61,22 @@ void	run_command_non_builtin(t_envlist *envlist, t_command *current_cmd)
 		if (execve(path, current_cmd->command, env) < 0)
 		{
 			perror("");
+			free(path);
 			exit(127);
 		}
 	}
 	else
 	{
-		perror("");
+		printf("minishell: %s: command not found\n", current_cmd->command[0]);
+		free(path);
 		exit(127);
 	}
 }
 
-void	launch_commands(t_vars *vars, t_command *current_cmd, int in, int out)
+/* new version */
+void	launch_commands(t_vars *vars, t_command *current_cmd, int input, int output, int to_close)
 {
 	pid_t	child;
-
 	child = fork();
 	if (child < 0)
 		perror("fork");
@@ -69,102 +84,102 @@ void	launch_commands(t_vars *vars, t_command *current_cmd, int in, int out)
 	{
 		signal(SIGINT, sigchild);
 		signal(SIGQUIT, sigchild);
-		if (in != 0)
-		{
-			if (dup2(in, 0) < 0)
-				perror("dup2");
-			close(in);
-		}
-		if (out != 1)
-		{
-			if (dup2(out, 1) < 0)
-				perror("dup2");
-			close(out);
-		}
+		redirection(vars);
+		fd_dup_and_close(input, output);
+		if (to_close) // to close fd[0] every time
+			close(to_close);
 		if (command_is_builtin(current_cmd->command) == TRUE)
 		{
 			run_command_builtin(vars, current_cmd);
 			exit(0);
 		}
 		else
+		{
 			run_command_non_builtin(vars->envp, current_cmd);
+			exit(0);
+		}
 	}
 	else
 	{
 		signal(SIGINT, sigmain);
 		signal(SIGQUIT, sigmain);
-		if (in != 0)
-			close(in);
-		if (out != 1)
-			close(out);
+		if (input != 0)
+			close(input);
+		if (output != 1)
+			close(output);
 	}
 }
 
-void	print_commands(t_command *cmd)
+void	run_command_no_pipe(t_vars *vars, t_command *current_cmd)
 {
-	int	i;
+	pid_t	child;
 
-	i = 0;
-	while (cmd->command[i])
+	if (command_is_builtin(current_cmd->command) == TRUE)
 	{
-		printf(">>%s<<\n", cmd->command[i]);
-		i++;
+		if (vars->in || vars->out)
+		{
+			child = fork();
+			if (child == 0)
+			{
+				redirection(vars);
+				run_command_builtin(vars, current_cmd);
+				exit(0);
+			}
+		}
+		else
+			run_command_builtin(vars, current_cmd);
 	}
-}
-
-void	execute_pipe_commands(t_vars *vars)
-{
-	int			fd[2];
-	int			in;
-	int			out;
-	int			i;
-	int			status;
-	pid_t		child;
-	t_command	*current_cmd;
-
-	out = 1;
-	in = 0;
-	current_cmd = vars->cmd;
-	i = 0;
-	tcsetattr(STDIN_FILENO, TCSANOW, &vars->saved_termios);
-	if (command_is_builtin(current_cmd->command) == TRUE && current_cmd->pipe == 0)
-		run_command_builtin(vars, current_cmd);
-	else if (current_cmd->pipe == 0)
+	else
 	{
 		child = fork();
 		if (child == 0)
 		{
-			signal(SIGINT, sigchild);
-			signal(SIGQUIT, sigchild);
+			redirection(vars);
 			run_command_non_builtin(vars->envp, current_cmd);
 		}
-		signal(SIGINT, sigmain);
-		signal(SIGQUIT, sigmain);
-		waitpid(child, &status, 0);
 	}
+	waitpid(child, NULL, 0);
+}
+
+void	execute_pipe_commands(t_vars *vars)
+{
+	int			input;
+	int			output;
+	int			i;
+	pid_t		child;
+	t_command	*current_cmd;
+	int			to_close;
+
+	output = 1;
+	input = 0;
+	current_cmd = vars->cmd;
+	i = 0;
+	to_close = 0;
+	tcsetattr(STDIN_FILENO, TCSANOW, &vars->saved_termios);
+	if (count_heredoc(vars) > 0)
+		multiple_heredoc(vars);
+	if (!current_cmd->pipe)
+		run_command_no_pipe(vars, current_cmd);
  	else
 	{
 		while (i < count_command(vars->cmd) - 1)
 		{
-			print_commands(current_cmd);
-			if (pipe(fd) < 0)
+			if (pipe(current_cmd->fd) < 0)
 				perror("pipe");
-			launch_commands(vars, current_cmd, in, fd[1]);
-			in = fd[0];
+			if (!to_close)
+				to_close = current_cmd->fd[0];
+			launch_commands(vars, current_cmd, input, current_cmd->fd[1], to_close);
+			to_close = 0;
+			input = current_cmd->fd[0];
 			current_cmd = current_cmd->next;
 			i++;
 		}
-		launch_commands(vars, current_cmd, in, out); //last command
+			launch_commands(vars, current_cmd, input, output, to_close); //last command
 		i = 0;
 		while (i < count_command(vars->cmd))
 		{
-			wait(&status);
-			if (status == -1)
-			{
-				perror("wait");
-				return ;
-			}
+			waitpid(child, NULL, 0);
 			i++;
 		}
 	}
-}
+} 
