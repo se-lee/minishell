@@ -97,8 +97,6 @@ void	tokenization(t_vars *vars, char *str)
 	i = 0;
 	while (str[i])
 	{
-		// while (str[i] && str[i] == ' ')
-		// 	i++;
 		if (str[i] && i == 0)
 		{
 			vars->first = protected_malloc(1, sizeof(t_token));

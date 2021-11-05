@@ -92,7 +92,7 @@ t_token	*token_hell(t_vars *vars, t_token *token)
 	return (temp_next);
 }
 
-t_token *replace_env(t_vars *vars, t_token *token)
+t_token	*replace_env(t_vars *vars, t_token *token)
 {
 	int		i;
 	char	*var;
@@ -112,7 +112,6 @@ t_token *replace_env(t_vars *vars, t_token *token)
 	}
 	if (token->buffer.str && find_space(token->buffer.str) != 0)
 	{
-		//	printf("%s\n", token->buffer.str);
 		if (token->token_type == WORD)
 		{
 			token = token_hell(vars, token);

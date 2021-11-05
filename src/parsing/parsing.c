@@ -136,7 +136,7 @@ char	**array_realloc(char **array, char *new_line)
 		i++;
 	}
 	free(array);
-	return(new_array);
+	return (new_array);
 }
 
 void	initialize_command(t_command *command)
@@ -315,7 +315,7 @@ t_token	*remove_token(t_vars *vars, t_token *token)
 	t_token	*current_token;
 
 	if (vars->first == token)
-	{ 
+	{
 		vars->first = token->next;
 		free(token->buffer.str);
 		free(token);
@@ -341,7 +341,7 @@ void	parsing(t_vars *vars, char *str)
 	current_token = vars->first;
 	while (current_token)
 	{
-		if (check_error(current_token) == 0)// && check_error2(vars->first) == 0)
+		if (check_error(current_token) == 0) // && check_error2(vars->first) == 0)
 		{
 			if (current_token->token_type == WORD
 				|| current_token->token_type == QUOTE)

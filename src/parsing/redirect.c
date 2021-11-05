@@ -1,6 +1,7 @@
 #include "minishell.h"
 
-void	prepare_inout(t_vars *vars, t_redirect **current_redirect, int cmd_num, int inout)
+void	prepare_inout(t_vars *vars, t_redirect **current_redirect,
+		int cmd_num, int inout)
 {
 	if (inout == IN && vars->in == NULL)
 	{
@@ -22,7 +23,8 @@ void	prepare_inout(t_vars *vars, t_redirect **current_redirect, int cmd_num, int
 	}
 }
 
-t_token	*fill_inout(t_vars *vars, t_token *current_token, t_redirect *current_inout, int cmd_num)
+t_token	*fill_inout(t_vars *vars, t_token *current_token,
+		t_redirect *current_inout, int cmd_num)
 {
 	current_inout->arrow_num = current_token->buffer.len;
 	current_inout->cmd_num = cmd_num;
@@ -50,7 +52,8 @@ void	fill_redirect(t_vars *vars)
 		if (current_token->token_type == REDIRECT_LEFT)
 		{
 			prepare_inout(vars, &current_in, cmd_num, IN);
-			current_token = fill_inout(vars, current_token, current_in, cmd_num);
+			current_token = fill_inout(vars, current_token,
+					current_in, cmd_num);
 		}
 		else if (current_token->token_type == REDIRECT_RIGHT)
 		{
