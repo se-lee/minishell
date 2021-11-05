@@ -2,7 +2,9 @@
 
 void	test_function_print_envarr(char **env, t_envlist *envlist)
 {
-	int	i = 0;
+	int	i;
+
+	i = 0;
 	printf("\n--------------[CHAR ** ENV]----------------\n");
 	while (env[i])
 	{

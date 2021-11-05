@@ -2,7 +2,7 @@
 
 char	*search_current_dir(char *command)
 {
-	char 	path[MAXPATHLEN];
+	char	path[MAXPATHLEN];
 	char	*temp;
 	char	*temp2;
 
@@ -12,7 +12,7 @@ char	*search_current_dir(char *command)
 		temp2 = ft_strjoin(temp, command);
 		free(temp);
 		if (access(temp2, X_OK) == 0)
-			return(temp2);
+			return (temp2);
 		free(temp2);
 	}
 	return (NULL);
@@ -45,7 +45,7 @@ char	*get_command_path(t_envlist *envp, char *command)
 		{
 			path = ft_strdup(path_sep[i]);
 			free_array(path_sep);
-			return(path);
+			return (path);
 		}
 		i++;
 	}
@@ -53,7 +53,7 @@ char	*get_command_path(t_envlist *envp, char *command)
 	return (path);
 }
 
-int		count_command(t_command *cmd)
+int	ount_command(t_command *cmd)
 {
 	int			count;
 	t_command	*current_cmd;
@@ -68,7 +68,7 @@ int		count_command(t_command *cmd)
 	return (count);
 }
 
-int		command_is_builtin(char **command)
+int	command_is_builtin(char **command)
 {
 	if ((ft_strcmp(command[0], "cd") == 0)
 		|| (ft_strcmp(command[0], "echo") == 0)
@@ -84,8 +84,8 @@ int		command_is_builtin(char **command)
 
 char	*get_env_value(t_envlist *envp, char *env_name, int return_value)
 {
-	t_envlist *current_env;
-	char	*value;
+	t_envlist	*current_env;
+	char		*value;
 
 	current_env = envp;
 	value = NULL;
@@ -93,19 +93,19 @@ char	*get_env_value(t_envlist *envp, char *env_name, int return_value)
 	{
 		if (ft_strcmp(current_env->name, env_name) == 0 && current_env->value)
 			value = ft_strdup(current_env->value);
-		current_env = current_env->next;	
+		current_env = current_env->next;
 	}
 	if (ft_strcmp(env_name, "?") == 0)
 		value = ft_itoa(return_value);
 	return (value);
 }
 
-char **envlist_to_char_array(t_envlist *envp)
+char	**envlist_to_char_array(t_envlist *envp)
 {
-	char	**env_arr;
-	char	*temp;
+	char		**env_arr;
+	char		*temp;
 	t_envlist	*current_env;
-	int		i;
+	int			i;
 
 	i = 0;
 	current_env = envp;

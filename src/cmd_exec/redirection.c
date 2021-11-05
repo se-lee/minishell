@@ -13,7 +13,7 @@ int	redirect_input(char *file)
 	return (0);
 }
 
-int		redirect_out(t_redirect *current_out)
+int	redirect_out(t_redirect *current_out)
 {
 	int		fd;
 	char	*file;
@@ -30,7 +30,6 @@ int		redirect_out(t_redirect *current_out)
 	close (fd);
 	return (0);
 }
-
 
 void	redirection(t_vars *vars)
 {

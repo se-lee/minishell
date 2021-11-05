@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-/* remove this function later */
+/* remove this function later? */
 void	print_commands(t_command *cmd)
 {
 	int	i;
@@ -13,9 +13,9 @@ void	print_commands(t_command *cmd)
 	}
 }
 
-int		envlist_count(t_envlist *envp)
+int	envlist_count(t_envlist *envp)
 {
-	int		count;
+	int			count;
 	t_envlist	*current_env;
 
 	current_env = envp;
@@ -53,7 +53,7 @@ void	run_command_non_builtin(t_envlist *envlist, t_command *current_cmd)
 {
 	char	*path;
 	char	**env;
-	
+
 	env = envlist_to_char_array(envlist);
 	path = get_command_path(envlist, current_cmd->command[0]);
 	if (path != NULL)
@@ -74,7 +74,8 @@ void	run_command_non_builtin(t_envlist *envlist, t_command *current_cmd)
 }
 
 /* new version */
-void	launch_commands(t_vars *vars, t_command *current_cmd, int input, int output, int to_close)
+void	launch_commands(t_vars *vars, t_command *current_cmd,
+		int input, int output, int to_close)
 {
 	pid_t	child;
 	child = fork();
@@ -86,7 +87,7 @@ void	launch_commands(t_vars *vars, t_command *current_cmd, int input, int output
 		signal(SIGQUIT, sigchild);
 		redirection(vars);
 		fd_dup_and_close(input, output);
-		if (to_close) // to close fd[0] every time
+		if (to_close)
 			close(to_close);
 		if (command_is_builtin(current_cmd->command) == TRUE)
 		{
@@ -160,7 +161,7 @@ void	execute_pipe_commands(t_vars *vars)
 		multiple_heredoc(vars);
 	if (!current_cmd->pipe)
 		run_command_no_pipe(vars, current_cmd);
- 	else
+	else
 	{
 		while (i < count_command(vars->cmd) - 1)
 		{
@@ -174,7 +175,7 @@ void	execute_pipe_commands(t_vars *vars)
 			current_cmd = current_cmd->next;
 			i++;
 		}
-			launch_commands(vars, current_cmd, input, output, to_close); //last command
+		launch_commands(vars, current_cmd, input, output, to_close);
 		i = 0;
 		while (i < count_command(vars->cmd))
 		{
@@ -182,4 +183,4 @@ void	execute_pipe_commands(t_vars *vars)
 			i++;
 		}
 	}
-} 
+}

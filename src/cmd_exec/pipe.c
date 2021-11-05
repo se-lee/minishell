@@ -15,4 +15,3 @@ void	fd_dup_and_close(int input, int output)
 		close(output);
 	}
 }
-

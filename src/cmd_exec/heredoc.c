@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int		count_heredoc(t_vars *vars)
+int	count_heredoc(t_vars *vars)
 {
 	t_redirect	*current_in;
 	int			heredoc_count;
@@ -19,19 +19,20 @@ int		count_heredoc(t_vars *vars)
 char	*get_delimiter(t_redirect *current_in)
 {
 	char	*delimiter;
+
 	if (current_in->filename == NULL)
 	{
 		perror("");
 		return (NULL);
 	}
-	else 
+	else
 	{
 		delimiter = ft_strdup(current_in->filename);
 		return (delimiter);
 	}
 }
 
-void		put_to_heredoc(t_redirect *current_in)
+void	put_to_heredoc(t_redirect *current_in)
 {
 	int		fd;
 	char	*delimiter;
@@ -71,7 +72,7 @@ void	multiple_heredoc(t_vars *vars)
 	}
 }
 
-int		redirect_heredoc(t_redirect *current_in)
+int	redirect_heredoc(t_redirect *current_in)
 {
 	int		fd;
 
