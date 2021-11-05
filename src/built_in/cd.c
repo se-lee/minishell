@@ -32,10 +32,18 @@ void	replace_pwd(t_vars *vars, t_envlist *current_envp,
 	else
 	{
 		current_envp = vars->envp;
-		while (current_envp->next)
+		while (current_envp && current_envp->next)
 			current_envp = current_envp->next;
-		current_envp->next = protected_malloc(1, sizeof(t_envlist));
-		current_envp = current_envp->next;
+		if (vars->envp == NULL)
+		{
+			vars->envp = protected_malloc(1, sizeof(t_envlist));
+			current_envp = vars->envp;
+		}
+		else
+		{
+			current_envp->next = protected_malloc(1, sizeof(t_envlist));
+			current_envp = current_envp->next;
+		}
 		current_envp->next = NULL;
 		current_envp->name = ft_strdup(name);
 		if (pwd != NULL)
