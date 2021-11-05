@@ -16,13 +16,14 @@ int	strisnum(char *str)
 	return (1);
 }
 
-void    builtin_exit(t_vars *vars, t_command *current_cmd)
+void	builtin_exit(t_vars *vars, t_command *current_cmd)
 {
 	if (current_cmd->command[1] == NULL)
-	    exit(vars->return_value);
+		exit(vars->return_value);
 	else if (current_cmd->command[1])
 	{
-		if (strisnum(current_cmd->command[1]) == 1 && current_cmd->command[2] == NULL)
+		if (strisnum(current_cmd->command[1]) == 1
+			&& current_cmd->command[2] == NULL)
 		{
 			vars->return_value = atoi(current_cmd->command[1]);
 			if (vars->return_value > 255 || vars->return_value < 0)
@@ -31,7 +32,8 @@ void    builtin_exit(t_vars *vars, t_command *current_cmd)
 				printf("exit\n");
 			exit(vars->return_value);
 		}
-		else if (strisnum(current_cmd->command[1]) == 1 && current_cmd->command[2] != NULL)
+		else if (strisnum(current_cmd->command[1]) == 1
+			&& current_cmd->command[2] != NULL)
 			printf("exit: too many arguments\n");
 		else
 		{
