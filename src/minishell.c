@@ -106,6 +106,24 @@ void	free_inout(t_vars *vars)
 	vars->out = NULL;
 }
 
+char	*vars_initializer(t_vars *vars)
+{
+	char	*str;
+
+	str = "";
+	vars->in = NULL;
+	vars->out = NULL;
+	vars->return_value = 0;
+	return (str);
+}
+
+void	loop_free(t_vars *vars)
+{
+	free_tokens(vars);
+	free_commands(vars);
+	free_inout(vars);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_vars			vars;
@@ -113,12 +131,9 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
+	str = vars_initializer(&vars);
 	envlist_create(&vars, envp);
 	tcgetattr(0, &vars.saved_termios);
-	str = "";
-	vars.in = NULL;
-	vars.out = NULL;
-	vars.return_value = 0;
 	while (str != NULL)
 	{
 		vars.error = 0;
@@ -129,9 +144,7 @@ int	main(int argc, char **argv, char **envp)
 			if (vars.error == 0 && vars.cmd != NULL)
 				execute_pipe_commands(&vars);
 			free(str);
-			free_tokens(&vars);
-			free_commands(&vars);
-			free_inout(&vars);
+			loop_free(&vars);
 		}
 		set_termios();
 		signal(SIGINT, control_c);
