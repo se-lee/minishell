@@ -60,7 +60,8 @@ t_token	*token_hell(t_vars *vars, t_token *token)
 	j = 0;
 	k = 0;
 	temp_next = token->next;
-	while (token->buffer.str[i] && token->buffer.str[i] == ' ' && token->token_type == WORD)
+	while (token->buffer.str[i] && token->buffer.str[i] == ' '
+		&& token->token_type == WORD)
 		i++;
 	while (token->buffer.str[i])
 	{
@@ -75,14 +76,16 @@ t_token	*token_hell(t_vars *vars, t_token *token)
 		current_token->token_type = token->token_type;
 		current_token->buffer.len = ft_strlen(current_token->buffer.str);
 		j = i;
-		while (token->buffer.str[i] && token->buffer.str[i] == ' ' && token->token_type == WORD)
+		while (token->buffer.str[i] && token->buffer.str[i] == ' '
+			&& token->token_type == WORD)
 			i++;
 		if (j != i && token->buffer.str[i])
 		{
 			malloc_token_next(&current_token);
 			current_token->token_type = SPACE_SIGN;
 			current_token->buffer.len = i - j;
-			current_token->buffer.str = ft_strndup(&token->buffer.str[j], i - j);
+			current_token->buffer.str = ft_strndup(&token->buffer.str[j],
+					i - j);
 		}
 		j = i;
 	}

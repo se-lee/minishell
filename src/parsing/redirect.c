@@ -35,15 +35,13 @@ t_token	*fill_inout(t_vars *vars, t_token *current_token,
 	return (current_token);
 }
 
-void	fill_redirect(t_vars *vars)
+void	fill_redirect(t_vars *vars, int cmd_num)
 {
 	t_token		*current_token;
 	t_redirect	*current_in;
 	t_redirect	*current_out;
-	int			cmd_num;
 
 	current_token = vars->first;
-	cmd_num = 0;
 	while (current_token)
 	{
 		if (current_token->token_type == PIPE_SIGN)
@@ -57,7 +55,8 @@ void	fill_redirect(t_vars *vars)
 		else if (current_token->token_type == REDIRECT_RIGHT)
 		{
 			prepare_inout(vars, &current_out, OUT);
-			current_token = fill_inout(vars, current_token, current_out, cmd_num);
+			current_token = fill_inout(vars, current_token,
+					current_out, cmd_num);
 		}
 		else
 			current_token = current_token->next;

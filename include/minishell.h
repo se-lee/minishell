@@ -94,8 +94,12 @@ t_token		*replace_env(t_vars *vars, t_token *token);
 void		tokenization(t_vars *vars, char *str);
 void		parsing(t_vars *vars, char *str);
 void		ft_comandadd_back(t_token **alst, t_token *new);
+char		**array_realloc(char **array, char *new_line);
 char		*remove_quotes(char *original, int token_type);
-void		fill_redirect(t_vars *vars);
+void		initialize_command(t_command *command);
+void		add_piperedirect(t_token *current_token, t_command *current_command);
+void		fill_redirect(t_vars *vars, int cmd_num);
+void		fill_commands(t_vars *vars, t_token *token, int i);
 t_token		*remove_token(t_vars *vars, t_token *token);
 
 /* built-in utils */
