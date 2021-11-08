@@ -111,6 +111,5 @@ void	tokenization(t_vars *vars, char *str)
 		}
 		if (str[i])
 			i += token_identification(current_token, &str[i]);
-		printf("token:%p\n", current_token->buffer.str);
 	}
 }
