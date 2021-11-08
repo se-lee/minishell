@@ -120,6 +120,13 @@ char		**envlist_to_char_array(t_envlist *envp);
 void		execute_pipe_commands(t_vars *vars);
 void		launch_command(t_vars *vars, t_command *current_cmd, int input, int output);
 
+/* loop_free */
+void		free_token(t_token *token);
+void		free_tokens(t_vars *vars);
+void		free_commands(t_vars *vars);
+void		free_inout(t_vars *vars);
+void		loop_free(t_vars *vars);
+
 /* pipe */
 void		fd_dup_and_close(int input, int output);
 
@@ -159,6 +166,8 @@ void		free_array(char **array);
 /* Signals*/
 void	sigchild(int sig);
 void	sigmain(int sig);
+void	set_termios(void);
+void	control_c(int sig);
 
 /* test functions to be removed later */
 void		test_function_print_envarr(char **env, t_envlist *envlist);

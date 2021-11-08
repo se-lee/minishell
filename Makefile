@@ -1,6 +1,8 @@
 NAME = minishell
 
 SRCS =	minishell.c						\
+		free_utils.c					\
+		signals.c						\
 		parsing/parsing.c				\
 		parsing/variables.c				\
 		parsing/parsing_utils.c			\
