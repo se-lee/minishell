@@ -24,24 +24,13 @@ char	*get_command_path(t_envlist *envp, char *command)
 	int		i;
 
 	path = get_env_value(envp, "PATH", 0);
-	if (path == NULL)
-	{
-		path = ft_strdup(command);
-		return (path);
-	}
+	if (path == NULL || ft_strncmp("/", command, 1) == 0)
+		return (command);
+	if (ft_strncmp("./", command, 2) == 0)
+		return (search_current_dir(&command[2]));
 	path_sep = ft_split(path, ':');
 	path = NULL;
-	if (ft_strncmp("./", command, 2) == 0)
-	{
-		path = search_current_dir(&command[2]);
-		return (path);
-	}
-	else if (ft_strncmp("/", command, 1) == 0)
-	{
-		path = ft_strdup(command);
-		return (path);
-	}
-	else if (ft_strchr(command, '/') != 0)
+	if (ft_strchr(command, '/') != 0)
 		path = ft_strdup(command);
 	i = 0;
 	while (path_sep[i])
@@ -49,11 +38,7 @@ char	*get_command_path(t_envlist *envp, char *command)
 		ft_append(&path_sep[i], "/");
 		ft_append(&path_sep[i], command);
 		if (access(path_sep[i], X_OK) == 0)
-		{
-			path = ft_strdup(path_sep[i]);
-			free_array(path_sep);
-			return (path);
-		}
+			return (path_sep[i]);
 		i++;
 	}
 	free_array(path_sep);
