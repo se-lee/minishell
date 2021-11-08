@@ -26,8 +26,8 @@ char	*get_command_path(t_envlist *envp, char *command)
 	path = get_env_value(envp, "PATH", 0);
 	if (path == NULL)
 	{
-		perror("path invalid");
-		free(path);
+		path = ft_strdup(command);
+		return (path);
 	}
 	path_sep = ft_split(path, ':');
 	path = NULL;

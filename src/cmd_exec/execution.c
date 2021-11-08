@@ -52,7 +52,7 @@ void	run_command_non_builtin(t_envlist *envlist, t_command *current_cmd)
 	}
 	else
 	{
-		printf("minishell: %s: command not found\n", current_cmd->command[0]);
+		printf("%s: command not found\n", current_cmd->command[0]);
 		free(path);
 		exit(127);
 	}
@@ -122,11 +122,6 @@ void	run_command_no_pipe(t_vars *vars, t_command *current_cmd)
 			child = fork();
 			if (child == 0)
 				child_process_no_pipe(vars, current_cmd, TRUE);
-			// {
-			// 	redirection(vars);
-			// 	run_command_builtin(vars, current_cmd);
-			// 	exit(0);
-			// }
 		}
 		else
 			run_command_builtin(vars, current_cmd);
@@ -136,10 +131,6 @@ void	run_command_no_pipe(t_vars *vars, t_command *current_cmd)
 		child = fork();
 		if (child == 0)
 			child_process_no_pipe(vars, current_cmd, FALSE);
-		// {
-		// 	redirection(vars);
-		// 	run_command_non_builtin(vars->envp, current_cmd);
-		// }
 	}
 	waitpid(child, NULL, 0);
 }
