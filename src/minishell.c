@@ -15,14 +15,12 @@ void	free_tokens(t_vars *vars)
 	t_token	*next;
 
 	current_token = vars->first;
-	while (current_token->next)
+	while (current_token)
 	{
 		next = current_token->next;
 		free_token(current_token);
 		current_token = next;
 	}
-	if (current_token)
-		free(current_token);
 }
 
 void	free_commands(t_vars *vars)
