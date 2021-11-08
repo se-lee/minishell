@@ -13,21 +13,6 @@ void	print_commands(t_command *cmd)
 	}
 }
 
-int	envlist_count(t_envlist *envp)
-{
-	int			count;
-	t_envlist	*current_env;
-
-	current_env = envp;
-	count = 0;
-	while (current_env)
-	{
-		count++;
-		current_env = current_env->next;
-	}
-	return (count);
-}
-
 void	run_command_builtin(t_vars *vars, t_command *current_cmd)
 {
 	char	*command;
@@ -73,7 +58,6 @@ void	run_command_non_builtin(t_envlist *envlist, t_command *current_cmd)
 	}
 }
 
-/* new version */
 void	launch_commands(t_vars *vars, t_command *current_cmd,
 		int input, int output, int to_close)
 {
@@ -111,6 +95,21 @@ void	launch_commands(t_vars *vars, t_command *current_cmd,
 	}
 }
 
+void	child_process_no_pipe(t_vars *vars, t_command *current_cmd, int builtin)
+{
+	if (builtin == TRUE)
+	{
+		redirection(vars);
+		run_command_builtin(vars, current_cmd);
+		exit(0);
+	}
+	else
+	{
+		redirection(vars);
+		run_command_non_builtin(vars->envp, current_cmd);		
+	}
+}
+
 void	run_command_no_pipe(t_vars *vars, t_command *current_cmd)
 {
 	pid_t	child;
@@ -122,11 +121,12 @@ void	run_command_no_pipe(t_vars *vars, t_command *current_cmd)
 		{
 			child = fork();
 			if (child == 0)
-			{
-				redirection(vars);
-				run_command_builtin(vars, current_cmd);
-				exit(0);
-			}
+				child_process_no_pipe(vars, current_cmd, TRUE);
+			// {
+			// 	redirection(vars);
+			// 	run_command_builtin(vars, current_cmd);
+			// 	exit(0);
+			// }
 		}
 		else
 			run_command_builtin(vars, current_cmd);
@@ -135,10 +135,11 @@ void	run_command_no_pipe(t_vars *vars, t_command *current_cmd)
 	{
 		child = fork();
 		if (child == 0)
-		{
-			redirection(vars);
-			run_command_non_builtin(vars->envp, current_cmd);
-		}
+			child_process_no_pipe(vars, current_cmd, FALSE);
+		// {
+		// 	redirection(vars);
+		// 	run_command_non_builtin(vars->envp, current_cmd);
+		// }
 	}
 	waitpid(child, NULL, 0);
 }

@@ -17,13 +17,14 @@ SRCS =	minishell.c						\
 		built_in/export_utils.c			\
 		built_in/pwd.c					\
 		built_in/unset.c				\
-		cmd_exec/execution.c			\
-		cmd_exec/test_functions.c		\
 		cmd_exec/cmd_utils.c			\
-		cmd_exec/redirection.c			\
+		cmd_exec/envlist_utils.c		\
+		cmd_exec/execution_utils.c		\
+		cmd_exec/execution.c			\
 		cmd_exec/heredoc.c				\
 		cmd_exec/pipe.c					\
-		cmd_exec/execution_utils.c		\
+		cmd_exec/redirection.c			\
+		cmd_exec/test_functions.c		\
 
 GCCF = gcc -g -Wall -Wextra -Werror #-fsanitize=address
 

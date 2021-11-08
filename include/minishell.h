@@ -112,6 +112,11 @@ void		builtin_export(t_vars *vars, t_command *current_cmd);
 void		builtin_unset(t_vars *vars, t_command *current_cmd);
 void		builtin_pwd(void);
 
+/* envlist utils */
+char	*get_env_value(t_envlist *envp, char *env_name, int return_value);
+char	**envlist_to_char_array(t_envlist *envp);
+int		envlist_count(t_envlist *envp);
+
 /* execution */
 void		run_command_builtin(t_vars *vars, t_command *current_cmd);
 void		run_command_non_builtin(t_envlist *envlist, t_command *current_cmd);
