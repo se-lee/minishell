@@ -48,47 +48,54 @@ t_token	*token_malloc_first(t_vars *vars, t_token *token)
 	return (current_token);
 }
 
-t_token	*token_hell(t_vars *vars, t_token *token)
+void	hell_utils(t_vars *vars, t_token *token, t_token **current_token, int i)
 {
-	t_token	*current_token;
-	t_token	*temp_next;
-	int		i;
-	int		j;
-	int		k;
+	int k;
+	int	j;
 
-	i = 0;
-	j = 0;
 	k = 0;
-	temp_next = token->next;
-	while (token->buffer.str[i] && token->buffer.str[i] == ' '
-		&& token->token_type == WORD)
-		i++;
+	j = 0;
 	while (token->buffer.str[i])
 	{
-		if (k == 0)
-			current_token = token_malloc_first(vars, token);
+		if (k++ == 0)
+			(*current_token) = token_malloc_first(vars, token);
 		else
-			malloc_token_next(&current_token);
-		k++;
+			malloc_token_next(&(*current_token));
 		while (token->buffer.str[i] && token->buffer.str[i] != ' ')
 			i++;
-		current_token->buffer.str = ft_strndup(&token->buffer.str[j], i - j);
-		current_token->token_type = token->token_type;
-		current_token->buffer.len = ft_strlen(current_token->buffer.str);
+		(*current_token)->buffer.str = ft_strndup(&token->buffer.str[j], i - j);
+		(*current_token)->token_type = token->token_type;
+		(*current_token)->buffer.len = ft_strlen((*current_token)->buffer.str);
 		j = i;
 		while (token->buffer.str[i] && token->buffer.str[i] == ' '
 			&& token->token_type == WORD)
 			i++;
 		if (j != i && token->buffer.str[i])
 		{
-			malloc_token_next(&current_token);
-			current_token->token_type = SPACE_SIGN;
-			current_token->buffer.len = i - j;
-			current_token->buffer.str = ft_strndup(&token->buffer.str[j],
+			malloc_token_next(&(*current_token));
+			(*current_token)->token_type = SPACE_SIGN;
+			(*current_token)->buffer.len = i - j;
+			(*current_token)->buffer.str = ft_strndup(&token->buffer.str[j],
 					i - j);
 		}
 		j = i;
 	}
+}
+
+t_token	*token_hell(t_vars *vars, t_token *token)
+{
+	t_token	*current_token;
+	t_token	*temp_next;
+	int		i;
+	int		j;
+
+	i = 0;
+	j = 0;
+	temp_next = token->next;
+	while (token->buffer.str[i] && token->buffer.str[i] == ' '
+		&& token->token_type == WORD)
+		i++;
+	hell_utils(vars, token, &current_token, i);
 	current_token->next = temp_next;
 	free(token->buffer.str);
 	free(token);
