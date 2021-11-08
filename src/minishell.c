@@ -15,14 +15,12 @@ void	free_tokens(t_vars *vars)
 	t_token	*next;
 
 	current_token = vars->first;
-	while (current_token->next)
+	while (current_token)
 	{
 		next = current_token->next;
 		free_token(current_token);
 		current_token = next;
 	}
-	if (current_token)
-		free(current_token);
 }
 
 void	free_commands(t_vars *vars)
@@ -83,6 +81,31 @@ void	sigchild(int sig)
 		exit(131);
 }
 
+void	free_inout(t_vars *vars)
+{
+	t_redirect	*current_inout;
+	t_redirect	*temp_next;
+
+	current_inout = vars->in;
+	while (current_inout)
+	{
+		temp_next = current_inout->next;
+		free(current_inout->filename);
+		free(current_inout);
+		current_inout = temp_next;
+	}
+	current_inout = vars->out;
+	while (current_inout)
+	{
+		temp_next = current_inout->next;
+		free(current_inout->filename);
+		free(current_inout);
+		current_inout = temp_next;
+	}
+	vars->in = NULL;
+	vars->out = NULL;
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_vars			vars;
@@ -108,6 +131,7 @@ int	main(int argc, char **argv, char **envp)
 			free(str);
 			free_tokens(&vars);
 			free_commands(&vars);
+			free_inout(&vars);
 		}
 		set_termios();
 		signal(SIGINT, control_c);

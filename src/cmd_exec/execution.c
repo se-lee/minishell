@@ -60,7 +60,7 @@ void	run_command_non_builtin(t_envlist *envlist, t_command *current_cmd)
 	{
 		if (execve(path, current_cmd->command, env) < 0)
 		{
-			perror("");
+			perror(current_cmd->command[0]);
 			free(path);
 			exit(127);
 		}
