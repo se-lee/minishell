@@ -11,8 +11,7 @@ char	*search_current_dir(char *command)
 		temp = ft_strjoin_char(path, '/');
 		temp2 = ft_strjoin(temp, command);
 		free(temp);
-		if (access(temp2, X_OK) == 0)
-			return (temp2);
+		return (temp2);
 		free(temp2);
 	}
 	return (NULL);
@@ -32,10 +31,18 @@ char	*get_command_path(t_envlist *envp, char *command)
 	}
 	path_sep = ft_split(path, ':');
 	path = NULL;
-	if (ft_strchr(command, '/') != 0)
-		path = ft_strdup(command);
-	else if (ft_strncmp("./", command, 2) == 0)
+	if (ft_strncmp("./", command, 2) == 0)
+	{
 		path = search_current_dir(&command[2]);
+		return (path);
+	}
+	else if (ft_strncmp("/", command, 1) == 0)
+	{
+		path = ft_strdup(command);
+		return (path);
+	}
+	else if (ft_strchr(command, '/') != 0)
+		path = ft_strdup(command);
 	i = 0;
 	while (path_sep[i])
 	{

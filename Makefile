@@ -24,7 +24,7 @@ SRCS =	minishell.c						\
 		cmd_exec/heredoc.c				\
 		cmd_exec/pipe.c					\
 
-GCCF = gcc -g -fsanitize=address -Wall -Wextra -Werror
+GCCF = gcc -g -fsanitize=address #-Wall -Wextra -Werror
 
 READLINE = -lreadline -L/usr/local/lib -I/usr/local/include
 
@@ -35,13 +35,13 @@ OBJS = $(addprefix bin/, ${SRCS:.c=.o})
 .PHONY :	all clean fclean re libft_
 
 bin/%.o : 	src/%.c	include/minishell.h
-			mkdir -p $(dir $@)
-			${GCCF} -c $< -o $@ -I include
+			@mkdir -p $(dir $@)
+			${GCCF} -c $< -o $@ -Iinclude -Ilibft
 
 all :		libft_ ${NAME}
 
 $(NAME) :	${OBJS} include/minishell.h | libft/libft.a
-			${GCCF} ${READLINE} libft/libft.a $(OBJS) -o $(NAME)
+			${GCCF} ${READLINE} $(OBJS) libft/libft.a -o $(NAME)
 
 libft_ :
 			$(MAKE) -C libft
