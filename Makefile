@@ -23,8 +23,9 @@ SRCS =	minishell.c						\
 		cmd_exec/redirection.c			\
 		cmd_exec/heredoc.c				\
 		cmd_exec/pipe.c					\
+		cmd_exec/execution_utils.c		\
 
-GCCF = gcc -g #-fsanitize=address #-Wall -Wextra -Werror
+GCCF = gcc -g -Wall -Wextra -Werror #-fsanitize=address
 
 READLINE = -lreadline -L/usr/local/lib -I/usr/local/include
 

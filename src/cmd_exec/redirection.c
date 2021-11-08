@@ -8,7 +8,7 @@ int	redirect_input(char *file)
 	if (fd < 0)
 		perror(file);
 	if (dup2(fd, STDIN_FILENO) == -1)
-		perror("dup2");
+		exit(EXIT_FAILURE);
 	close(fd);
 	return (0);
 }
@@ -27,7 +27,7 @@ int	redirect_out(t_redirect *current_out)
 	if (fd < 0)
 		perror(file);
 	if (dup2(fd, STDOUT_FILENO) == -1)
-		perror ("dup2");
+		exit(EXIT_FAILURE);
 	close (fd);
 	return (0);
 }
@@ -52,4 +52,6 @@ void	redirection(t_vars *vars)
 		redirect_out(current_out);
 		current_out = current_out->next;
 	}
+	if (count_heredoc(vars) > 0)
+		unlink(".heredoc");
 }
