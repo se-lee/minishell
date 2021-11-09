@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-/* remove this function later? */
+/* remove this function later */
 void	print_commands(t_command *cmd)
 {
 	int	i;
@@ -69,7 +69,7 @@ void	launch_commands(t_vars *vars, t_command *current_cmd,
 	{
 		signal(SIGINT, sigchild);
 		signal(SIGQUIT, sigchild);
-		redirection(vars);
+		redirection(vars,current_cmd);
 		fd_dup_and_close(input, output);
 		if (to_close)
 			close(to_close);
@@ -95,21 +95,6 @@ void	launch_commands(t_vars *vars, t_command *current_cmd,
 	}
 }
 
-void	child_process_no_pipe(t_vars *vars, t_command *current_cmd, int builtin)
-{
-	if (builtin == TRUE)
-	{
-		redirection(vars);
-		run_command_builtin(vars, current_cmd);
-		exit(0);
-	}
-	else
-	{
-		redirection(vars);
-		run_command_non_builtin(vars->envp, current_cmd);		
-	}
-}
-
 void	run_command_no_pipe(t_vars *vars, t_command *current_cmd)
 {
 	pid_t	child;
@@ -121,7 +106,7 @@ void	run_command_no_pipe(t_vars *vars, t_command *current_cmd)
 		{
 			child = fork();
 			if (child == 0)
-				child_process_no_pipe(vars, current_cmd, TRUE);
+				redirect_and_run_cmd(vars, current_cmd, TRUE);
 		}
 		else
 			run_command_builtin(vars, current_cmd);
@@ -130,7 +115,7 @@ void	run_command_no_pipe(t_vars *vars, t_command *current_cmd)
 	{
 		child = fork();
 		if (child == 0)
-			child_process_no_pipe(vars, current_cmd, FALSE);
+			redirect_and_run_cmd(vars, current_cmd, FALSE);
 	}
 	waitpid(child, NULL, 0);
 }
@@ -152,7 +137,7 @@ void	execute_pipe_commands(t_vars *vars)
 	to_close = 0;
 	tcsetattr(STDIN_FILENO, TCSANOW, &vars->saved_termios);
 	if (count_heredoc(vars) > 0)
-		multiple_heredoc(vars);
+		update_heredoc(vars);
 	if (!current_cmd->pipe)
 		run_command_no_pipe(vars, current_cmd);
 	else

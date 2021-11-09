@@ -15,3 +15,11 @@ void	fd_dup_and_close(int input, int output)
 		close(output);
 	}
 }
+
+void	fd_close(int input, int output)
+{
+	if (input != 0)
+		close(input);
+	if (output != 1)
+		close(output);
+}

@@ -124,21 +124,31 @@ int			envlist_count(t_envlist *envp);
 char		**envlist_to_char_array(t_envlist *envp);
 void		execute_pipe_commands(t_vars *vars);
 void		launch_command(t_vars *vars, t_command *current_cmd, int input, int output);
+void		run_command_no_pipe(t_vars *vars, t_command *current_cmd);
+
+/* execution new version */
+void		fork_and_run_command(t_vars *vars, t_command *current_cmd, int input, int output, int to_close);
+void 		execute_command(t_vars *vars);
+void		redirect_and_run_cmd(t_vars *vars, t_command *current_cmd, int builtin);
+
 
 /* pipe */
 void		fd_dup_and_close(int input, int output);
+void		fd_close(int input, int output);
+void		close_inout_fd(int input, int output);
 
 /* redirection */
 int			redirect_input(char *file);
 int			redirect_output_overwrite(char *file);
 int			redirect_output_append(char *file);
-void		redirection(t_vars *vars);
+// void		redirection(t_vars *vars);
+void	redirection(t_vars *vars, t_command *current_cmd);
 // void		heredoc(t_redirect *current_in);
-void		put_to_heredoc(t_redirect *current_in);
+void		write_to_heredoc(t_redirect *current_in);
 // void		put_to_heredoc(t_vars *vars);
 int			redirect_heredoc(void);
 int			count_heredoc(t_vars *vars);
-void		multiple_heredoc(t_vars *vars);
+void		update_heredoc(t_vars *vars);
 
 /* command utils */
 char		*get_command_path(t_envlist *envp, char *command);

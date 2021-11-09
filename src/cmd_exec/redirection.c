@@ -6,7 +6,10 @@ int	redirect_input(char *file)
 
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
+	{
 		perror(file);
+		exit(EXIT_FAILURE);
+	}
 	if (dup2(fd, STDIN_FILENO) == -1)
 		exit(EXIT_FAILURE);
 	close(fd);
@@ -32,13 +35,15 @@ int	redirect_out(t_redirect *current_out)
 	return (0);
 }
 
-void	redirection(t_vars *vars)
+void	redirection(t_vars *vars, t_command *current_cmd)
 {
 	t_redirect	*current_in;
 	t_redirect	*current_out;
 
 	current_in = vars->in;
 	current_out = vars->out;
+	if (current_cmd->command[0] == NULL)
+		exit(0);
 	while (current_in)
 	{
 		if (current_in->arrow_num == 1)
