@@ -54,3 +54,24 @@ int	export_syntax(char *str, int quotes)
 	}
 	return (1);
 }
+
+void	add_new_var_to_list(t_vars *vars, char *new_var)
+{
+	t_envlist	*current_env;
+
+	current_env = vars->envp;
+	while (current_env->next != NULL)
+		current_env = current_env->next;
+	current_env->next = protected_malloc(1, sizeof(t_envlist));
+	current_env = current_env->next;
+	current_env->name = env_separation(new_var, 0);
+	current_env->value = env_separation(new_var, 1);
+	current_env->next = NULL;
+}
+
+void	free_env(t_envlist *current_env)
+{
+	free(current_env->name);
+	free(current_env->value);
+	free(current_env);
+}

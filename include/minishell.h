@@ -111,6 +111,13 @@ void		envlist_print_all(t_envlist *envp);
 int			format_is_valid(char *str);
 int			ft_inenv(t_envlist *envp, char *str);
 int			export_syntax(char *str, int quotes);
+char		*search_home(t_envlist	*envp);
+void		replace_main(t_vars *vars, t_envlist *current_envp,
+				char *name, char *pwd);
+void		replace_pwd(t_vars *vars, t_envlist *current_envp,
+				char *name, char *pwd);
+void		add_new_var_to_list(t_vars *vars, char *new_var);
+void		free_env(t_envlist *current_env);
 
 /* built-in commands */
 void		builtin_cd(t_vars *vars, t_command *current_cmd);
