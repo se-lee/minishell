@@ -5,11 +5,13 @@ SRCS =	minishell.c						\
 		signals.c						\
 		parsing/parsing.c				\
 		parsing/variables.c				\
+		parsing/variable_utils.c		\
 		parsing/parsing_utils.c			\
 		parsing/tokenization.c			\
 		parsing/tokenization_utils.c	\
 		parsing/misc_utils.c			\
 		parsing/envlist_utils.c			\
+		parsing/envlist_utils2.c		\
 		parsing/redirect.c				\
 		parsing/commands.c				\
 		parsing/commands_utils.c		\

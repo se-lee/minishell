@@ -97,10 +97,15 @@ void		ft_comandadd_back(t_token **alst, t_token *new);
 char		**array_realloc(char **array, char *new_line);
 char		*remove_quotes(char *original, int token_type);
 void		initialize_command(t_command *command);
-void		add_piperedirect(t_token *current_token, t_command *current_command);
+void		add_piperedirect(t_token *current_token,
+				t_command *current_command);
 void		fill_redirect(t_vars *vars, int cmd_num);
 void		fill_commands(t_vars *vars, t_token *token, int i);
 t_token		*remove_token(t_vars *vars, t_token *token);
+char		*find_variable(char *str);
+void		malloc_token_next(t_token **current_token);
+void		envlist_free(t_envlist *to_free);
+void		envlist_print_all(t_envlist *envp);
 
 /* built-in utils */
 int			format_is_valid(char *str);
