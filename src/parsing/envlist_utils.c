@@ -1,46 +1,5 @@
 #include "minishell.h"
 
-char	*separate_part(char *str, int *i, int *j)
-{
-	char	*new_str;
-
-	new_str = protected_malloc((*i) + 1, sizeof(char));
-	while (*j < *i)
-	{
-		new_str[*j] = str[*j];
-		(*j)++;
-	}
-	new_str[*j] = '\0';
-	return (new_str);
-}
-
-char	*env_separation(char *str, int part)
-{
-	int		i;
-	int		j;
-	char	*new_str;
-
-	i = 0;
-	j = 0;
-	while (str[i] && str[i] != '=')
-		i++;
-	if (part == 0)
-		return (separate_part(str, &i, &j));
-	if (str[i] && part == 1)
-	{
-		new_str = protected_malloc(ft_strlen(str) - i + 1, sizeof(char));
-		while (i < (int)ft_strlen(str))
-		{
-			new_str[j] = str[i + 1];
-			j++;
-			i++;
-		}
-		new_str[j] = '\0';
-		return (new_str);
-	}
-	return (NULL);
-}
-
 void	envlist_create_loop(char **envp, t_envlist **current_envlist, int i)
 {
 	(*current_envlist)->next = malloc(sizeof(t_envlist));
@@ -78,6 +37,23 @@ void	envlist_create(t_vars *vars, char **envp)
 	}
 }
 
+void	env_dup_loop(t_envlist **current_env, t_envlist **new_env)
+{
+	char	*temp;
+
+	(*new_env)->next = protected_malloc(1, sizeof(t_envlist));
+	(*new_env) = (*new_env)->next;
+	temp = ft_strdup((*current_env)->name);
+	(*new_env)->name = ft_strjoin("declare -x ", temp);
+	free(temp);
+	if ((*current_env)->value != NULL)
+		(*new_env)->value = ft_strdup((*current_env)->value);
+	else
+		(*new_env)->value = NULL;
+	(*new_env)->next = NULL;
+	(*current_env) = (*current_env)->next;
+}
+
 t_envlist	*envlist_duplicate(t_envlist *envp)
 {
 	t_envlist	*new_env;
@@ -98,18 +74,6 @@ t_envlist	*envlist_duplicate(t_envlist *envp)
 	first = new_env;
 	current_env = current_env->next;
 	while (current_env)
-	{
-		new_env->next = protected_malloc(1, sizeof(t_envlist));
-		new_env = new_env->next;
-		temp = ft_strdup(current_env->name);
-		new_env->name = ft_strjoin("declare -x ", temp);
-		free(temp);
-		if (current_env->value != NULL)
-			new_env->value = ft_strdup(current_env->value);
-		else
-			new_env->value = NULL;
-		new_env->next = NULL;
-		current_env = current_env->next;
-	}
+		env_dup_loop(&current_env, &new_env);
 	return (first);
 }
