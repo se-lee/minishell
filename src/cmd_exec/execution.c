@@ -46,7 +46,7 @@ void	run_command_builtin(t_vars *vars, t_command *current_cmd)
 	else if (ft_strcmp(command, "pwd") == 0)
 		builtin_pwd();
 	else if (ft_strcmp(command, "unset") == 0)
-		builtin_unset(vars, current_cmd);
+		builtin_unset(vars, current_cmd, 1);
 }
 
 void	run_command_non_builtin(t_envlist *envlist, t_command *current_cmd)

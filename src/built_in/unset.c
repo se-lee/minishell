@@ -46,15 +46,13 @@ void	envlist_delete_var(t_envlist *current_env)
 	}
 }
 
-void	builtin_unset(t_vars *vars, t_command *current_cmd)
+void	builtin_unset(t_vars *vars, t_command *current_cmd, int i)
 {
 	char		*var_to_unset;
 	t_envlist	*current_env;
-	int			i;
 
 	if (!(current_cmd))
 		return ;
-	i = 1;
 	while (current_cmd->command[i])
 	{
 		current_env = vars->envp;

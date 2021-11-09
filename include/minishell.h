@@ -64,10 +64,10 @@ struct s_redirect {
 struct s_command {
 	char		**command;
 	int			pipe;
-	int			quotes; //ADD
+	int			quotes;
 	int			redirect_right;
 	int			redirect_left;
-	int			fd[2]; // 11/3 ADD
+	int			fd[2];
 	t_command	*next;
 };
 
@@ -82,7 +82,7 @@ struct s_vars {
 	int				error;
 };
 
-//Parsing fonctions
+/* Parsing fonctions */
 int			ft_isspecial(char c);
 int			ft_isupper(char c);
 int			find_space(char *str);
@@ -125,7 +125,7 @@ void		builtin_echo(t_command *current_cmd);
 void		builtin_env(t_vars *vars);
 void		builtin_exit(t_vars *vars, t_command *current_cmd);
 void		builtin_export(t_vars *vars, t_command *current_cmd);
-void		builtin_unset(t_vars *vars, t_command *current_cmd);
+void		builtin_unset(t_vars *vars, t_command *current_cmd, int i);
 void		builtin_pwd(void);
 
 /* execution */
@@ -134,7 +134,8 @@ void		run_command_non_builtin(t_envlist *envlist, t_command *current_cmd);
 int			envlist_count(t_envlist *envp);
 char		**envlist_to_char_array(t_envlist *envp);
 void		execute_pipe_commands(t_vars *vars);
-void		launch_command(t_vars *vars, t_command *current_cmd, int input, int output);
+void		launch_command(t_vars *vars, t_command *current_cmd,
+				int input, int output);
 
 /* loop_free */
 void		free_token(t_token *token);
@@ -151,9 +152,7 @@ int			redirect_input(char *file);
 int			redirect_output_overwrite(char *file);
 int			redirect_output_append(char *file);
 void		redirection(t_vars *vars);
-// void		heredoc(t_redirect *current_in);
 void		put_to_heredoc(t_redirect *current_in);
-// void		put_to_heredoc(t_vars *vars);
 int			redirect_heredoc(void);
 int			count_heredoc(t_vars *vars);
 void		multiple_heredoc(t_vars *vars);
@@ -179,11 +178,11 @@ void		ft_append(char **a, char *str);
 void		*protected_malloc(size_t count, size_t size);
 void		free_array(char **array);
 
-/* Signals*/
-void	sigchild(int sig);
-void	sigmain(int sig);
-void	set_termios(void);
-void	control_c(int sig);
+/* Signals */
+void		sigchild(int sig);
+void		sigmain(int sig);
+void		set_termios(void);
+void		control_c(int sig);
 
 /* test functions to be removed later */
 void		test_function_print_envarr(char **env, t_envlist *envlist);
