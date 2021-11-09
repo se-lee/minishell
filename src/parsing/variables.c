@@ -48,9 +48,22 @@ t_token	*token_malloc_first(t_vars *vars, t_token *token)
 	return (current_token);
 }
 
+void	hell_increment(t_token *token, t_token **current_token, int *i, int *j)
+{
+	if (*j != *i && token->buffer.str[*i])
+	{
+		malloc_token_next(&(*current_token));
+		(*current_token)->token_type = SPACE_SIGN;
+		(*current_token)->buffer.len = *i - *j;
+		(*current_token)->buffer.str = ft_strndup(&token->buffer.str[*j],
+				*i - *j);
+	}
+	*j = *i;
+}
+
 void	hell_utils(t_vars *vars, t_token *token, t_token **current_token, int i)
 {
-	int k;
+	int	k;
 	int	j;
 
 	k = 0;
@@ -70,15 +83,7 @@ void	hell_utils(t_vars *vars, t_token *token, t_token **current_token, int i)
 		while (token->buffer.str[i] && token->buffer.str[i] == ' '
 			&& token->token_type == WORD)
 			i++;
-		if (j != i && token->buffer.str[i])
-		{
-			malloc_token_next(&(*current_token));
-			(*current_token)->token_type = SPACE_SIGN;
-			(*current_token)->buffer.len = i - j;
-			(*current_token)->buffer.str = ft_strndup(&token->buffer.str[j],
-					i - j);
-		}
-		j = i;
+		hell_increment(token, current_token, &i, &j);
 	}
 }
 
