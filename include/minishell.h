@@ -124,6 +124,8 @@ void		run_command_non_builtin(t_envlist *envlist, t_command *current_cmd);
 void		run_command_no_pipe(t_vars *vars, t_command *current_cmd);
 void	launch_command(t_vars *vars, t_command *current_cmd, int input, int output, int to_close);
 void		execute_command(t_vars *vars);
+void	execute_command(t_vars *vars); // to be removed later
+
 
 /* execution utils */
 void		run_command_and_exit(t_vars *vars, t_command *current_cmd);

@@ -4,13 +4,11 @@ void	run_command_and_exit(t_vars *vars, t_command *current_cmd)
 {
 	if (command_is_builtin(current_cmd->command) == TRUE)
 	{
-		redirection(vars, current_cmd);
 		run_command_builtin(vars, current_cmd);
 		exit(0);
 	}
 	else
 	{
-		redirection(vars, current_cmd);
 		run_command_non_builtin(vars->envp, current_cmd);
 		exit(0);
 	}

@@ -128,6 +128,7 @@ int	main(int argc, char **argv, char **envp)
 			parsing(&vars, str);
 			if (vars.error == 0 && vars.cmd != NULL)
 				execute_command(&vars);
+				// execute_command(&vars);
 			free(str);
 			free_tokens(&vars);
 			free_commands(&vars);

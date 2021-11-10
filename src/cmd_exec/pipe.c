@@ -18,7 +18,6 @@ void	pipe_and_launch_commands(t_vars *vars, t_command *current_cmd, int input, i
 	launch_command(vars, current_cmd, input, current_cmd->fd[1], to_close);
 }
 
-
 void	fd_dup_and_close(int input, int output)
 {
 	if (input != 0)
