@@ -97,6 +97,7 @@ void		ft_comandadd_back(t_token **alst, t_token *new);
 char		*remove_quotes(char *original, int token_type);
 void		fill_redirect(t_vars *vars);
 t_token		*remove_token(t_vars *vars, t_token *token);
+void		malloc_cmd_next(t_command **current_cmd); //Added to the list
 
 /* built-in utils */
 int			format_is_valid(char *str);
@@ -128,12 +129,13 @@ void		run_command_non_builtin(t_envlist *envlist, t_command *current_cmd);
 void		run_command_no_pipe(t_vars *vars, t_command *current_cmd);
 void		run_command_and_exit(t_vars *vars, t_command *current_cmd);
 void		redirect_and_run_cmd(t_vars *vars, t_command *current_cmd, int builtin);
-void		wait_loop(int command_count, pid_t child);
+void		pipe_get_next_cmd(t_command *current_cmd);
 
 /* pipe */
 void		fd_dup_and_close(int input, int output);
 void		fd_close(int input, int output);
 void		pipe_and_launch_command(t_vars *vars, t_command *current_cmd, int input, int to_close);
+void		wait_loop(int command_count, pid_t child);
 
 /* redirection */
 void		redirection(t_vars *vars, t_command *current_cmd);

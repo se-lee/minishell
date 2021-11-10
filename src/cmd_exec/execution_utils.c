@@ -74,15 +74,16 @@ void	redirect_and_run_cmd(t_vars *vars, t_command *current_cmd, int builtin)
 	}
 }
 
-void	wait_loop(int command_count, pid_t child)
+void	pipe_get_next_cmd(t_command *current_cmd)
 {
-	int		i;
+	char		*line;
 
-	i = 0;
-	while (i < command_count)
-	{
-		waitpid(child, NULL, 0);
-		i++;
-	}
+	current_cmd->next = protected_malloc(1, sizeof(t_command));
+	current_cmd = current_cmd->next;
+	current_cmd->next = NULL;
+	line = NULL;
+	ft_putstr_fd("> ", OUT);
+	get_next_line(IN, &line);
+	current_cmd->command = ft_split(line, ' ');
+	free(line);
 }
-
