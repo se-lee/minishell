@@ -119,23 +119,21 @@ int		envlist_count(t_envlist *envp);
 
 /* execution */
 void		print_commands(t_command *cmd); //erase this function
+void		launch_commands(t_vars *vars, t_command *current_cmd, int input, int output, int to_close);
+void		execute_command(t_vars *vars);
+
+/* execution utils */
 void		run_command_builtin(t_vars *vars, t_command *current_cmd);
 void		run_command_non_builtin(t_envlist *envlist, t_command *current_cmd);
 void		run_command_no_pipe(t_vars *vars, t_command *current_cmd);
-void	launch_command(t_vars *vars, t_command *current_cmd, int input, int output, int to_close);
-void		execute_command(t_vars *vars);
-void	execute_command(t_vars *vars); // to be removed later
-
-
-/* execution utils */
 void		run_command_and_exit(t_vars *vars, t_command *current_cmd);
 void		redirect_and_run_cmd(t_vars *vars, t_command *current_cmd, int builtin);
 void		wait_loop(int command_count, pid_t child);
 
 /* pipe */
-void	pipe_and_launch_commands(t_vars *vars, t_command *current_cmd, int input, int to_close);
 void		fd_dup_and_close(int input, int output);
 void		fd_close(int input, int output);
+void		pipe_and_launch_command(t_command *current_cmd, t_vars *vars, int to_close, int input);
 
 /* redirection */
 void		redirection(t_vars *vars, t_command *current_cmd);
