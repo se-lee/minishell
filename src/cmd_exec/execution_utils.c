@@ -79,11 +79,10 @@ void	pipe_get_next_cmd(t_command *current_cmd)
 	char		*line;
 
 	current_cmd->next = protected_malloc(1, sizeof(t_command));
-	current_cmd = current_cmd->next;
-	current_cmd->next = NULL;
+	current_cmd->next->next = NULL;
 	line = NULL;
 	ft_putstr_fd("> ", OUT);
 	get_next_line(IN, &line);
-	current_cmd->command = ft_split(line, ' ');
+	current_cmd->next->command = ft_split(line, ' ');
 	free(line);
 }
