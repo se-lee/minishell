@@ -122,7 +122,7 @@ void		print_commands(t_command *cmd); //erase this function
 void		run_command_builtin(t_vars *vars, t_command *current_cmd);
 void		run_command_non_builtin(t_envlist *envlist, t_command *current_cmd);
 void		run_command_no_pipe(t_vars *vars, t_command *current_cmd);
-void		launch_commands(t_vars *vars, t_command *current_cmd, int input, int output);
+void	launch_command(t_vars *vars, t_command *current_cmd, int input, int output, int to_close);
 void		execute_command(t_vars *vars);
 
 /* execution utils */
@@ -131,14 +131,11 @@ void		redirect_and_run_cmd(t_vars *vars, t_command *current_cmd, int builtin);
 void		wait_loop(int command_count, pid_t child);
 
 /* pipe */
-void		pipe_loop(t_vars *vars, t_command *current_cmd, int input);
+void	pipe_and_launch_commands(t_vars *vars, t_command *current_cmd, int input, int to_close);
 void		fd_dup_and_close(int input, int output);
 void		fd_close(int input, int output);
 
 /* redirection */
-int			redirect_input(char *file);
-int			redirect_output_overwrite(char *file);
-int			redirect_output_append(char *file);
 void		redirection(t_vars *vars, t_command *current_cmd);
 void		write_to_heredoc(t_redirect *current_in);
 int			redirect_heredoc(void);

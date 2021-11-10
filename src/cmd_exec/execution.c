@@ -83,9 +83,10 @@ void	run_command_no_pipe(t_vars *vars, t_command *current_cmd)
 	waitpid(child, NULL, 0);
 }
 
-void	launch_commands(t_vars *vars, t_command *current_cmd, int input, int output)
+void	launch_command(t_vars *vars, t_command *current_cmd, int input, int output, int to_close)
 {
 	pid_t	child;
+
 	child = fork();
 	if (child < 0)
 		perror("fork");
@@ -93,10 +94,11 @@ void	launch_commands(t_vars *vars, t_command *current_cmd, int input, int output
 	{
 		signal(SIGINT, sigchild);
 		signal(SIGQUIT, sigchild);
-		redirection(vars,current_cmd);
+		// redirection(vars, current_cmd);
 		fd_dup_and_close(input, output);
-		if (current_cmd->fd[0])
-			close(current_cmd->fd[0]);
+printf("current_cmd fd[0]:%d\n", current_cmd->fd[0]);
+		if (!to_close)
+			close(to_close);
 		run_command_and_exit(vars, current_cmd);
 	}
 	else
@@ -106,17 +108,21 @@ void	launch_commands(t_vars *vars, t_command *current_cmd, int input, int output
 		fd_close(input, output);
 	}
 }
+
 void	execute_command(t_vars *vars)
 {
 	int			input;
 	int			output;
 	pid_t		child;
 	t_command	*current_cmd;
+	int			to_close;
 
 	child = 0;
 	output = 1;
 	input = 0;
 	current_cmd = vars->cmd;
+	current_cmd->fd[0] = 0;
+	to_close = 0;
 	tcsetattr(STDIN_FILENO, TCSANOW, &vars->saved_termios);
 	if (count_heredoc(vars) > 0)
 		update_heredoc(vars);
@@ -126,11 +132,13 @@ void	execute_command(t_vars *vars)
 	{
 		while (current_cmd->next != NULL)
 		{
-			pipe_loop(vars, current_cmd, input);
+			pipe_and_launch_commands(vars, current_cmd, input, to_close);
+			to_close = 0;
 			input = current_cmd->fd[0];
+	printf("input:%d\n", input);
 			current_cmd = current_cmd->next;
 		}
-		launch_commands(vars, current_cmd, input, output);
-		wait_loop(count_command(vars->cmd), child);
+		launch_command(vars, current_cmd, input, output, to_close);
 	}
+		wait_loop(count_command(vars->cmd), child);
 }
