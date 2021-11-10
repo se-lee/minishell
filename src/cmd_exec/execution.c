@@ -58,33 +58,6 @@ void	run_command_non_builtin(t_envlist *envlist, t_command *current_cmd)
 	}
 }
 
-void	launch_commands(t_vars *vars, t_command *current_cmd, int input, int output)
-{
-	pid_t	child;
-	child = fork();
-	if (child < 0)
-		perror("fork");
-	if (child == 0)
-	{
-		signal(SIGINT, sigchild);
-		signal(SIGQUIT, sigchild);
-		redirection(vars,current_cmd);
-		fd_dup_and_close(input, output);
-		if (current_cmd->fd[0])
-			close(current_cmd->fd[0]);
-		run_command_and_exit(vars, current_cmd);
-	}
-	else
-	{
-		signal(SIGINT, sigmain);
-		signal(SIGQUIT, sigmain);
-		if (input != 0)
-			close(input);
-		if (output != 1)
-			close(output);
-	}
-}
-
 void	run_command_no_pipe(t_vars *vars, t_command *current_cmd)
 {
 	pid_t	child;
@@ -110,26 +83,30 @@ void	run_command_no_pipe(t_vars *vars, t_command *current_cmd)
 	waitpid(child, NULL, 0);
 }
 
-void	wait_loop(int command_count ,pid_t child)
+void	launch_commands(t_vars *vars, t_command *current_cmd, int input, int output)
 {
-	int		i;
-
-	i = 0;
-	while (i < command_count)
+	pid_t	child;
+	child = fork();
+	if (child < 0)
+		perror("fork");
+	if (child == 0)
 	{
-		waitpid(child, NULL, 0);
-		i++;
+		signal(SIGINT, sigchild);
+		signal(SIGQUIT, sigchild);
+		redirection(vars,current_cmd);
+		fd_dup_and_close(input, output);
+		if (current_cmd->fd[0])
+			close(current_cmd->fd[0]);
+		run_command_and_exit(vars, current_cmd);
+	}
+	else
+	{
+		signal(SIGINT, sigmain);
+		signal(SIGQUIT, sigmain);
+		fd_close(input, output);
 	}
 }
-
-void	pipe_loop(t_vars *vars, t_command *current_cmd, int input)
-{
-	if (pipe(current_cmd->fd) < 0)
-		perror("pipe");
-	launch_commands(vars, current_cmd, input, current_cmd->fd[1]);
-}
-
-void	execute_pipe_commands(t_vars *vars)
+void	execute_command(t_vars *vars)
 {
 	int			input;
 	int			output;

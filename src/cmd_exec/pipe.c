@@ -1,5 +1,12 @@
 #include "minishell.h"
 
+void	pipe_loop(t_vars *vars, t_command *current_cmd, int input)
+{
+	if (pipe(current_cmd->fd) < 0)
+		perror("pipe");
+	launch_commands(vars, current_cmd, input, current_cmd->fd[1]);
+}
+
 void	fd_dup_and_close(int input, int output)
 {
 	if (input != 0)

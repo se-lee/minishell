@@ -118,25 +118,22 @@ char	**envlist_to_char_array(t_envlist *envp);
 int		envlist_count(t_envlist *envp);
 
 /* execution */
+void		print_commands(t_command *cmd); //erase this function
 void		run_command_builtin(t_vars *vars, t_command *current_cmd);
 void		run_command_non_builtin(t_envlist *envlist, t_command *current_cmd);
-int			envlist_count(t_envlist *envp);
-char		**envlist_to_char_array(t_envlist *envp);
-void		execute_pipe_commands(t_vars *vars);
-void		launch_command(t_vars *vars, t_command *current_cmd, int input, int output);
 void		run_command_no_pipe(t_vars *vars, t_command *current_cmd);
+void		launch_commands(t_vars *vars, t_command *current_cmd, int input, int output);
+void		execute_command(t_vars *vars);
 
-/* execution new version */
-// void		fork_and_run_command(t_vars *vars, t_command *current_cmd, int input, int output, int to_close);
-void	fork_and_run_command(t_vars *vars, t_command *current_cmd, int input, int output);
-void 		execute_command(t_vars *vars);
-void		redirect_and_run_cmd(t_vars *vars, t_command *current_cmd, int builtin);
+/* execution utils */
 void		run_command_and_exit(t_vars *vars, t_command *current_cmd);
+void		redirect_and_run_cmd(t_vars *vars, t_command *current_cmd, int builtin);
+void		wait_loop(int command_count, pid_t child);
 
 /* pipe */
+void		pipe_loop(t_vars *vars, t_command *current_cmd, int input);
 void		fd_dup_and_close(int input, int output);
 void		fd_close(int input, int output);
-void		close_inout_fd(int input, int output);
 
 /* redirection */
 int			redirect_input(char *file);
@@ -152,9 +149,6 @@ void		update_heredoc(t_vars *vars);
 char		*get_command_path(t_envlist *envp, char *command);
 int			count_command(t_command *cmd);
 int			command_is_builtin(char **command);
-char		*get_env_value(t_envlist *envp, char *env_name, int return_value);
-char		**envlist_to_char_array(t_envlist *envp);
-void		print_commands(t_command *cmd);
 
 /* envlist utils */
 void		envlist_create(t_vars *vars, char **envp);
@@ -172,9 +166,5 @@ void		free_array(char **array);
 /* Signals*/
 void	sigchild(int sig);
 void	sigmain(int sig);
-
-/* test functions to be removed later */
-void		test_function_print_envarr(char **env, t_envlist *envlist);
-void		test_func_print_commands(t_command *current_cmd);
 
 #endif
