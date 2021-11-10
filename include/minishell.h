@@ -119,7 +119,7 @@ int		envlist_count(t_envlist *envp);
 
 /* execution */
 void		print_commands(t_command *cmd); //erase this function
-void		launch_commands(t_vars *vars, t_command *current_cmd, int input, int output, int to_close);
+void		launch_commands(t_vars *vars, t_command *current_cmd, int fds[2], int to_close);
 void		execute_command(t_vars *vars);
 
 /* execution utils */
@@ -133,7 +133,7 @@ void		wait_loop(int command_count, pid_t child);
 /* pipe */
 void		fd_dup_and_close(int input, int output);
 void		fd_close(int input, int output);
-void		pipe_and_launch_command(t_command *current_cmd, t_vars *vars, int to_close, int input);
+void		pipe_and_launch_command(t_vars *vars, t_command *current_cmd, int input, int to_close);
 
 /* redirection */
 void		redirection(t_vars *vars, t_command *current_cmd);

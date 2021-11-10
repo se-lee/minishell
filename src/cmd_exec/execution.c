@@ -39,7 +39,7 @@ void	run_command_no_pipe(t_vars *vars, t_command *current_cmd)
 }
 
 void	launch_commands(t_vars *vars, t_command *current_cmd,
-		int input, int output, int to_close)
+		int fds[2], int to_close)
 {
 	pid_t	child;
 	child = fork();
@@ -50,7 +50,7 @@ void	launch_commands(t_vars *vars, t_command *current_cmd,
 		signal(SIGINT, sigchild);
 		signal(SIGQUIT, sigchild);
 		redirection(vars, current_cmd);
-		fd_dup_and_close(input, output);
+		fd_dup_and_close(fds[0], fds[1]);
 		if (to_close)
 			close(to_close);
 		run_command_and_exit(vars, current_cmd);
@@ -59,10 +59,10 @@ void	launch_commands(t_vars *vars, t_command *current_cmd,
 	{
 		signal(SIGINT, sigmain);
 		signal(SIGQUIT, sigmain);
-		if (input != 0)
-			close(input);
-		if (output != 1)
-			close(output);
+		if (fds[0] != 0)
+			close(fds[0]);
+		if (fds[1] != 1)
+			close(fds[1]);
 	}
 }
 
@@ -83,12 +83,12 @@ void	execute_with_or_without_pipe(t_vars *vars, t_command *current_cmd)
 	{
 		while (current_cmd->next != NULL)
 		{
-			pipe_and_launch_command(current_cmd, vars, to_close, input);
+			pipe_and_launch_command(vars, current_cmd, input, to_close);
 			to_close = 0;
 			input = current_cmd->fd[0];
 			current_cmd = current_cmd->next;
 		}
-		launch_commands(vars, current_cmd, input, output, to_close);
+		launch_commands(vars, current_cmd, (int[2]){input, output}, to_close);
 		wait_loop(count_command(vars->cmd), child);
 	}
 }

@@ -39,6 +39,7 @@ void	redirection(t_vars *vars, t_command *current_cmd)
 
 	current_in = vars->in;
 	current_out = vars->out;
+	(void)current_cmd;
 	while (current_in)
 	{
 		if (current_in->arrow_num == 1)
