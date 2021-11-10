@@ -58,8 +58,7 @@ void	run_command_non_builtin(t_envlist *envlist, t_command *current_cmd)
 	}
 }
 
-void	launch_commands(t_vars *vars, t_command *current_cmd,
-		int input, int output)
+void	launch_commands(t_vars *vars, t_command *current_cmd, int input, int output)
 {
 	pid_t	child;
 	child = fork();
@@ -73,17 +72,7 @@ void	launch_commands(t_vars *vars, t_command *current_cmd,
 		fd_dup_and_close(input, output);
 		if (current_cmd->fd[0])
 			close(current_cmd->fd[0]);
-		if (command_is_builtin(current_cmd->command) == TRUE)
-		{
-			run_command_builtin(vars, current_cmd);
-			exit(0);
-		}
-			
-		else
-		{
-			run_command_non_builtin(vars->envp, current_cmd);
-			exit(0);
-		}
+		run_command_and_exit(vars, current_cmd);
 	}
 	else
 	{
@@ -121,21 +110,36 @@ void	run_command_no_pipe(t_vars *vars, t_command *current_cmd)
 	waitpid(child, NULL, 0);
 }
 
+void	wait_loop(int command_count ,pid_t child)
+{
+	int		i;
+
+	i = 0;
+	while (i < command_count)
+	{
+		waitpid(child, NULL, 0);
+		i++;
+	}
+}
+
+void	pipe_loop(t_vars *vars, t_command *current_cmd, int input)
+{
+	if (pipe(current_cmd->fd) < 0)
+		perror("pipe");
+	launch_commands(vars, current_cmd, input, current_cmd->fd[1]);
+}
+
 void	execute_pipe_commands(t_vars *vars)
 {
 	int			input;
 	int			output;
-	int			i;
 	pid_t		child;
 	t_command	*current_cmd;
-	int			to_close;
 
 	child = 0;
 	output = 1;
 	input = 0;
 	current_cmd = vars->cmd;
-	i = 0;
-	to_close = 0;
 	tcsetattr(STDIN_FILENO, TCSANOW, &vars->saved_termios);
 	if (count_heredoc(vars) > 0)
 		update_heredoc(vars);
@@ -143,24 +147,13 @@ void	execute_pipe_commands(t_vars *vars)
 		run_command_no_pipe(vars, current_cmd);
 	else
 	{
-		while (i < count_command(vars->cmd) - 1)
+		while (current_cmd->next != NULL)
 		{
-			if (pipe(current_cmd->fd) < 0)
-				perror("pipe");
-			if (!to_close)
-				to_close = current_cmd->fd[0];
-			launch_commands(vars, current_cmd, input, current_cmd->fd[1]);
-			to_close = 0;
+			pipe_loop(vars, current_cmd, input);
 			input = current_cmd->fd[0];
 			current_cmd = current_cmd->next;
-			i++;
 		}
 		launch_commands(vars, current_cmd, input, output);
-		i = 0;
-		while (i < count_command(vars->cmd))
-		{
-			waitpid(child, NULL, 0);
-			i++;
-		}
+		wait_loop(count_command(vars->cmd), child);
 	}
 }

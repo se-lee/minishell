@@ -128,7 +128,7 @@ void		run_command_no_pipe(t_vars *vars, t_command *current_cmd);
 
 /* execution new version */
 // void		fork_and_run_command(t_vars *vars, t_command *current_cmd, int input, int output, int to_close);
-void		fork_and_run_command(t_vars *vars, t_command *current_cmd, int to_close);
+void	fork_and_run_command(t_vars *vars, t_command *current_cmd, int input, int output);
 void 		execute_command(t_vars *vars);
 void		redirect_and_run_cmd(t_vars *vars, t_command *current_cmd, int builtin);
 void		run_command_and_exit(t_vars *vars, t_command *current_cmd);
