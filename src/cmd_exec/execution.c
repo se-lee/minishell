@@ -59,7 +59,7 @@ void	run_command_non_builtin(t_envlist *envlist, t_command *current_cmd)
 }
 
 void	launch_commands(t_vars *vars, t_command *current_cmd,
-		int input, int output, int to_close)
+		int input, int output)
 {
 	pid_t	child;
 	child = fork();
@@ -71,8 +71,8 @@ void	launch_commands(t_vars *vars, t_command *current_cmd,
 		signal(SIGQUIT, sigchild);
 		redirection(vars,current_cmd);
 		fd_dup_and_close(input, output);
-		if (to_close)
-			close(to_close);
+		if (current_cmd->fd[0])
+			close(current_cmd->fd[0]);
 		if (command_is_builtin(current_cmd->command) == TRUE)
 		{
 			run_command_builtin(vars, current_cmd);
@@ -149,13 +149,13 @@ void	execute_pipe_commands(t_vars *vars)
 				perror("pipe");
 			if (!to_close)
 				to_close = current_cmd->fd[0];
-			launch_commands(vars, current_cmd, input, current_cmd->fd[1], to_close);
+			launch_commands(vars, current_cmd, input, current_cmd->fd[1]);
 			to_close = 0;
 			input = current_cmd->fd[0];
 			current_cmd = current_cmd->next;
 			i++;
 		}
-		launch_commands(vars, current_cmd, input, output, to_close);
+		launch_commands(vars, current_cmd, input, output);
 		i = 0;
 		while (i < count_command(vars->cmd))
 		{
