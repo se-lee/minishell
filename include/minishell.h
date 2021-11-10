@@ -127,10 +127,11 @@ void		launch_command(t_vars *vars, t_command *current_cmd, int input, int output
 void		run_command_no_pipe(t_vars *vars, t_command *current_cmd);
 
 /* execution new version */
-void		fork_and_run_command(t_vars *vars, t_command *current_cmd, int input, int output, int to_close);
+// void		fork_and_run_command(t_vars *vars, t_command *current_cmd, int input, int output, int to_close);
+void		fork_and_run_command(t_vars *vars, t_command *current_cmd, int to_close);
 void 		execute_command(t_vars *vars);
 void		redirect_and_run_cmd(t_vars *vars, t_command *current_cmd, int builtin);
-
+void		run_command_and_exit(t_vars *vars, t_command *current_cmd);
 
 /* pipe */
 void		fd_dup_and_close(int input, int output);
@@ -141,11 +142,8 @@ void		close_inout_fd(int input, int output);
 int			redirect_input(char *file);
 int			redirect_output_overwrite(char *file);
 int			redirect_output_append(char *file);
-// void		redirection(t_vars *vars);
-void	redirection(t_vars *vars, t_command *current_cmd);
-// void		heredoc(t_redirect *current_in);
+void		redirection(t_vars *vars, t_command *current_cmd);
 void		write_to_heredoc(t_redirect *current_in);
-// void		put_to_heredoc(t_vars *vars);
 int			redirect_heredoc(void);
 int			count_heredoc(t_vars *vars);
 void		update_heredoc(t_vars *vars);

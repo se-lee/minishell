@@ -78,6 +78,7 @@ void	launch_commands(t_vars *vars, t_command *current_cmd,
 			run_command_builtin(vars, current_cmd);
 			exit(0);
 		}
+			
 		else
 		{
 			run_command_non_builtin(vars->envp, current_cmd);
