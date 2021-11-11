@@ -70,7 +70,7 @@ void	redirect_and_run_cmd(t_vars *vars, t_command *current_cmd, int builtin)
 	else
 	{
 		redirection(vars, current_cmd);
-		run_command_non_builtin(vars->envp, current_cmd);		
+		run_command_non_builtin(vars->envp, current_cmd);
 	}
 }
 

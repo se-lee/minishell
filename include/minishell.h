@@ -129,13 +129,14 @@ void		builtin_unset(t_vars *vars, t_command *current_cmd, int i);
 void		builtin_pwd(void);
 
 /* envlist utils */
-char	*get_env_value(t_envlist *envp, char *env_name, int return_value);
-char	**envlist_to_char_array(t_envlist *envp);
-int		envlist_count(t_envlist *envp);
+char		*get_env_value(t_envlist *envp, char *env_name, int return_value);
+char		**envlist_to_char_array(t_envlist *envp);
+int			envlist_count(t_envlist *envp);
 
 /* execution */
 void		print_commands(t_command *cmd); //erase this function
-void		launch_commands(t_vars *vars, t_command *current_cmd, int fds[2], int to_close);
+void		launch_commands(t_vars *vars, t_command *current_cmd,
+				int fds[2], int to_close);
 void		execute_command(t_vars *vars);
 
 /* execution utils */
@@ -155,13 +156,15 @@ void		free_inout(t_vars *vars);
 void		loop_free(t_vars *vars);
 void		run_command_no_pipe(t_vars *vars, t_command *current_cmd);
 void		run_command_and_exit(t_vars *vars, t_command *current_cmd);
-void		redirect_and_run_cmd(t_vars *vars, t_command *current_cmd, int builtin);
+void		redirect_and_run_cmd(t_vars *vars, t_command *current_cmd,
+				int builtin);
 void		pipe_get_next_cmd(t_command *current_cmd);
 
 /* pipe */
 void		fd_dup_and_close(int input, int output);
 void		fd_close(int input, int output);
-void		pipe_and_launch_command(t_vars *vars, t_command *current_cmd, int input, int to_close);
+void		pipe_and_launch_command(t_vars *vars, t_command *current_cmd,
+				int input, int to_close);
 void		wait_loop(int command_count, pid_t child);
 
 /* redirection */
