@@ -41,11 +41,10 @@ void	cd_to_home(t_vars *vars, char *path_temp)
 	char	*path;
 
 	home = search_home(vars->envp);
-	printf("home:%s\n", home);
 	if (home == NULL)
 	{
 		ft_putstr_fd("minishell: cd: ", 2);
-		ft_putendl_fd(": HOME not set", 2);
+		ft_putendl_fd("HOME not set", 2);
 		return ;
 	}
 	path = NULL;
