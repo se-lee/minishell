@@ -32,7 +32,7 @@ char	*get_delimiter(t_redirect *current_in)
 	}
 }
 
-void	put_to_heredoc(t_redirect *current_in)
+void	write_to_heredoc(t_redirect *current_in)
 {
 	int		fd;
 	char	*delimiter;
@@ -59,7 +59,7 @@ void	put_to_heredoc(t_redirect *current_in)
 	close(fd);
 }
 
-void	multiple_heredoc(t_vars *vars)
+void	update_heredoc(t_vars *vars)
 {
 	t_redirect	*current_in;
 
@@ -67,7 +67,7 @@ void	multiple_heredoc(t_vars *vars)
 	while (current_in)
 	{
 		if (current_in->arrow_num == 2)
-			put_to_heredoc(current_in);
+			write_to_heredoc(current_in);
 		current_in = current_in->next;
 	}
 }

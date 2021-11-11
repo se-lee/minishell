@@ -44,7 +44,6 @@ void	fill_command(t_token *token, t_command *current_command)
 {
 	int		i;
 	char	**cmd;
-	char	*temp;
 	t_token	*current_token;
 
 	cmd = prepare_command(token, &current_token, current_command);
