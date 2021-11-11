@@ -46,6 +46,7 @@ void	envlist_delete_var(t_envlist *current_env)
 	}
 }
 
+/* ADDED 11/11 */
 void	unset_check_error(char *var_to_unset)
 {
 	if (ft_isdigit(var_to_unset[0]))

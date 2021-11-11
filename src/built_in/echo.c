@@ -6,6 +6,8 @@ int	echo_n(char *str)
 
 	if (str[0] != '-')
 		return (0);
+	if (str[0] == '-' && ft_strlen(str) == 1)
+		return (0);
 	i = 1;
 	while (str[i] && str[i] == 'n')
 		i++;
@@ -21,6 +23,7 @@ void	builtin_echo(t_command *current_cmd)
 
 	n_option = 0;
 	i = 1;
+print_commands(current_cmd);
 	if (current_cmd && current_cmd->command[1] != NULL)
 	{
 		if (current_cmd->command[1][0] == '-')
@@ -31,6 +34,7 @@ void	builtin_echo(t_command *current_cmd)
 				i++;
 			}
 		}
+printf("i:%d\n", i);
 		while (current_cmd->command[i])
 		{
 			printf("%s", current_cmd->command[i]);

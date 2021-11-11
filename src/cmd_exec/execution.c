@@ -8,7 +8,7 @@ void	print_commands(t_command *cmd)
 	i = 0;
 	while (cmd->command[i])
 	{
-		printf(">>%s<<\n", cmd->command[i]);
+		printf("%d>>%s<<\n", i, cmd->command[i]);
 		i++;
 	}
 }
