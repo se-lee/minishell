@@ -136,6 +136,6 @@ void	parsing(t_vars *vars, char *str)
 	}
 	fill_redirect(vars, 0);
 	fill_commands(vars, vars->first, 0);
-	if (vars->error == 0)
-		printf_commands(vars);
+	// if (vars->error == 0)
+	// 	printf_commands(vars);
 }
