@@ -46,6 +46,16 @@ void	envlist_delete_var(t_envlist *current_env)
 	}
 }
 
+void	unset_check_error(char *var_to_unset)
+{
+	if (ft_isdigit(var_to_unset[0]))
+	{
+		ft_putstr_fd("minishell: unset: ", 2);
+		ft_putstr_fd(var_to_unset, 2);
+		ft_putendl_fd(": not a valid identifier", 2);
+	}
+}
+
 void	builtin_unset(t_vars *vars, t_command *current_cmd, int i)
 {
 	char		*var_to_unset;
@@ -57,6 +67,7 @@ void	builtin_unset(t_vars *vars, t_command *current_cmd, int i)
 	{
 		current_env = vars->envp;
 		var_to_unset = current_cmd->command[i];
+		unset_check_error(var_to_unset);
 		if (ft_strncmp(current_env->name, var_to_unset,
 				ft_strlen(var_to_unset)) == 0)
 			envlist_delete_first(vars, current_env);
