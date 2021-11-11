@@ -7,10 +7,12 @@ char	*search_home(t_envlist	*envp)
 
 	home_path = NULL;
 	current_envp = envp;
-	while (current_envp && ft_strncmp(current_envp->name, "HOME", 5) != 0)
+	while (current_envp)
+	{
+		if (ft_strncmp(current_envp->name, "HOME", 5) == 0)
+			home_path = ft_strdup(current_envp->value);
 		current_envp = current_envp->next;
-	if (ft_strncmp(current_envp->name, "HOME", 5) == 0)
-		home_path = ft_strdup(current_envp->value);
+	}
 	return (home_path);
 }
 
