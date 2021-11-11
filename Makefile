@@ -16,7 +16,7 @@ SRCS =	minishell.c						\
 		parsing/commands.c				\
 		parsing/commands_utils.c		\
 		built_in/cd.c					\
-		built_in/cd_utils.c					\
+		built_in/cd_utils.c				\
 		built_in/echo.c					\
 		built_in/env.c					\
 		built_in/exit.c					\
@@ -32,7 +32,7 @@ SRCS =	minishell.c						\
 		cmd_exec/pipe.c					\
 		cmd_exec/redirection.c			\
 
-GCCF = gcc -g -Wall -Wextra -Werror #-fsanitize=address
+GCCF = gcc -g -Wall -Wextra -Werror -fsanitize=address
 
 READLINE = -lreadline -L/usr/local/lib -I/usr/local/include
 

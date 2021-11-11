@@ -67,9 +67,14 @@ void	export_while(t_vars *vars, char *command, int quotes)
 	int		res;
 
 	res = export_syntax(command, quotes);
-	printf("res:%d\n", res);
+	// printf("res:%d\n", res);
 	if (res == 0)
-		printf("export: %s: invalid token\n", command);
+	{
+		ft_putstr_fd("minishell: export: ", 2);
+		ft_putstr_fd(command, 2);
+		ft_putendl_fd(": not a valid identifier", 2);
+		// printf("export: %s: invalid token\n", command);
+	}
 	else
 	{
 		var_str = command;
@@ -84,13 +89,13 @@ void	builtin_export(t_vars *vars, t_command *current_cmd)
 	t_envlist	*sorted;
 	int			i;
 
-	print_commands(current_cmd);
+	// print_commands(current_cmd);
 	if (current_cmd && current_cmd->command[1])
 	{
 		i = 1;
 		while (current_cmd->command[i])
 		{
-			printf("cmd[%d]:%s\n", i, current_cmd->command[i]);
+			// printf("cmd[%d]:%s\n", i, current_cmd->command[i]);
 			export_while(vars, current_cmd->command[i], current_cmd->quotes);
 			i++;
 		}

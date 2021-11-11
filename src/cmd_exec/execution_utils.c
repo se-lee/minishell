@@ -21,7 +21,7 @@ void	run_command_builtin(t_vars *vars, t_command *current_cmd)
 		builtin_unset(vars, current_cmd, 0);
 }
 
-void	run_command_non_builtin(t_envlist *envlist, t_command *current_cmd)
+int	run_command_non_builtin(t_envlist *envlist, t_command *current_cmd)
 {
 	char	*path;
 	char	**env;
@@ -35,13 +35,18 @@ void	run_command_non_builtin(t_envlist *envlist, t_command *current_cmd)
 			perror(current_cmd->command[0]);
 			free(path);
 			exit(127);
+			// return (127);
 		}
+		return (0);
 	}
 	else
 	{
-		printf("%s: command not found\n", current_cmd->command[0]);
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(current_cmd->command[0], 2);
+		ft_putendl_fd(": command not found", 2);
 		free(path);
 		exit(127);
+		// return (127);
 	}
 }
 
@@ -54,8 +59,9 @@ void	run_command_and_exit(t_vars *vars, t_command *current_cmd)
 	}
 	else
 	{
-		run_command_non_builtin(vars->envp, current_cmd);
-		exit(0);
+		exit(run_command_non_builtin(vars->envp, current_cmd));
+		// run_command_non_builtin(vars->envp, current_cmd);
+		// exit(0);
 	}
 }
 
