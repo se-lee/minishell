@@ -16,10 +16,19 @@ int	strisnum(char *str)
 	return (1);
 }
 
+void	display_error_and_exit(t_command *current_cmd, char *message, int exit_status)
+{
+	display_cmd_error(current_cmd, message, TRUE);
+	exit(exit_status);
+}
+
 void	builtin_exit(t_vars *vars, t_command *current_cmd)
 {
 	if (current_cmd->command[1] == NULL)
+	{
+		printf("exit\n");
 		exit(vars->return_value);
+	}
 	else if (current_cmd->command[1])
 	{
 		if (strisnum(current_cmd->command[1]) == 1
@@ -28,7 +37,7 @@ void	builtin_exit(t_vars *vars, t_command *current_cmd)
 			vars->return_value = atoi(current_cmd->command[1]);
 			if (vars->return_value > 255 || vars->return_value < 0)
 				vars->return_value = vars->return_value % 256;
-			if (current_cmd->pipe == 0)
+			if (count_command(vars->cmd) == 1) //current_cmd->pipe == 0)
 				printf("exit\n");
 			exit(vars->return_value);
 		}
@@ -36,9 +45,11 @@ void	builtin_exit(t_vars *vars, t_command *current_cmd)
 			&& current_cmd->command[2] != NULL)
 			display_cmd_error(current_cmd, "too many arguments", FALSE);
 		else
-		{
-			display_cmd_error(current_cmd, "numeric argument required", TRUE);
-			exit(255);
-		}
+			display_error_and_exit(current_cmd, "numeric argument required", 255);
 	}
 }
+
+		// {
+		// 	display_cmd_error(current_cmd, "numeric argument required", TRUE);
+		// 	exit(255);
+		// }
