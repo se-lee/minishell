@@ -54,3 +54,13 @@ void	display_cmd_error(t_command *current_cmd, char *message, int show_arg)
 	}
 	ft_putendl_fd(message, 2);
 }
+
+void	display_syntax_error(t_token *current_token)
+{
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd("syntax error near unexpected token", 2);
+	ft_putchar_fd('`', 2);
+	ft_putchar_fd(current_token->buffer.str[0], 2);
+	ft_putchar_fd('\'', 2);
+	ft_putchar_fd('\n', 2);
+}

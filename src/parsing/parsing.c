@@ -87,7 +87,6 @@ void	printf_commands(t_vars *vars)
 		current_cmd = current_cmd->next;
 	}
 }
-
 t_token	*remove_token(t_vars *vars, t_token *token)
 {
 	t_token	*current_token;

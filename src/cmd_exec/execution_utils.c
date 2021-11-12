@@ -41,9 +41,7 @@ int	run_command_non_builtin(t_envlist *envlist, t_command *current_cmd)
 	}
 	else
 	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(current_cmd->command[0], 2);
-		ft_putendl_fd(": command not found", 2);
+		display_cmd_error(current_cmd, "command not found", FALSE);
 		free(path);
 		exit(127);
 		// return (127);

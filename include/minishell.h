@@ -196,6 +196,8 @@ void		ft_append(char **a, char *str);
 void		*protected_malloc(size_t count, size_t size);
 void		free_array(char **array);
 void	display_cmd_error(t_command *current_cmd, char *message, int arg);
+void	display_syntax_error(t_token *current_token);
+
 
 /* Signals */
 void		sigchild(int sig);

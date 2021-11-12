@@ -100,9 +100,12 @@ void	execute_command(t_vars *vars)
 {
 	t_command	*current_cmd;
 
+	if (!vars->cmd)
+		return ;
 	current_cmd = vars->cmd;
 	tcsetattr(STDIN_FILENO, TCSANOW, &vars->saved_termios);
 	if (count_heredoc(vars) > 0)
 		update_heredoc(vars);
-	execute_with_or_without_pipe(vars, current_cmd);
+	if (current_cmd)
+		execute_with_or_without_pipe(vars, current_cmd);
 }
