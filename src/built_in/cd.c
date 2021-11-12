@@ -73,7 +73,7 @@ void	builtin_cd(t_vars *vars, t_command *current_cmd)
 		if (old_pwd != NULL)
 			printf("%s\n", old_pwd);
 		else
-			ft_putendl_fd("minishell: cd: OLDPWD not set", 2);
+			display_cmd_error(current_cmd, "OLDPWD not set", FALSE);
 		chdir(old_pwd);
 		old_pwd = find_pwd(vars);
 		replace_pwds(vars, old_pwd);
@@ -82,7 +82,7 @@ void	builtin_cd(t_vars *vars, t_command *current_cmd)
 	{
 		old_pwd = find_pwd(vars);
 		if (chdir(path) == -1)
-			display_error_fd(current_cmd);
+			display_cmd_error(current_cmd, "No such file or directory", TRUE);
 		replace_pwds(vars, old_pwd);
 	}
 }

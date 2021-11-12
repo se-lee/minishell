@@ -37,9 +37,20 @@ void	free_array(char **array)
 	free(array);
 }
 
-void	display_error_fd(t_command *current_cmd)
+void	display_cmd_error(t_command *current_cmd, char *message, int show_arg)
 {
+	char	*command_name;
+	char	*argument;
+
+	command_name = current_cmd->command[0];
+	argument = current_cmd->command[1];
 	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(current_cmd->command[0], 2);
-	perror(current_cmd->command[1]);
+	ft_putstr_fd(command_name, 2);
+	ft_putstr_fd(": ", 2);
+	if (show_arg == TRUE)
+	{
+		ft_putstr_fd(argument, 2);
+		ft_putstr_fd(": ", 2);
+	}
+	ft_putendl_fd(message, 2);
 }

@@ -34,10 +34,10 @@ void	builtin_exit(t_vars *vars, t_command *current_cmd)
 		}
 		else if (strisnum(current_cmd->command[1]) == 1
 			&& current_cmd->command[2] != NULL)
-			printf("exit: too many arguments\n");
+			display_cmd_error(current_cmd, "too many arguments", FALSE);
 		else
 		{
-			printf("exit : numeric argument required\n");
+			display_cmd_error(current_cmd, "numeric argument required", TRUE);
 			exit(255);
 		}
 	}

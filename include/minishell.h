@@ -195,7 +195,7 @@ t_envlist	*envlist_sort_ascii(t_vars *vars);
 void		ft_append(char **a, char *str);
 void		*protected_malloc(size_t count, size_t size);
 void		free_array(char **array);
-void		display_error_fd(t_command *current_cmd);
+void	display_cmd_error(t_command *current_cmd, char *message, int arg);
 
 /* Signals */
 void		sigchild(int sig);
