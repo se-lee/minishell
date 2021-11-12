@@ -36,3 +36,10 @@ void	free_array(char **array)
 	}
 	free(array);
 }
+
+void	display_error_fd(t_command *current_cmd)
+{
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(current_cmd->command[0], 2);
+	perror(current_cmd->command[1]);
+}
