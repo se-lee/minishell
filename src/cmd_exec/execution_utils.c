@@ -21,7 +21,7 @@ void	run_command_builtin(t_vars *vars, t_command *current_cmd)
 		builtin_unset(vars, current_cmd, 0);
 }
 
-int	run_command_non_builtin(t_envlist *envlist, t_command *current_cmd)
+int	run_command_non_builtin(t_vars *vars, t_envlist *envlist, t_command *current_cmd)
 {
 	char	*path;
 	char	**env;
@@ -34,8 +34,8 @@ int	run_command_non_builtin(t_envlist *envlist, t_command *current_cmd)
 		{
 			perror(current_cmd->command[0]);
 			free(path);
-			exit(127);
-			// return (127);
+			vars->return_value = 127;
+			exit(vars->return_value);
 		}
 		return (0);
 	}
@@ -43,8 +43,10 @@ int	run_command_non_builtin(t_envlist *envlist, t_command *current_cmd)
 	{
 		display_cmd_error(current_cmd, "command not found", FALSE);
 		free(path);
-		exit(127);
-		// return (127);
+printf("return_value1:%d\n", vars->return_value);
+		vars->return_value = 127;
+printf("return_value2:%d\n", vars->return_value);
+		exit(vars->return_value);
 	}
 }
 
@@ -53,13 +55,12 @@ void	run_command_and_exit(t_vars *vars, t_command *current_cmd)
 	if (command_is_builtin(current_cmd->command) == TRUE)
 	{
 		run_command_builtin(vars, current_cmd);
-		exit(0);
+		exit(vars->return_value);
 	}
 	else
 	{
-		exit(run_command_non_builtin(vars->envp, current_cmd));
-		// run_command_non_builtin(vars->envp, current_cmd);
-		// exit(0);
+		run_command_non_builtin(vars, vars->envp, current_cmd);
+		exit(vars->return_value);
 	}
 }
 
@@ -74,7 +75,7 @@ void	redirect_and_run_cmd(t_vars *vars, t_command *current_cmd, int builtin)
 	else
 	{
 		redirection(vars, current_cmd);
-		run_command_non_builtin(vars->envp, current_cmd);
+		run_command_non_builtin(vars, vars->envp, current_cmd);
 	}
 }
 
