@@ -8,7 +8,7 @@ char	*vars_initializer(t_vars *vars)
 	vars->in = NULL;
 	vars->out = NULL;
 	vars->return_value = 0;
-	vars->cmd = NULL; //add
+	// vars->cmd = NULL; //add
 	return (str);
 }
 
@@ -25,6 +25,7 @@ int	main(int argc, char **argv, char **envp)
 	while (str != NULL)
 	{
 		vars.error = 0;
+		vars.cmd = NULL; //add
 		if (str[0])
 		{
 			add_history(str);
