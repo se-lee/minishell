@@ -8,6 +8,7 @@ char	*vars_initializer(t_vars *vars)
 	vars->in = NULL;
 	vars->out = NULL;
 	vars->return_value = 0;
+	vars->cmd = NULL; //add
 	return (str);
 }
 
