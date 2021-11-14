@@ -25,7 +25,7 @@ int	main(int argc, char **argv, char **envp)
 	while (str != NULL)
 	{
 		vars.error = 0;
-		vars.cmd = NULL; //add
+		vars.cmd = NULL; //added 
 		if (str[0])
 		{
 			add_history(str);

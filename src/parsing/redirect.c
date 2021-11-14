@@ -1,5 +1,13 @@
 #include "minishell.h"
 
+void	initialize_inout(t_redirect *inout)
+{
+	inout->filename = NULL;
+	inout->arrow_num = 0;
+	inout->cmd_num = 0;
+	inout->next = NULL;
+}
+
 void	prepare_inout(t_vars *vars, t_redirect **current_redirect, int inout)
 {
 	if (inout == IN && vars->in == NULL)
@@ -25,6 +33,7 @@ void	prepare_inout(t_vars *vars, t_redirect **current_redirect, int inout)
 t_token	*fill_inout(t_vars *vars, t_token *current_token,
 		t_redirect *current_inout, int cmd_num)
 {
+	initialize_inout(current_inout);
 	current_inout->arrow_num = current_token->buffer.len;
 	current_inout->cmd_num = cmd_num;
 	current_token = remove_token(vars, current_token);
