@@ -120,7 +120,8 @@ void		add_new_var_to_list(t_vars *vars, char *new_var);
 void		free_env(t_envlist *current_env);
 
 /* built-in commands */
-void		builtin_cd(t_vars *vars, t_command *current_cmd);
+// void		builtin_cd(t_vars *vars, t_command *current_cmd);
+int			builtin_cd(t_vars *vars, t_command *current_cmd);
 void		builtin_echo(t_command *current_cmd);
 void		builtin_env(t_vars *vars);
 void		builtin_exit(t_vars *vars, t_command *current_cmd);
@@ -140,7 +141,8 @@ void		launch_commands(t_vars *vars, t_command *current_cmd,
 void		execute_command(t_vars *vars);
 
 /* execution utils */
-void		run_command_builtin(t_vars *vars, t_command *current_cmd);
+// void		run_command_builtin(t_vars *vars, t_command *current_cmd);
+int			run_command_builtin(t_vars *vars, t_command *current_cmd);
 int			run_command_non_builtin(t_vars *vars, t_envlist *envlist, t_command *current_cmd);
 int			envlist_count(t_envlist *envp);
 char		**envlist_to_char_array(t_envlist *envp);

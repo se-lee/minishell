@@ -1,8 +1,10 @@
 #include "minishell.h"
 
+/*
 void	run_command_builtin(t_vars *vars, t_command *current_cmd)
 {
 	char	*command;
+
 
 	command = current_cmd->command[0];
 	if (ft_strcmp(command, "cd") == 0)
@@ -20,6 +22,32 @@ void	run_command_builtin(t_vars *vars, t_command *current_cmd)
 	else if (ft_strcmp(command, "unset") == 0)
 		builtin_unset(vars, current_cmd, 0);
 }
+*/
+
+int	run_command_builtin(t_vars *vars, t_command *current_cmd)
+{
+	char	*command;
+	int		return_value;
+
+	command = current_cmd->command[0];
+	return_value = 0;
+	if (ft_strcmp(command, "cd") == 0)
+		return_value = builtin_cd(vars, current_cmd);
+	else if (ft_strcmp(command, "echo") == 0)
+		builtin_echo(current_cmd);
+	else if (ft_strcmp(command, "env") == 0)
+		builtin_env(vars);
+	else if (ft_strcmp(command, "exit") == 0)
+		builtin_exit(vars, current_cmd);
+	else if (ft_strcmp(command, "export") == 0)
+		builtin_export(vars, current_cmd);
+	else if (ft_strcmp(command, "pwd") == 0)
+		builtin_pwd();
+	else if (ft_strcmp(command, "unset") == 0)
+		builtin_unset(vars, current_cmd, 0);
+	return (return_value);
+}
+
 
 int	run_command_non_builtin(t_vars *vars, t_envlist *envlist, t_command *current_cmd)
 {

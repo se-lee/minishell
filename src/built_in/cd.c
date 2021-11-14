@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	replace_pwds(t_vars *vars, char *old_pwd)
+void	replace_oldpwd_and_pwd(t_vars *vars, char *old_pwd)
 {
 	t_envlist	*current_envp;
 	char		pwd[MAXPATHLEN];
@@ -56,10 +56,10 @@ void	cd_to_home(t_vars *vars, char *path_temp)
 	free(home);
 	chdir(path);
 	free(path);
-	replace_pwds(vars, find_pwd(vars));
+	replace_oldpwd_and_pwd(vars, find_pwd(vars));
 }
 
-void	builtin_cd(t_vars *vars, t_command *current_cmd)
+int		builtin_cd(t_vars *vars, t_command *current_cmd)
 {
 	char	*path;
 	char	*old_pwd;
@@ -73,16 +73,23 @@ void	builtin_cd(t_vars *vars, t_command *current_cmd)
 		if (old_pwd != NULL)
 			printf("%s\n", old_pwd);
 		else
+		{
 			display_cmd_error(current_cmd, "OLDPWD not set", FALSE);
+			return (EXIT_FAILURE);
+		}
 		chdir(old_pwd);
 		old_pwd = find_pwd(vars);
-		replace_pwds(vars, old_pwd);
+		replace_oldpwd_and_pwd(vars, old_pwd);
 	}
 	else
 	{
 		old_pwd = find_pwd(vars);
 		if (chdir(path) == -1)
+		{
 			display_cmd_error(current_cmd, "No such file or directory", TRUE);
-		replace_pwds(vars, old_pwd);
+			return (EXIT_FAILURE);
+		}
+		replace_oldpwd_and_pwd(vars, old_pwd);
 	}
+		return (EXIT_SUCCESS);
 }
