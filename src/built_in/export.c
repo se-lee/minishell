@@ -68,18 +68,18 @@ void	export_while(t_vars *vars, char *command, int quotes)
 	int		res;
 
 	res = export_syntax(command, quotes);
-	// printf("res:%d\n", res);
 	if (res == 0)
 	{
 		ft_putstr_fd("minishell: export: ", 2);
 		ft_putstr_fd(command, 2);
 		ft_putendl_fd(": not a valid identifier", 2);
-		// printf("export: %s: invalid token\n", command);
 	}
 	else
 	{
 		var_str = command;
-		if (ft_inenv(vars->envp, var_str) == 1)
+		if (ft_inenv(vars->envp, var_str) == 1 && format_is_valid(var_str) == FALSE)
+			return ;
+		else if (ft_inenv(vars->envp, var_str) == 1 && format_is_valid(var_str) == TRUE)
 			delete_env(vars->envp, var_str);
 		add_new_var_to_list(vars, var_str);
 	}
