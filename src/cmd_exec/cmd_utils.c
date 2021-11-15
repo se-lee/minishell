@@ -24,7 +24,7 @@ char	*get_command_path(t_envlist *envp, char *command)
 	int		i;
 
 	path = get_env_value(envp, "PATH", 0);
-	if (path == NULL || ft_strncmp("/", command, 1) == 0)
+	if (path == NULL || ft_strncmp("/", command, 1) == 0 || ft_strcmp(path, "") == 0)
 		return (command);
 	if (ft_strncmp("./", command, 2) == 0)
 		return (search_current_dir(&command[2]));

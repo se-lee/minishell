@@ -82,6 +82,11 @@ void	run_command_non_builtin(t_vars *vars, t_envlist *envlist, t_command *curren
 	}
 }
 
+/*
+126 : the command does not execute (for some reason; eg - no permission to execute)
+127 : command not found
+*/
+
 void	run_command_and_exit(t_vars *vars, t_command *current_cmd)
 {
 	if (command_is_builtin(current_cmd->command) == TRUE)
