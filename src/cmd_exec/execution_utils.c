@@ -65,17 +65,22 @@ int	run_command_non_builtin(t_vars *vars, t_envlist *envlist, t_command *current
 			vars->return_value = 127;
 			exit(vars->return_value);
 		}
-		return (0);
+	}
+	else if (ft_strncmp(current_cmd->command[0], "|", 1) == 0)
+	{
+		ft_putendl_fd("minishell: syntax error near unexpected token `|'", 2);
+		free(path);
+		vars->return_value = 127;
+		exit(vars->return_value);
 	}
 	else
 	{
 		display_cmd_error(current_cmd, "command not found", FALSE);
 		free(path);
-printf("return_value1:%d\n", vars->return_value);
 		vars->return_value = 127;
-printf("return_value2:%d\n", vars->return_value);
 		exit(vars->return_value);
 	}
+		return (0);
 }
 
 void	run_command_and_exit(t_vars *vars, t_command *current_cmd)
