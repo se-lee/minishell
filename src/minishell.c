@@ -46,6 +46,8 @@ int	main(int argc, char **argv, char **envp)
 		signal(SIGINT, control_c);
 		str = readline("\x1B[32mminishell$\x1B[0m: ");
 	}
+	if (count_heredoc(&vars) > 0)
+		unlink(".heredoc");
 	printf("exit\n");//ft_putendl_fd("exit", 0);
 }
 
