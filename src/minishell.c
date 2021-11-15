@@ -44,7 +44,7 @@ int	main(int argc, char **argv, char **envp)
 		main_loop(&vars, str);
 		set_termios();
 		signal(SIGINT, control_c);
-printf("return value:%d\n", vars.return_value);
+// printf("return value:%d\n", vars.return_value);
 		str = readline("\x1B[32mminishell$\x1B[0m: ");
 	}
 	if (count_heredoc(&vars) > 0)

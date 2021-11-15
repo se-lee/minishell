@@ -78,7 +78,7 @@ struct s_vars {
 	t_redirect		*in;
 	t_redirect		*out;
 	struct termios	saved_termios;
-	int				return_value;
+	long long int	return_value;
 	int				error;
 };
 
@@ -118,6 +118,10 @@ void		replace_pwd(t_vars *vars, t_envlist *current_envp,
 				char *name, char *pwd);
 void		add_new_var_to_list(t_vars *vars, char *new_var);
 void		free_env(t_envlist *current_env);
+int			strisnum(char *str);
+void		remove_space(char **str);
+int			value_exceeds_llint(char *str, long long int return_value);
+
 
 /* built-in commands */
 // void		builtin_cd(t_vars *vars, t_command *current_cmd);

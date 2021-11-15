@@ -45,23 +45,26 @@ void	run_command_builtin(t_vars *vars, t_command *current_cmd)
 		vars->return_value = builtin_unset(vars, current_cmd, 0);
 }
 
-
 void	run_command_non_builtin(t_vars *vars, t_envlist *envlist, t_command *current_cmd)
 {
 	char	*path;
 	char	**env;
+	int		temp;
 
 	env = envlist_to_char_array(envlist);
 	path = get_command_path(envlist, current_cmd->command[0]);
 	if (path != NULL)
 	{
-		if (execve(path, current_cmd->command, env) < 0)
+		temp = execve(path, current_cmd->command, env);
+		if (temp < 0)
 		{
 			perror(current_cmd->command[0]);
 			free(path);
 			vars->return_value = 127;
 			exit(vars->return_value);
 		}
+		else
+			vars->return_value = temp;
 	}
 	else if (ft_strncmp(current_cmd->command[0], "|", 1) == 0)
 	{

@@ -19,6 +19,7 @@ SRCS =	minishell.c						\
 		built_in/cd_utils.c				\
 		built_in/echo.c					\
 		built_in/env.c					\
+		built_in/exit_utils.c			\
 		built_in/exit.c					\
 		built_in/export.c				\
 		built_in/export_utils.c			\
