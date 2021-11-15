@@ -36,7 +36,7 @@ t_token	*fill_inout(t_vars *vars, t_token *current_token,
 	initialize_inout(current_inout);
 	current_inout->arrow_num = current_token->buffer.len;
 	current_inout->cmd_num = cmd_num;
-	current_token = remove_token(vars, current_token); //removes < / > from buffer.str
+	current_token = remove_token(vars, current_token);
 	if (current_token == NULL) //added
 		return (NULL);
 	if (current_token->token_type == SPACE_SIGN)
