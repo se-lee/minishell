@@ -95,6 +95,7 @@ t_token	*replace_env(t_vars *vars, t_token *token)
 			var = find_variable(&token->buffer.str[i]);
 			value = get_env_value(vars->envp, &var[1], vars->return_value);
 			update_token(token, var, value);
+			free(value);
 			i = -1;
 		}
 	}
