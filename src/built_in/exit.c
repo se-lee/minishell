@@ -46,7 +46,6 @@ void	builtin_exit(t_vars *vars, t_command *current_cmd)
 			&& current_cmd->command[2] == NULL)
 		{
 			vars->return_value = ft_atoi(current_cmd->command[1]); //atoi -> ft_atoi
-printf("ret:%d\n", vars->return_value);
 			if (vars->return_value > 255 || vars->return_value < 0)
 				vars->return_value = vars->return_value % 256;
 			if (count_command(vars->cmd) == 1) //current_cmd->pipe == 0)
