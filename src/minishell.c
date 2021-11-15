@@ -12,6 +12,21 @@ char	*vars_initializer(t_vars *vars)
 	return (str);
 }
 
+void	main_loop(t_vars *vars, char *str)
+{
+	if (str[0])
+	{
+		add_history(str);
+		parsing(vars, str);
+		if (vars->error == 0 && vars->cmd != NULL)
+			execute_command(vars);
+		free(str);
+		loop_free(vars);
+	}
+	else
+		free(str);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_vars			vars;
@@ -26,17 +41,7 @@ int	main(int argc, char **argv, char **envp)
 	{
 		vars.error = 0;
 		vars.cmd = NULL; //added 
-		if (str[0])
-		{
-			add_history(str);
-			parsing(&vars, str);
-			if (vars.error == 0 && vars.cmd != NULL)
-				execute_command(&vars);
-			free(str);
-			loop_free(&vars);
-		}
-		else
-			free(str);
+		main_loop(&vars, str);
 		set_termios();
 		signal(SIGINT, control_c);
 		str = readline("\x1B[32mminishell$\x1B[0m: ");
