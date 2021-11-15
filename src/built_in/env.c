@@ -21,7 +21,14 @@ void	envlist_print(t_envlist *envp)
 	}
 }
 
-void	builtin_env(t_vars *vars)
+int		builtin_env(t_vars *vars)
 {
-	envlist_print(vars->envp);
+	if (vars->cmd->command[1] != NULL)
+	{
+		display_cmd_error(&vars->cmd[0], "No such file or directory", TRUE);
+		return (127);
+	}
+	else
+		envlist_print(vars->envp);
+	return (EXIT_SUCCESS);
 }

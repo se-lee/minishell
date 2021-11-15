@@ -122,11 +122,11 @@ void		free_env(t_envlist *current_env);
 /* built-in commands */
 // void		builtin_cd(t_vars *vars, t_command *current_cmd);
 int			builtin_cd(t_vars *vars, t_command *current_cmd);
-void		builtin_echo(t_command *current_cmd);
-void		builtin_env(t_vars *vars);
+int			builtin_echo(t_command *current_cmd);
+int			builtin_env(t_vars *vars);
 void		builtin_exit(t_vars *vars, t_command *current_cmd);
-void		builtin_export(t_vars *vars, t_command *current_cmd);
-void		builtin_unset(t_vars *vars, t_command *current_cmd, int i);
+int			builtin_export(t_vars *vars, t_command *current_cmd);
+int			builtin_unset(t_vars *vars, t_command *current_cmd, int i);
 void		builtin_pwd(void);
 
 /* envlist utils */
@@ -142,8 +142,8 @@ void		execute_command(t_vars *vars);
 
 /* execution utils */
 // void		run_command_builtin(t_vars *vars, t_command *current_cmd);
-int			run_command_builtin(t_vars *vars, t_command *current_cmd);
-int			run_command_non_builtin(t_vars *vars, t_envlist *envlist, t_command *current_cmd);
+void		run_command_builtin(t_vars *vars, t_command *current_cmd);
+void		run_command_non_builtin(t_vars *vars, t_envlist *envlist, t_command *current_cmd);
 int			envlist_count(t_envlist *envp);
 char		**envlist_to_char_array(t_envlist *envp);
 void		execute_pipe_commands(t_vars *vars);

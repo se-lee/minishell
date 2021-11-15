@@ -27,7 +27,7 @@ void	echo_print_args(t_command *current_cmd, int i)
 	}	
 }
 
-void	builtin_echo(t_command *current_cmd)
+int		builtin_echo(t_command *current_cmd)
 {
 	int	n_option;
 	int	i;
@@ -45,9 +45,10 @@ void	builtin_echo(t_command *current_cmd)
 			}
 		}
 		if (n_option == 1 && current_cmd->command[i] == NULL)
-			return ;
+			return (EXIT_SUCCESS);
 		echo_print_args(current_cmd, i);
 	}
 	if (n_option == 0)
 		printf("\n");
+	return (EXIT_SUCCESS);
 }
