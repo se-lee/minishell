@@ -59,6 +59,7 @@ void	delete_env(t_envlist *envp, char *str)
 	}
 	else
 		delete_env_else(&current_env, name);
+	free(name);
 }
 
 void	export_while(t_vars *vars, char *command, int quotes)

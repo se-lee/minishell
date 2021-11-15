@@ -25,7 +25,11 @@ int	ft_inenv(t_envlist *envp, char *str)
 				name, (ft_strlen(name) + 1)) != 0))
 		current_env = current_env->next;
 	if (current_env)
+	{
+		free(name);
 		return (1);
+	}
+	free(name);
 	return (0);
 }
 
