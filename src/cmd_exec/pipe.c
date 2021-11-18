@@ -28,7 +28,7 @@ void	pipe_and_launch_command(t_vars *vars, t_command *current_cmd,
 			int input, int to_close)
 {
 	if (pipe(current_cmd->fd) < 0)
-		perror("pipe");
+		ft_putendl_fd("error: pipe", 2);
 	if (!to_close)
 		to_close = current_cmd->fd[0];
 	launch_commands(vars, current_cmd, (int [2]){input, current_cmd->fd[1]},

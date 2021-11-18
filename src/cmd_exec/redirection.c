@@ -13,7 +13,7 @@ int	redirect_input(char *file)
 	return (0);
 }
 
-int	redirect_out(t_redirect *current_out)
+int	redirect_out(t_command *current_cmd, t_redirect *current_out)
 {
 	int		fd;
 	char	*file;
@@ -26,6 +26,7 @@ int	redirect_out(t_redirect *current_out)
 		fd = open(file, O_APPEND | O_CREAT | O_WRONLY, 0644);
 	if (fd < 0)
 		perror(file);
+	// if (dup2(fd, current_cmd->next->fd[1]) < 0)
 	if (dup2(fd, STDOUT_FILENO) == -1)
 		exit(EXIT_FAILURE);
 	close (fd);
@@ -50,7 +51,7 @@ void	redirection(t_vars *vars, t_command *current_cmd)
 	}
 	while (current_out)
 	{
-		redirect_out(current_out);
+		redirect_out(current_cmd, current_out);
 		current_out = current_out->next;
 	}
 }
