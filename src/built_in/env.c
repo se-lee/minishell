@@ -21,7 +21,7 @@ void	envlist_print(t_envlist *envp)
 	}
 }
 
-int		builtin_env(t_vars *vars)
+int	builtin_env(t_vars *vars)
 {
 	if (vars->cmd->command[1] != NULL)
 	{

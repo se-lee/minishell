@@ -46,14 +46,13 @@ void	envlist_delete_var(t_envlist *current_env)
 	}
 }
 
-/* ADDED 11/11 */
-int		unset_check_error(t_command *current_cmd)
+int	unset_check_error(t_command *current_cmd)
 {
 	display_cmd_error(current_cmd, "not a valid identifier", TRUE);
 	return (EXIT_FAILURE);
 }
 
-int		builtin_unset(t_vars *vars, t_command *current_cmd, int i)
+int	builtin_unset(t_vars *vars, t_command *current_cmd, int i)
 {
 	char		*var_to_unset;
 	t_envlist	*current_env;

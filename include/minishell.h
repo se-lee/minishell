@@ -83,7 +83,6 @@ struct s_vars {
 	int				error;
 };
 
-
 /* Parsing fonctions */
 int			ft_isspecial(char c);
 int			ft_isupper(char c);
@@ -124,7 +123,6 @@ int			strisnum(char *str);
 void		remove_space(char **str);
 int			value_exceeds_llint(char *str, long long int return_value);
 
-
 /* built-in commands */
 // void		builtin_cd(t_vars *vars, t_command *current_cmd);
 int			builtin_cd(t_vars *vars, t_command *current_cmd);
@@ -149,7 +147,8 @@ void		execute_command(t_vars *vars);
 /* execution utils */
 // void		run_command_builtin(t_vars *vars, t_command *current_cmd);
 void		run_command_builtin(t_vars *vars, t_command *current_cmd);
-void		run_command_non_builtin(t_vars *vars, t_envlist *envlist, t_command *current_cmd);
+void		run_command_non_builtin(t_vars *vars, t_envlist *envlist,
+				t_command *current_cmd);
 int			envlist_count(t_envlist *envp);
 char		**envlist_to_char_array(t_envlist *envp);
 void		execute_pipe_commands(t_vars *vars);
@@ -203,9 +202,8 @@ t_envlist	*envlist_sort_ascii(t_vars *vars);
 void		ft_append(char **a, char *str);
 void		*protected_malloc(size_t count, size_t size);
 void		free_array(char **array);
-void	display_cmd_error(t_command *current_cmd, char *message, int arg);
-void	display_syntax_error(t_token *current_token);
-
+void		display_cmd_error(t_command *current_cmd, char *message, int arg);
+void		display_syntax_error(t_token *current_token);
 
 /* Signals */
 void		sigchild(int sig);

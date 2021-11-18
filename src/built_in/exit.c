@@ -1,17 +1,18 @@
 #include "minishell.h"
 
-void	display_error_and_exit(t_command *current_cmd, char *message, int exit_status)
+void	display_error_and_exit(t_command *current_cmd,
+	char *message, int exit_status)
 {
 	display_cmd_error(current_cmd, message, TRUE);
 	exit(exit_status);
 }
 
-long  long int	ft_atolli(const char *str)
+long long int	ft_atolli(const char *str)
 {
-	int	i;
+	int				i;
 	long long int	out;
-	int	sign;
-	int	len;
+	int				sign;
+	int				len;
 
 	len = 0;
 	i = 0;

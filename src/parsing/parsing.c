@@ -87,6 +87,7 @@ void	printf_commands(t_vars *vars)
 		current_cmd = current_cmd->next;
 	}
 }
+
 t_token	*remove_token(t_vars *vars, t_token *token)
 {
 	t_token	*current_token;
@@ -122,20 +123,21 @@ void	parsing(t_vars *vars, char *str)
 		{
 			if (current_token->token_type == WORD
 				|| current_token->token_type == QUOTE)
+			{
 				current_token = replace_env(vars, current_token);
+			}
 			else
 				current_token = current_token->next;
 		}
 		else
 		{
 			display_syntax_error(current_token);
-			// printf("syntax error near unexpected token\n");
 			vars->error = -1;
 			break ;
 		}
 	}
 	fill_redirect(vars, 0);
 	fill_commands(vars, vars->first, 0);
-	// if (vars->error == 0)
-	// 	printf_commands(vars);
+	if (vars->error == 0)
+		printf_commands(vars);
 }

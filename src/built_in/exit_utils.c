@@ -25,8 +25,7 @@ void	remove_space(char **str)
 	*str = temp;
 }
 
-
-int		value_exceeds_llint(char *str, long long int return_value)
+int	value_exceeds_llint(char *str, long long int return_value)
 {
 	char	*temp;
 
