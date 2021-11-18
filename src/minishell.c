@@ -34,6 +34,7 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
+	g_vars = &vars;
 	str = vars_initializer(&vars);
 	envlist_create(&vars, envp);
 	tcgetattr(0, &vars.saved_termios);
@@ -51,13 +52,3 @@ int	main(int argc, char **argv, char **envp)
 		unlink(".heredoc");
 	printf("exit\n");//ft_putendl_fd("exit", 0);
 }
-
-/*
-in var_initializer:
-str = ""; --(changed to) -->	str = ft_strdup("");
-
-and added
-else free(str);
-in main (line 36)
-*/
-

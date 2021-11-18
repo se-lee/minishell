@@ -15,8 +15,9 @@ void	control_c(int sig)
 	(void)sig;
 	printf("\n");
 	rl_on_new_line();
-	// rl_replace_line("", 0);
+	rl_replace_line("", 0);
 	rl_redisplay();
+	g_vars->return_value = 1;
 }
 
 void	sigmain(int sig)
@@ -30,7 +31,13 @@ void	sigmain(int sig)
 void	sigchild(int sig)
 {
 	if (sig == SIGINT)
+	{
+		g_vars->return_value = 130;
 		exit(130);
+	}
 	else
+	{
+		g_vars->return_value = 131;
 		exit(131);
+	}
 }

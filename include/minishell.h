@@ -24,6 +24,7 @@ typedef struct s_envlist	t_envlist;
 typedef struct s_redirect	t_redirect;
 typedef struct s_command	t_command;
 typedef enum e_type			t_type;
+t_vars						*g_vars;
 
 enum e_type
 {
@@ -81,6 +82,7 @@ struct s_vars {
 	long long int	return_value;
 	int				error;
 };
+
 
 /* Parsing fonctions */
 int			ft_isspecial(char c);
