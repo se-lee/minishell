@@ -28,8 +28,17 @@ void	remove_space(char **str)
 
 int		value_exceeds_llint(char *str, long long int return_value)
 {
-	if (ft_strcmp(str, ft_itoa(return_value)) != 0)
+	char	*temp;
+
+	temp = ft_itoa(return_value);
+	if (ft_strcmp(str, temp) != 0)
+	{
+		free(temp);
 		return (TRUE);
+	}
 	else
+	{
+		free(temp);
 		return (FALSE);
+	}
 }
