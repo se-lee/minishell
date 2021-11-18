@@ -45,7 +45,8 @@ void	run_command_builtin(t_vars *vars, t_command *current_cmd)
 		vars->return_value = builtin_unset(vars, current_cmd, 0);
 }
 
-void	run_command_non_builtin(t_vars *vars, t_envlist *envlist, t_command *current_cmd)
+void	run_command_non_builtin(t_vars *vars,
+	t_envlist *envlist, t_command *current_cmd)
 {
 	char	*path;
 	char	**env;

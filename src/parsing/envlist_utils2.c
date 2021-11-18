@@ -6,7 +6,7 @@ void	envlist_free(t_envlist *to_free)
 	t_envlist	*temp;
 
 	current_env = to_free;
-	while (current_env) //current_env->next)
+	while (current_env)
 	{
 		temp = current_env->next;
 		free(current_env->name);

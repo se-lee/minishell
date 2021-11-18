@@ -27,7 +27,7 @@ void	echo_print_args(t_command *current_cmd, int i)
 	}	
 }
 
-int		builtin_echo(t_command *current_cmd)
+int	builtin_echo(t_command *current_cmd)
 {
 	int	n_option;
 	int	i;
@@ -38,7 +38,8 @@ int		builtin_echo(t_command *current_cmd)
 	{
 		if (current_cmd->command[1][0] == '-')
 		{
-			while (current_cmd->command[i] && echo_n(current_cmd->command[i]) == 1)
+			while (current_cmd->command[i]
+				&& echo_n(current_cmd->command[i]) == 1)
 			{
 				n_option = 1;
 				i++;

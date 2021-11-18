@@ -62,32 +62,20 @@ void	delete_env(t_envlist *envp, char *str)
 	free(name);
 }
 
-void	export_while(t_vars *vars, char *command)//, int quotes)
+void	export_while(t_vars *vars, char *command)
 {
 	char	*var_str;
-	// int		res;
 
-	// res = export_syntax(command, quotes);
-	// if (res == 0)
-	// {
-	// 	ft_putstr_fd("minishell: export: ", 2);
-	// 	ft_putstr_fd(command, 2);
-	// 	ft_putendl_fd(": not a valid identifier", 2);
-	// 	return (EXIT_FAILURE);
-	// }
-	// else
-	// {
-		var_str = command;
-		if (ft_inenv(vars->envp, var_str) == 1 && format_is_valid(var_str) == FALSE)
-			return ;
-		else if (ft_inenv(vars->envp, var_str) == 1 && format_is_valid(var_str) == TRUE)
-			delete_env(vars->envp, var_str);
-		add_new_var_to_list(vars, var_str);
-	// }
-	// return (EXIT_SUCCESS);
+	var_str = command;
+	if (ft_inenv(vars->envp, var_str) == 1 && format_is_valid(var_str) == FALSE)
+		return ;
+	else if (ft_inenv(vars->envp, var_str) == 1
+		&& format_is_valid(var_str) == TRUE)
+		delete_env(vars->envp, var_str);
+	add_new_var_to_list(vars, var_str);
 }
 
-int		builtin_export(t_vars *vars, t_command *current_cmd)
+int	builtin_export(t_vars *vars, t_command *current_cmd)
 {
 	t_envlist	*sorted;
 	int			i;
@@ -98,11 +86,11 @@ int		builtin_export(t_vars *vars, t_command *current_cmd)
 		if (export_syntax(current_cmd->command[i], current_cmd->quotes) == 0)
 		{
 			display_cmd_error(current_cmd, "not a valid identifier", TRUE);
-			return (EXIT_FAILURE);			
+			return (EXIT_FAILURE);
 		}
 		while (current_cmd->command[i])
 		{
-			export_while(vars, current_cmd->command[i]);//, current_cmd->quotes);
+			export_while(vars, current_cmd->command[i]);
 			i++;
 		}
 	}

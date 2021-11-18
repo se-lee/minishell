@@ -87,6 +87,7 @@ void	printf_commands(t_vars *vars)
 		current_cmd = current_cmd->next;
 	}
 }
+
 t_token	*remove_token(t_vars *vars, t_token *token)
 {
 	t_token	*current_token;
@@ -131,7 +132,6 @@ void	parsing(t_vars *vars, char *str)
 		else
 		{
 			display_syntax_error(current_token);
-			// printf("syntax error near unexpected token\n");
 			vars->error = -1;
 			break ;
 		}
