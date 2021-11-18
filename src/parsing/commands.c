@@ -50,6 +50,7 @@ void	fill_command(t_token *token, t_command *current_command)
 	i = 0;
 	while (current_token && ft_piperedirect(current_token->token_type) == 0)
 	{
+		printf("current_token = >>%s<<\n", current_token->buffer.str);
 		while (current_token && ft_piperedirect(current_token->token_type) == 0
 			&& current_token->token_type != SPACE_SIGN)
 		{
@@ -63,6 +64,12 @@ void	fill_command(t_token *token, t_command *current_command)
 	}
 	if (current_token)
 		add_piperedirect(current_token, current_command);
+	i = 0;
+	while (cmd[i])
+	{
+		printf("cmd = >>%s<<\n", cmd[i]);
+		i++;
+	}
 	current_command->command = cmd;
 }
 

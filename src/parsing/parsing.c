@@ -122,7 +122,9 @@ void	parsing(t_vars *vars, char *str)
 		{
 			if (current_token->token_type == WORD
 				|| current_token->token_type == QUOTE)
+			{
 				current_token = replace_env(vars, current_token);
+			}
 			else
 				current_token = current_token->next;
 		}
@@ -136,6 +138,6 @@ void	parsing(t_vars *vars, char *str)
 	}
 	fill_redirect(vars, 0);
 	fill_commands(vars, vars->first, 0);
-	// if (vars->error == 0)
-	// 	printf_commands(vars);
+	if (vars->error == 0)
+		printf_commands(vars);
 }

@@ -48,6 +48,8 @@ void	hell_utils(t_vars *vars, t_token *token, t_token **current_token, int i)
 			(*current_token) = token_malloc_first(vars, token);
 		else
 			malloc_token_next(&(*current_token));
+		while (token->buffer.str[j] == ' ')
+			j++;
 		while (token->buffer.str[i] && token->buffer.str[i] != ' ')
 			i++;
 		(*current_token)->buffer.str = ft_strndup(&token->buffer.str[j], i - j);
