@@ -69,6 +69,7 @@ struct s_command {
 	int			redirect_right;
 	int			redirect_left;
 	int			fd[2];
+	int			exit_status; //ADD (need to initiate)
 	t_command	*next;
 };
 
@@ -131,7 +132,7 @@ int			builtin_env(t_vars *vars);
 void		builtin_exit(t_vars *vars, t_command *current_cmd);
 int			builtin_export(t_vars *vars, t_command *current_cmd);
 int			builtin_unset(t_vars *vars, t_command *current_cmd, int i);
-void		builtin_pwd(void);
+int			builtin_pwd(void);
 
 /* envlist utils */
 char		*get_env_value(t_envlist *envp, char *env_name, int return_value);
@@ -142,11 +143,13 @@ int			envlist_count(t_envlist *envp);
 void		print_commands(t_command *cmd); //erase this function
 void		launch_commands(t_vars *vars, t_command *current_cmd,
 				int fds[2], int to_close);
-void		execute_command(t_vars *vars);
+// void		execute_command(t_vars *vars);
+void	execute_command(t_vars *vars, t_envlist *envlist);
+
 
 /* execution utils */
+void	run_command(t_vars *vars, t_command *current_cmd, t_envlist *envlist);
 // void		run_command_builtin(t_vars *vars, t_command *current_cmd);
-void		run_command_builtin(t_vars *vars, t_command *current_cmd);
 void		run_command_non_builtin(t_vars *vars, t_envlist *envlist,
 				t_command *current_cmd);
 int			envlist_count(t_envlist *envp);

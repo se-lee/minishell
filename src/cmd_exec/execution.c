@@ -1,6 +1,7 @@
 #include "minishell.h"
 
-/* remove this function later */
+/*
+remove this function later
 void	print_commands(t_command *cmd)
 {
 	int	i;
@@ -16,8 +17,10 @@ void	print_commands(t_command *cmd)
 void	run_command_no_pipe(t_vars *vars, t_command *current_cmd)
 {
 	pid_t	child;
+	int		status;
 
 	child = 0;
+	status = 0;
 	if (command_is_builtin(current_cmd->command) == TRUE)
 	{
 		if (vars->in || vars->out)
@@ -35,7 +38,7 @@ void	run_command_no_pipe(t_vars *vars, t_command *current_cmd)
 		if (child == 0)
 			redirect_and_run_cmd(vars, current_cmd, FALSE);
 	}
-	waitpid(child, NULL, 0);
+	waitpid(child, &status, 0);
 }
 
 void	launch_commands(t_vars *vars, t_command *current_cmd,
@@ -109,3 +112,4 @@ void	execute_command(t_vars *vars)
 	if (current_cmd)
 		execute_with_or_without_pipe(vars, current_cmd);
 }
+*/

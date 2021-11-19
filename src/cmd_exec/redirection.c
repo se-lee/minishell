@@ -26,9 +26,16 @@ int	redirect_out(t_command *current_cmd, t_redirect *current_out)
 		fd = open(file, O_APPEND | O_CREAT | O_WRONLY, 0644);
 	if (fd < 0)
 		perror(file);
-	// if (dup2(fd, current_cmd->next->fd[1]) < 0)
-	if (dup2(fd, STDOUT_FILENO) == -1)
-		exit(EXIT_FAILURE);
+	// if (current_cmd->next != NULL)
+	// {
+	// 	if (dup2(fd, current_cmd->fd[1]) < 0)
+	// 		exit(EXIT_FAILURE);
+	// }
+	// if (current_cmd->next == NULL)
+	// {
+		if (dup2(fd, STDOUT_FILENO) == -1)
+			exit(EXIT_FAILURE);
+	// }
 	close (fd);
 	return (0);
 }
