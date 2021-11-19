@@ -8,7 +8,8 @@ int	redirect_input(char *file)
 	if (fd < 0)
 		perror(file);
 	if (dup2(fd, STDIN_FILENO) == -1)
-		exit(EXIT_FAILURE);
+		return (-1);
+		// exit(EXIT_FAILURE);
 	close(fd);
 	return (0);
 }

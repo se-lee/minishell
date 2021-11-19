@@ -19,7 +19,7 @@ void	main_loop(t_vars *vars, char *str)
 		add_history(str);
 		parsing(vars, str);
 		if (vars->error == 0 && vars->cmd != NULL)
-			execute_command(vars, vars->envp);
+			execute_command(vars);
 		free(str);
 		loop_free(vars);
 	}

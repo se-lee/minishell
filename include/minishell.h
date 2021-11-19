@@ -69,6 +69,7 @@ struct s_command {
 	int			redirect_right;
 	int			redirect_left;
 	int			fd[2];
+	pid_t		pid; //add (need to initiate)
 	int			exit_status; //ADD (need to initiate)
 	t_command	*next;
 };
@@ -143,13 +144,10 @@ int			envlist_count(t_envlist *envp);
 void		print_commands(t_command *cmd); //erase this function
 void		launch_commands(t_vars *vars, t_command *current_cmd,
 				int fds[2], int to_close);
-// void		execute_command(t_vars *vars);
-void	execute_command(t_vars *vars, t_envlist *envlist);
-
+void		execute_command(t_vars *vars);
 
 /* execution utils */
-void	run_command(t_vars *vars, t_command *current_cmd, t_envlist *envlist);
-// void		run_command_builtin(t_vars *vars, t_command *current_cmd);
+void		run_command_builtin(t_vars *vars, t_command *current_cmd);
 void		run_command_non_builtin(t_vars *vars, t_envlist *envlist,
 				t_command *current_cmd);
 int			envlist_count(t_envlist *envp);
