@@ -1,19 +1,5 @@
 #include "minishell.h"
 
-static void	add_new_var_to_list(t_vars *vars, char *new_var)
-{
-	t_envlist	*current_env;
-
-	current_env = vars->envp;
-	while (current_env->next != NULL)
-		current_env = current_env->next;
-	current_env->next = protected_malloc(1, sizeof(t_envlist));
-	current_env = current_env->next;
-	current_env->name = env_separation(new_var, 0);
-	current_env->value = env_separation(new_var, 1);
-	current_env->next = NULL;
-}
-
 t_envlist	*envlist_sort_ascii(t_vars *vars)
 {
 	t_envlist	*current_env;
@@ -40,10 +26,24 @@ t_envlist	*envlist_sort_ascii(t_vars *vars)
 	return (new_env);
 }
 
+void	delete_env_else(t_envlist **current_env, char *name)
+{
+	t_envlist	*temp;
+
+	while ((*current_env)->next && (ft_strncmp((*current_env)->next->name,
+				name, (ft_strlen(name) + 1)) != 0))
+		(*current_env) = (*current_env)->next;
+	if ((*current_env)->next)
+	{
+		temp = (*current_env)->next->next;
+		free_env((*current_env)->next);
+		(*current_env)->next = temp;
+	}
+}
+
 void	delete_env(t_envlist *envp, char *str)
 {
 	t_envlist	*current_env;
-	t_envlist	*temp;
 	char		*name;
 
 	current_env = envp;
@@ -55,98 +55,50 @@ void	delete_env(t_envlist *envp, char *str)
 			envp = current_env->next;
 		else
 			envp = NULL;
-		free(current_env->name);
-		free(current_env->value);
-		free(current_env);
+		free_env(current_env);
 	}
 	else
-	{
-		while (current_env->next && (ft_strncmp(current_env->next->name,
-					name, (ft_strlen(name) + 1)) != 0))
-			current_env = current_env->next;
-		if (current_env->next)
-		{
-			temp = current_env->next->next;
-			free(current_env->next->name);
-			free(current_env->next->value);
-			free(current_env->next);
-			current_env->next = temp;
-		}
-	}
+		delete_env_else(&current_env, name);
+	free(name);
 }
 
-void	export_while(t_vars *vars, char *command, int quotes)
+void	export_while(t_vars *vars, char *command)
 {
 	char	*var_str;
-	int		res;
 
-	res = export_syntax(command, quotes);
-	printf("res:%d\n", res);
-	if (res == 0)
-		printf("export: %s: invalid token\n", command);
-	else
-	{
-		var_str = command;
-		if (ft_inenv(vars->envp, var_str) == 1)
-			delete_env(vars->envp, var_str);
-		add_new_var_to_list(vars, var_str);
-	}
+	var_str = command;
+	if (ft_inenv(vars->envp, var_str) == 1 && format_is_valid(var_str) == FALSE)
+		return ;
+	else if (ft_inenv(vars->envp, var_str) == 1
+		&& format_is_valid(var_str) == TRUE)
+		delete_env(vars->envp, var_str);
+	add_new_var_to_list(vars, var_str);
 }
 
-/*
-// this is original
-void	builtin_export(t_vars *vars, t_command *current_cmd)
+int	builtin_export(t_vars *vars, t_command *current_cmd)
 {
-	char		*var_str;
-	char		*var_name;
-	char		*temp;
 	t_envlist	*sorted;
 	int			i;
 
 	if (current_cmd && current_cmd->command[1])
 	{
 		i = 1;
+		if (export_syntax(current_cmd->command[i], current_cmd->quotes) == 0)
+		{
+			display_cmd_error(current_cmd, "not a valid identifier", TRUE);
+			return (EXIT_FAILURE);
+		}
 		while (current_cmd->command[i])
 		{
-	printf("cmd[%d]:%s\n", i, current_cmd->command[i]);
 			export_while(vars, current_cmd->command[i]);
 			i++;
 		}
 	}
-	else
+	else if (vars->envp != NULL)
 	{
 		sorted = envlist_sort_ascii(vars);
 		envlist_print_all(sorted);
 		envlist_free(sorted);
 	}
-}
-*/
-
-// this is test version 
-void	builtin_export(t_vars *vars, t_command *current_cmd)
-{
-	char		*var_str;
-	char		*var_name;
-	char		*temp;
-	t_envlist	*sorted;
-	int			i;
-
-print_commands(current_cmd);
-
-	if (current_cmd && current_cmd->command[1])
-	{
-		i = 1;
-		while (current_cmd->command[i])
-		{
-printf("cmd[%d]:%s\n", i, current_cmd->command[i]);
-			export_while(vars, current_cmd->command[i], current_cmd->quotes);
-			i++;
-		}
-	}
-	else
-	{
-		sorted = envlist_sort_ascii(vars);
-		envlist_print_all(sorted);
-		envlist_free(sorted);
-	}
+	return (EXIT_SUCCESS);
 }

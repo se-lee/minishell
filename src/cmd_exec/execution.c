@@ -1,6 +1,7 @@
 #include "minishell.h"
 
-/* remove this function later */
+/*
+remove this function later
 void	print_commands(t_command *cmd)
 {
 	int	i;
@@ -8,173 +9,108 @@ void	print_commands(t_command *cmd)
 	i = 0;
 	while (cmd->command[i])
 	{
-		printf(">>%s<<\n", cmd->command[i]);
+		printf("%d>>%s<<\n", i, cmd->command[i]);
 		i++;
 	}
 }
+*/
 
-int		envlist_count(t_envlist *envp)
-{
-	int		count;
-	t_envlist	*current_env;
-
-	current_env = envp;
-	count = 0;
-	while (current_env)
-	{
-		count++;
-		current_env = current_env->next;
-	}
-	return (count);
-}
-
-void	run_command_builtin(t_vars *vars, t_command *current_cmd)
-{
-	char	*command;
-
-	command = current_cmd->command[0];
-	if (ft_strcmp(command, "cd") == 0)
-		builtin_cd(vars, current_cmd);
-	else if (ft_strcmp(command, "echo") == 0)
-		builtin_echo(vars, current_cmd);
-	else if (ft_strcmp(command, "env") == 0)
-		builtin_env(vars);
-	else if (ft_strcmp(command, "exit") == 0)
-		builtin_exit(current_cmd);
-	else if (ft_strcmp(command, "export") == 0)
-		builtin_export(vars, current_cmd);
-	else if (ft_strcmp(command, "pwd") == 0)
-		builtin_pwd();
-	else if (ft_strcmp(command, "unset") == 0)
-		builtin_unset(vars, current_cmd);
-}
-
-void	run_command_non_builtin(t_envlist *envlist, t_command *current_cmd)
-{
-	char	*path;
-	char	**env;
-	
-	env = envlist_to_char_array(envlist);
-	path = get_command_path(envlist, current_cmd->command[0]);
-	if (path != NULL)
-	{
-		if (execve(path, current_cmd->command, env) < 0)
-		{
-			perror("");
-			free(path);
-			exit(127);
-		}
-	}
-	else
-	{
-		printf("minishell: %s: command not found\n", current_cmd->command[0]);
-		free(path);
-		exit(127);
-	}
-}
-
-/* new version */
-void	launch_commands(t_vars *vars, t_command *current_cmd, int input, int output, int to_close)
-{
-	pid_t	child;
-	child = fork();
-	if (child < 0)
-		perror("fork");
-	if (child == 0)
-	{
-		redirection(vars);
-		fd_dup_and_close(input, output);
-		if (to_close)// if to_close is not 0
-			close(to_close);
-		if (command_is_builtin(current_cmd->command) == TRUE)
-		{
-			run_command_builtin(vars, current_cmd);
-			exit(0);
-		}
-		else
-		{
-			run_command_non_builtin(vars->envp, current_cmd);
-			exit(0);
-		}
-	}
-	else
-	{
-		if (input != 0)
-			close(input);
-		if (output != 1)
-			close(output);
-	}
-}
 
 void	run_command_no_pipe(t_vars *vars, t_command *current_cmd)
 {
 	pid_t	child;
+	int		status;
 
+	child = 0;
+	status = 0;
 	if (command_is_builtin(current_cmd->command) == TRUE)
 	{
 		if (vars->in || vars->out)
 		{
 			child = fork();
 			if (child == 0)
-			{
-				redirection(vars);
-				run_command_builtin(vars, current_cmd);
-				exit(0);
-			}
+				redirect_and_run_cmd(vars, current_cmd, TRUE);
 		}
 		else
-			run_command_builtin(vars, current_cmd);
+			run_command(vars, current_cmd); //run_command_builtin(vars, current_cmd);
 	}
 	else
 	{
 		child = fork();
 		if (child == 0)
-		{
-			redirection(vars);
-			run_command_non_builtin(vars->envp, current_cmd);
-		}
+			redirect_and_run_cmd(vars, current_cmd, FALSE);
 	}
-	waitpid(child, NULL, 0);
+	waitpid(child, &status, 0);
 }
 
-void	execute_pipe_commands(t_vars *vars)
+void	launch_commands(t_vars *vars, t_command *current_cmd,
+		int in, int out, int to_close)
+{
+	pid_t	child;
+
+	child = fork();
+	if (child < 0)
+		perror("fork");
+	if (child == 0)
+	{
+		signal(SIGINT, sigchild);
+		signal(SIGQUIT, sigchild);
+		fd_dup_and_close(in, out);
+		redirection(vars, current_cmd);
+		if (to_close)
+			close(to_close);
+		run_command_and_exit(vars, current_cmd);
+	}
+	else
+	{
+		signal(SIGINT, sigmain);
+		signal(SIGQUIT, sigmain);
+		if (out != 1)
+			close(out);
+		if (to_close)
+			close(to_close);
+	}
+}
+
+void	execute_with_or_without_pipe(t_vars *vars, t_command *current_cmd)
 {
 	int			input;
 	int			output;
-	int			i;
 	pid_t		child;
-	t_command	*current_cmd;
 	int			to_close;
 
+	child = 0;
 	output = 1;
 	input = 0;
-	current_cmd = vars->cmd;
-	i = 0;
 	to_close = 0;
-	if (count_heredoc(vars) > 0)
-		multiple_heredoc(vars);
 	if (!current_cmd->pipe)
-		run_command_no_pipe(vars, current_cmd);
- 	else
+		run_command(vars, current_cmd); //run_command_no_pipe(vars, current_cmd);
+	else
 	{
-		while (i < count_command(vars->cmd) - 1)
+		if (current_cmd->next == NULL)
+			pipe_get_next_cmd(current_cmd);
+		while (current_cmd->next != NULL)
 		{
-			if (pipe(current_cmd->fd) < 0)
-				perror("pipe");
-			if (!to_close)
-				to_close = current_cmd->fd[0];
-			launch_commands(vars, current_cmd, input, current_cmd->fd[1], to_close);
-			to_close = 0;
+			pipe_and_launch_command(vars, current_cmd, input, to_close == 0);
+			to_close = 1;
 			input = current_cmd->fd[0];
 			current_cmd = current_cmd->next;
-			i++;
 		}
-			launch_commands(vars, current_cmd, input, output, to_close); //last command
-		i = 0;
-		while (i < count_command(vars->cmd))
-		{
-			waitpid(child, NULL, 0);
-			i++;
-		}
+		launch_commands(vars, current_cmd, input, 1, to_close);
+		wait_loop(count_command(vars->cmd), child);
 	}
-} 
+}
+
+void	execute_command(t_vars *vars)
+{
+	t_command	*current_cmd;
+
+	if (!vars->cmd)
+		return ;
+	current_cmd = vars->cmd;
+	tcsetattr(STDIN_FILENO, TCSANOW, &vars->saved_termios);
+	if (count_heredoc(vars) > 0)
+		update_heredoc(vars);
+	if (current_cmd)
+		execute_with_or_without_pipe(vars, current_cmd);
+}

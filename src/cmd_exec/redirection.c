@@ -8,49 +8,58 @@ int	redirect_input(char *file)
 	if (fd < 0)
 		perror(file);
 	if (dup2(fd, STDIN_FILENO) == -1)
-		perror("dup2");
+		return (-1);
+		// exit(EXIT_FAILURE);
 	close(fd);
 	return (0);
 }
 
-int		redirect_out(t_redirect *current_out)
+int	redirect_out(t_command *current_cmd, t_redirect *current_out)
 {
 	int		fd;
 	char	*file;
 
 	file = current_out->filename;
+	fd = -1;
 	if (current_out->arrow_num == 1)
 		fd = open(file, O_TRUNC | O_CREAT | O_WRONLY, 0644);
 	else if (current_out->arrow_num == 2)
 		fd = open(file, O_APPEND | O_CREAT | O_WRONLY, 0644);
 	if (fd < 0)
 		perror(file);
+	// if (current_cmd->next != NULL)
+	// {
+	// 	if (dup2(fd, current_cmd->fd[1]) < 0)
+	// 		exit(EXIT_FAILURE);
+	// }
+	// if (current_cmd->next == NULL)
+	// {
 	if (dup2(fd, STDOUT_FILENO) == -1)
-		perror ("dup2");
+		exit(EXIT_FAILURE);
+	// }
 	close (fd);
 	return (0);
 }
 
-
-void	redirection(t_vars *vars)
+void	redirection(t_vars *vars, t_command *current_cmd)
 {
 	t_redirect	*current_in;
 	t_redirect	*current_out;
-	pid_t		child;
 
 	current_in = vars->in;
 	current_out = vars->out;
-		while (current_in)
-		{
-			if (current_in->arrow_num == 1)
-				redirect_input(current_in->filename);
-			else if (current_in->arrow_num == 2)
-				redirect_heredoc(current_in);
-			current_in = current_in->next;
-		}
-		while (current_out)
-		{
-			redirect_out(current_out);
-			current_out = current_out->next;
-		}
+	(void)current_cmd;
+	while (current_in)
+	{
+		if (current_in->arrow_num == 1)
+			redirect_input(current_in->filename);
+		else if (current_in->arrow_num == 2)
+			redirect_heredoc();
+		current_in = current_in->next;
+	}
+	while (current_out)
+	{
+		redirect_out(current_cmd, current_out);
+		current_out = current_out->next;
+	}
 }

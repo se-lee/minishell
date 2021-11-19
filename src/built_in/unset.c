@@ -23,7 +23,7 @@ void	envlist_delete_first(t_vars *vars, t_envlist *current_env)
 	}
 }
 
-void	envlist_delete_var(t_vars *vars, t_envlist *current_env)
+void	envlist_delete_var(t_envlist *current_env)
 {
 	t_envlist	*temp;
 
@@ -46,29 +46,40 @@ void	envlist_delete_var(t_vars *vars, t_envlist *current_env)
 	}
 }
 
-void	builtin_unset(t_vars *vars, t_command *current_cmd)
+int	unset_check_error(t_command *current_cmd)
+{
+	display_cmd_error(current_cmd, "not a valid identifier", TRUE);
+	return (EXIT_FAILURE);
+}
+
+int	builtin_unset(t_vars *vars, t_command *current_cmd, int i)
 {
 	char		*var_to_unset;
-	char		*var_str;
 	t_envlist	*current_env;
-	int			i;
 
 	if (!(current_cmd))
-		return ;
-	var_to_unset = current_cmd->command[1];
-	current_env = vars->envp;
-	if (ft_strncmp(current_env->name, var_to_unset,
-			ft_strlen(var_to_unset)) == 0)
-		envlist_delete_first(vars, current_env);
-	else
+		return (EXIT_FAILURE);
+	while (current_cmd->command[i])
 	{
-		while (current_env->next)
+		current_env = vars->envp;
+		var_to_unset = current_cmd->command[i];
+		if (ft_isdigit(var_to_unset[0]))
+			return (unset_check_error(current_cmd));
+		if (ft_strncmp(current_env->name, var_to_unset,
+				ft_strlen(var_to_unset)) == 0)
+			envlist_delete_first(vars, current_env);
+		else
 		{
-			if (ft_strncmp(current_env->next->name, var_to_unset,
-					ft_strlen(var_to_unset) + 1) == 0)
-				envlist_delete_var(vars, current_env);
-			if (current_env->next)
-				current_env = current_env->next;
+			while (current_env->next)
+			{
+				if (ft_strncmp(current_env->next->name, var_to_unset,
+						ft_strlen(var_to_unset) + 1) == 0)
+					envlist_delete_var(current_env);
+				if (current_env->next)
+					current_env = current_env->next;
+			}
 		}
-	}	
+		i++;
+	}
+	return (EXIT_SUCCESS);
 }

@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int		count_heredoc(t_vars *vars)
+int	count_heredoc(t_vars *vars)
 {
 	t_redirect	*current_in;
 	int			heredoc_count;
@@ -19,28 +19,29 @@ int		count_heredoc(t_vars *vars)
 char	*get_delimiter(t_redirect *current_in)
 {
 	char	*delimiter;
+
 	if (current_in->filename == NULL)
 	{
 		perror("");
 		return (NULL);
 	}
-	else 
+	else
 	{
 		delimiter = ft_strdup(current_in->filename);
 		return (delimiter);
 	}
 }
 
-void		put_to_heredoc(t_redirect *current_in)
+void	write_to_heredoc(t_redirect *current_in)
 {
 	int		fd;
 	char	*delimiter;
 	char	*line;
 
+	delimiter = get_delimiter(current_in);
 	fd = open(".heredoc", O_TRUNC | O_CREAT | O_WRONLY, 0644);
 	if (fd < 0)
 		perror("heredoc_file");
-	delimiter = get_delimiter(current_in);
 	line = NULL;
 	ft_putstr_fd("> ", OUT);
 	while (get_next_line(IN, &line))
@@ -58,7 +59,7 @@ void		put_to_heredoc(t_redirect *current_in)
 	close(fd);
 }
 
-void	multiple_heredoc(t_vars *vars)
+void	update_heredoc(t_vars *vars)
 {
 	t_redirect	*current_in;
 
@@ -66,12 +67,12 @@ void	multiple_heredoc(t_vars *vars)
 	while (current_in)
 	{
 		if (current_in->arrow_num == 2)
-			put_to_heredoc(current_in);
+			write_to_heredoc(current_in);
 		current_in = current_in->next;
 	}
 }
 
-int		redirect_heredoc(t_redirect *current_in)
+int	redirect_heredoc(void)
 {
 	int		fd;
 

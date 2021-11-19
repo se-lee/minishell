@@ -1,58 +1,30 @@
 #include "minishell.h"
 
-void	free_token(t_token *token)
+char	*vars_initializer(t_vars *vars)
 {
-	free(token->buffer.str);
-	token->buffer.len = 0;
-	token->token_type = 0;
-	token->next = NULL;
-	free(token);
+	char	*str;
+
+	str = ft_strdup("");
+	vars->in = NULL;
+	vars->out = NULL;
+	vars->return_value = 0;
+	// vars->cmd = NULL; //add
+	return (str);
 }
 
-void	free_tokens(t_vars *vars)
+void	main_loop(t_vars *vars, char *str)
 {
-	t_token	*current_token;
-	t_token	*next;
-
-	current_token = vars->first;
-	while (current_token->next)
+	if (str[0])
 	{
-		next = current_token->next;
-		free_token(current_token);
-		current_token = next;
+		add_history(str);
+		parsing(vars, str);
+		if (vars->error == 0 && vars->cmd != NULL)
+			execute_command(vars);
+		free(str);
+		loop_free(vars);
 	}
-	if (current_token)
-		free(current_token);
-}
-
-void	free_commands(t_vars *vars)
-{
-	t_command	*current_cmd;
-	t_command	*next;
-
-	current_cmd = vars->cmd;
-	while (current_cmd->next)
-	{
-		next = current_cmd->next;
-		free_array(current_cmd->command);
-		free(current_cmd);
-		current_cmd = next;
-	}
-	if (current_cmd)
-	{
-		free_array(current_cmd->command);
-		free(current_cmd);
-	}
-}
-
-void	set_termios(void)
-{
-	struct termios	termios;
-
-	tcgetattr(0, &termios);
-	termios.c_cc[VINTR] = 0;
-	termios.c_cc[VQUIT] = 0;
-	tcsetattr(STDIN_FILENO, TCSANOW, &termios);
+	else
+		free(str);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -62,25 +34,21 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
+	g_vars = &vars;
+	str = vars_initializer(&vars);
 	envlist_create(&vars, envp);
-	tcgetattr(0, &vars.saved_termios); 
-	set_termios();
-	str = readline("minishell$ "); //changed to str="";
+	tcgetattr(0, &vars.saved_termios);
 	while (str != NULL)
 	{
-		if (str[0])
-		{
-			vars.error = 0;
-			add_history(str);
-			parsing(&vars, str);
-			if (vars.error == 0)
-				execute_pipe_commands(&vars);
-			free(str);
-			free_tokens(&vars);
-			free_commands(&vars);
-		}
-		//set_termios();
-		str = readline("minishell$ ");
+		vars.error = 0;
+		vars.cmd = NULL; //added 
+		main_loop(&vars, str);
+		set_termios();
+		signal(SIGINT, control_c);
+// printf("return value:%d\n", vars.return_value);
+		str = readline("\x1B[32mminishell$\x1B[0m: ");
 	}
-	printf("exit\n");
+	if (count_heredoc(&vars) > 0)
+		unlink(".heredoc");
+	printf("exit\n");//ft_putendl_fd("exit", 0);
 }
