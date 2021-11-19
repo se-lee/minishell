@@ -23,7 +23,7 @@ void	fd_close(int input, int output)
 	if (output != 1)
 		close(output);
 }
-/*
+
 void	pipe_and_launch_command(t_vars *vars, t_command *current_cmd,
 			int input, int to_close)
 {
@@ -34,7 +34,7 @@ void	pipe_and_launch_command(t_vars *vars, t_command *current_cmd,
 	launch_commands(vars, current_cmd, (int [2]){input, current_cmd->fd[1]},
 		to_close);
 }
-*/
+
 void	wait_loop(int command_count, pid_t child)
 {
 	int		i;

@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-/*
+
 void	run_command_builtin(t_vars *vars, t_command *current_cmd)
 {
 	char	*command;
@@ -21,6 +21,7 @@ void	run_command_builtin(t_vars *vars, t_command *current_cmd)
 	else if (ft_strcmp(command, "unset") == 0)
 		vars->return_value = builtin_unset(vars, current_cmd, 0);
 }
+
 
 void	run_command_non_builtin(t_vars *vars,
 	t_envlist *envlist, t_command *current_cmd)
@@ -60,8 +61,9 @@ void	run_command_non_builtin(t_vars *vars,
 	}
 }
 
-126 : the command does not execute (for some reason; eg - no permission to execute)
-127 : command not found
+
+// 126 : the command does not execute (for some reason; eg - no permission to execute)
+// 127 : command not found
 
 void	run_command_and_exit(t_vars *vars, t_command *current_cmd)
 {
@@ -90,6 +92,10 @@ void	redirect_and_run_cmd(t_vars *vars, t_command *current_cmd, int builtin)
 		redirection(vars, current_cmd);
 		run_command_non_builtin(vars, vars->envp, current_cmd);
 	}
+	// redirection(vars, current_cmd);
+	// run_command(vars, current_cmd);
+	// if (builtin == TRUE)
+	// 	exit(0);
 }
 
 void	pipe_get_next_cmd(t_command *current_cmd)
@@ -104,5 +110,3 @@ void	pipe_get_next_cmd(t_command *current_cmd)
 	current_cmd->next->command = ft_split(line, ' ');
 	free(line);
 }
-
-*/

@@ -15,6 +15,7 @@ void	print_commands(t_command *cmd)
 }
 */
 
+
 void	run_command_no_pipe(t_vars *vars, t_command *current_cmd)
 {
 	pid_t	child;
@@ -31,7 +32,7 @@ void	run_command_no_pipe(t_vars *vars, t_command *current_cmd)
 				redirect_and_run_cmd(vars, current_cmd, TRUE);
 		}
 		else
-			run_command_builtin(vars, current_cmd);
+			run_command(vars, current_cmd); //run_command_builtin(vars, current_cmd);
 	}
 	else
 	{
@@ -58,6 +59,7 @@ void	launch_commands(t_vars *vars, t_command *current_cmd,
 		fd_dup_and_close(fds[0], fds[1]);
 		if (to_close)
 			close(to_close);
+		// run_command(vars, current_cmd);
 		run_command_and_exit(vars, current_cmd);
 	}
 	else
@@ -83,7 +85,7 @@ void	execute_with_or_without_pipe(t_vars *vars, t_command *current_cmd)
 	input = 0;
 	to_close = 0;
 	if (!current_cmd->pipe)
-		run_command_no_pipe(vars, current_cmd);
+		run_command(vars, current_cmd); //run_command_no_pipe(vars, current_cmd);
 	else
 	{
 		if (current_cmd->next == NULL)

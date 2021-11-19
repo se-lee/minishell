@@ -90,6 +90,7 @@ void	pipe_fork_child(t_vars *vars, t_command *current_cmd)
 	}
 }
 
+/*
 void	execute_command(t_vars *vars)
 {
 	t_command	*current_cmd;
@@ -110,3 +111,4 @@ void	execute_command(t_vars *vars)
 		pipe_fork_child(vars, current_cmd);
 	}
 }
+*/
