@@ -16,14 +16,6 @@ void	fd_dup_and_close(int input, int output)
 	}
 }
 
-void	fd_close(int input, int output)
-{
-	if (input != 0)
-		close(input);
-	if (output != 1)
-		close(output);
-}
-
 void	pipe_and_launch_command(t_vars *vars, t_command *current_cmd,
 			int input, int to_close)
 {

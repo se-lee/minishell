@@ -102,6 +102,7 @@ void	execute_with_or_without_pipe(t_vars *vars, t_command *current_cmd)
 	}
 }
 
+/*
 void	execute_command(t_vars *vars)
 {
 	t_command	*current_cmd;
@@ -115,3 +116,4 @@ void	execute_command(t_vars *vars)
 	if (current_cmd)
 		execute_with_or_without_pipe(vars, current_cmd);
 }
+*/

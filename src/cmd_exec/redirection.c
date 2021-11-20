@@ -8,8 +8,7 @@ int	redirect_input(char *file)
 	if (fd < 0)
 		perror(file);
 	if (dup2(fd, STDIN_FILENO) == -1)
-		return (-1);
-		// exit(EXIT_FAILURE);
+		perror("dup2");
 	close(fd);
 	return (0);
 }
@@ -35,7 +34,7 @@ int	redirect_out(t_command *current_cmd, t_redirect *current_out)
 	// if (current_cmd->next == NULL)
 	// {
 		if (dup2(fd, STDOUT_FILENO) == -1)
-			exit(EXIT_FAILURE);
+			perror("dup2");
 	// }
 	close (fd);
 	return (0);
