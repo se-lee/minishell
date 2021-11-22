@@ -17,17 +17,18 @@ void	run_command_no_pipe(t_vars *vars, t_command *current_cmd)
 {
 	pid_t	child;
 
+	signal(SIGQUIT, sigchild);
+	signal(SIGINT, sigchild);
 	child = 0;
 	if (command_is_builtin(current_cmd->command) == TRUE)
 	{
-		if (vars->in || vars->out)
-		{
-			child = fork();
-			if (child == 0)
-				redirect_and_run_cmd(vars, current_cmd, TRUE);
-		}
-		else
-			run_command_builtin(vars, current_cmd);
+		vars->std_in = dup(STDIN_FILENO);
+		vars->std_out = dup(STDOUT_FILENO);
+		redirect_and_run_cmd(vars, current_cmd, TRUE);
+		dup2(vars->std_in, 0);
+		dup2(vars->std_out, 1);
+		close (vars->std_in);
+		close(vars->std_out);
 	}
 	else
 	{
@@ -35,21 +36,22 @@ void	run_command_no_pipe(t_vars *vars, t_command *current_cmd)
 		if (child == 0)
 			redirect_and_run_cmd(vars, current_cmd, FALSE);
 	}
-	waitpid(child, NULL, 0);
+	if (child != 0)
+		wait_loop(vars, child);
 }
 
-void	launch_commands(t_vars *vars, t_command *current_cmd,
+int	launch_commands(t_vars *vars, t_command *current_cmd,
 		int fds[2], int to_close)
 {
 	pid_t	child;
 
+	signal(SIGQUIT, sigchild);
+	signal(SIGINT, sigchild);
 	child = fork();
 	if (child < 0)
 		perror("fork");
 	if (child == 0)
 	{
-		signal(SIGINT, sigchild);
-		signal(SIGQUIT, sigchild);
 		redirection(vars, current_cmd);
 		fd_dup_and_close(fds[0], fds[1]);
 		if (to_close)
@@ -58,13 +60,12 @@ void	launch_commands(t_vars *vars, t_command *current_cmd,
 	}
 	else
 	{
-		signal(SIGINT, sigmain);
-		signal(SIGQUIT, sigmain);
 		if (fds[0] != 0)
 			close(fds[0]);
 		if (fds[1] != 1)
 			close(fds[1]);
 	}
+	return (child);
 }
 
 void	execute_with_or_without_pipe(t_vars *vars, t_command *current_cmd)
@@ -91,8 +92,9 @@ void	execute_with_or_without_pipe(t_vars *vars, t_command *current_cmd)
 			input = current_cmd->fd[0];
 			current_cmd = current_cmd->next;
 		}
-		launch_commands(vars, current_cmd, (int [2]){input, output}, to_close);
-		wait_loop(count_command(vars->cmd), child);
+		child = launch_commands(vars, current_cmd,
+				(int [2]){input, output}, to_close);
+		wait_loop(vars, child);
 	}
 }
 

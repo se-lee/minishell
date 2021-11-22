@@ -5,7 +5,6 @@ void	run_command_builtin(t_vars *vars, t_command *current_cmd)
 {
 	char	*command;
 
-
 	command = current_cmd->command[0];
 	if (ft_strcmp(command, "cd") == 0)
 		builtin_cd(vars, current_cmd);
@@ -108,7 +107,6 @@ void	redirect_and_run_cmd(t_vars *vars, t_command *current_cmd, int builtin)
 	{
 		redirection(vars, current_cmd);
 		run_command_builtin(vars, current_cmd);
-		exit(0);
 	}
 	else
 	{

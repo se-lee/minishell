@@ -78,6 +78,8 @@ struct s_vars {
 	t_command		*cmd;
 	t_redirect		*in;
 	t_redirect		*out;
+	int				std_in;
+	int				std_out;
 	struct termios	saved_termios;
 	long long int	return_value;
 	int				error;
@@ -140,7 +142,7 @@ int			envlist_count(t_envlist *envp);
 
 /* execution */
 void		print_commands(t_command *cmd); //erase this function
-void		launch_commands(t_vars *vars, t_command *current_cmd,
+int			launch_commands(t_vars *vars, t_command *current_cmd,
 				int fds[2], int to_close);
 void		execute_command(t_vars *vars);
 
@@ -172,7 +174,7 @@ void		fd_dup_and_close(int input, int output);
 void		fd_close(int input, int output);
 void		pipe_and_launch_command(t_vars *vars, t_command *current_cmd,
 				int input, int to_close);
-void		wait_loop(int command_count, pid_t child);
+void		wait_loop(t_vars *vars, pid_t child);
 
 /* redirection */
 int			redirect_input(char *file);
