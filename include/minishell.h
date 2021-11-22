@@ -59,6 +59,7 @@ struct s_redirect {
 	char		*filename;
 	int			arrow_num;
 	int			cmd_num;
+	t_type		side;
 	t_redirect	*next;
 };
 
@@ -76,8 +77,7 @@ struct s_vars {
 	t_token			*first;
 	t_envlist		*envp;
 	t_command		*cmd;
-	t_redirect		*in;
-	t_redirect		*out;
+	t_redirect		*inout;
 	int				std_in;
 	int				std_out;
 	struct termios	saved_termios;

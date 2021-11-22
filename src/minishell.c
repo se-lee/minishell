@@ -5,8 +5,7 @@ char	*vars_initializer(t_vars *vars)
 	char	*str;
 
 	str = ft_strdup("");
-	vars->in = NULL;
-	vars->out = NULL;
+	vars->inout = NULL;
 	vars->return_value = 0;
 	return (str);
 }
