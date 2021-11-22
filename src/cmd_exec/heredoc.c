@@ -5,7 +5,7 @@ int	count_heredoc(t_vars *vars)
 	t_redirect	*current_in;
 	int			heredoc_count;
 
-	current_in = vars->in;
+	current_in = vars->inout;
 	heredoc_count = 0;
 	while (current_in)
 	{
@@ -16,18 +16,18 @@ int	count_heredoc(t_vars *vars)
 	return (heredoc_count);
 }
 
-char	*get_delimiter(t_redirect *current_in)
+char	*get_delimiter(t_redirect *current_inout)
 {
 	char	*delimiter;
 
-	if (current_in->filename == NULL)
+	if (current_inout->filename == NULL)
 	{
 		perror("");
 		return (NULL);
 	}
 	else
 	{
-		delimiter = ft_strdup(current_in->filename);
+		delimiter = ft_strdup(current_inout->filename);
 		return (delimiter);
 	}
 }
@@ -65,14 +65,14 @@ void	write_to_heredoc(t_redirect *current_in)
 
 void	update_heredoc(t_vars *vars)
 {
-	t_redirect	*current_in;
+	t_redirect	*current_inout;
 
-	current_in = vars->in;
-	while (current_in)
+	current_inout = vars->inout;
+	while (current_inout)
 	{
-		if (current_in->arrow_num == 2)
-			write_to_heredoc(current_in);
-		current_in = current_in->next;
+		if (current_inout->arrow_num == 2)
+			write_to_heredoc(current_inout);
+		current_inout = current_inout->next;
 	}
 }
 

@@ -51,7 +51,7 @@ void	free_inout(t_vars *vars)
 	t_redirect	*current_inout;
 	t_redirect	*temp_next;
 
-	current_inout = vars->in;
+	current_inout = vars->inout;
 	while (current_inout)
 	{
 		temp_next = current_inout->next;
@@ -59,16 +59,7 @@ void	free_inout(t_vars *vars)
 		free(current_inout);
 		current_inout = temp_next;
 	}
-	current_inout = vars->out;
-	while (current_inout)
-	{
-		temp_next = current_inout->next;
-		free(current_inout->filename);
-		free(current_inout);
-		current_inout = temp_next;
-	}
-	vars->in = NULL;
-	vars->out = NULL;
+	vars->inout = NULL;
 }
 
 void	loop_free(t_vars *vars)

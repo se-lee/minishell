@@ -22,22 +22,10 @@ void	control_c(int sig)
 
 void	sigmain(int sig)
 {
-	if (sig == SIGQUIT)
-		printf("Quit: 3\n");
-	else
-		printf("\n");
+	(void)sig;
 }
 
 void	sigchild(int sig)
 {
-	if (sig == SIGINT)
-	{
-		g_vars->return_value = 130;
-		exit(130);
-	}
-	else
-	{
-		g_vars->return_value = 131;
-		exit(131);
-	}
+	(void)sig;
 }

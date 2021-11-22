@@ -8,18 +8,12 @@ void	initialize_inout(t_redirect *inout)
 	inout->next = NULL;
 }
 
-void	prepare_inout(t_vars *vars, t_redirect **current_redirect, int inout)
+void	prepare_inout(t_vars *vars, t_redirect **current_redirect)
 {
-	if (inout == IN && vars->in == NULL)
+	if (vars->inout == NULL)
 	{
-		vars->in = protected_malloc(1, sizeof(t_redirect));
-		(*current_redirect) = vars->in;
-		(*current_redirect)->next = NULL;
-	}
-	else if (inout == OUT && vars->out == NULL)
-	{
-		vars->out = protected_malloc(1, sizeof(t_redirect));
-		(*current_redirect) = vars->out;
+		vars->inout = protected_malloc(1, sizeof(t_redirect));
+		(*current_redirect) = vars->inout;
 		(*current_redirect)->next = NULL;
 	}
 	else
@@ -37,6 +31,7 @@ t_token	*fill_inout(t_vars *vars, t_token *current_token,
 
 	current_inout->arrow_num = current_token->buffer.len;
 	current_inout->cmd_num = cmd_num;
+	current_inout->side = current_token->token_type;
 	current_token = remove_token(vars, current_token);
 	if (current_token == NULL)
 		return (NULL);
@@ -50,25 +45,20 @@ t_token	*fill_inout(t_vars *vars, t_token *current_token,
 void	fill_redirect(t_vars *vars, int cmd_num)
 {
 	t_token		*current_token;
-	t_redirect	*current_in;
-	t_redirect	*current_out;
+	t_redirect	*current_inout;
 
 	current_token = vars->first;
 	while (current_token)
 	{
 		if (current_token->token_type == PIPE_SIGN)
 			cmd_num++;
-		if (current_token->token_type == REDIRECT_LEFT)
+		if (current_token->token_type == REDIRECT_LEFT
+			|| current_token->token_type == REDIRECT_RIGHT)
 		{
-			prepare_inout(vars, &current_in, IN);
+			prepare_inout(vars, &current_inout);
 			current_token = fill_inout(vars, current_token,
-					current_in, cmd_num);
-		}
-		else if (current_token->token_type == REDIRECT_RIGHT)
-		{
-			prepare_inout(vars, &current_out, OUT);
-			current_token = fill_inout(vars, current_token,
-					current_out, cmd_num);
+					current_inout, cmd_num);
+			printf("filename :%s\n", current_inout->filename);
 		}
 		else
 			current_token = current_token->next;

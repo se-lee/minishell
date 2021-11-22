@@ -59,6 +59,7 @@ struct s_redirect {
 	char		*filename;
 	int			arrow_num;
 	int			cmd_num;
+	t_type		side;
 	t_redirect	*next;
 };
 
@@ -78,8 +79,7 @@ struct s_vars {
 	t_token			*first;
 	t_envlist		*envp;
 	t_command		*cmd;
-	t_redirect		*in;
-	t_redirect		*out;
+	t_redirect		*inout;
 	int				std_in;
 	int				std_out;
 	struct termios	saved_termios;
@@ -144,7 +144,7 @@ int			envlist_count(t_envlist *envp);
 
 /* execution */
 void		print_commands(t_command *cmd); //erase this function
-void		launch_commands(t_vars *vars, t_command *current_cmd,
+int			launch_commands(t_vars *vars, t_command *current_cmd,
 				int fds[2], int to_close);
 void		execute_command(t_vars *vars);
 void		run_command(t_vars *vars, t_command *current_cmd);
@@ -176,7 +176,7 @@ void		fd_dup_and_close(int input, int output);
 void		fd_close(int input, int output);
 void		pipe_and_launch_command(t_vars *vars, t_command *current_cmd,
 				int input, int to_close);
-void		wait_loop(int command_count, pid_t child);
+void		wait_loop(t_vars *vars, pid_t child);
 
 /* redirection */
 int			redirect_input(t_command *current_cmd, t_redirect *current_in);

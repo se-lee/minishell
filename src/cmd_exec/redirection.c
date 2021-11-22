@@ -1,35 +1,35 @@
 #include "minishell.h"
 
-int	redirect_input(t_command *current_cmd, t_redirect *current_in)
+int	redirect_input(t_command *current_cmd, t_redirect *current_inout)
 {
 	int		fd;
 	char	*file;
 
-	file = current_in->filename;
+	file = current_inout->filename;
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
 		perror(file);
-printf("[in] current_cmd:%s    file:%s    in_fd:%d    in_currnt_fd[1]:%d    in_cmd_nbr:%d\n", current_cmd->command[0], current_in->filename, fd, current_cmd->fd[1], current_in->cmd_num);
+printf("[in] current_cmd:%s    file:%s    in_fd:%d    in_currnt_fd[1]:%d    in_cmd_nbr:%d\n", current_cmd->command[0], current_inout->filename, fd, current_cmd->fd[1], current_inout->cmd_num);
 	if (dup2(fd, STDIN_FILENO) == -1)
 		perror("dup2");
 	close(fd);
 	return (0);
 }
 
-int	redirect_out(t_command *current_cmd, t_redirect *current_out)
+int	redirect_out(t_command *current_cmd, t_redirect *current_inout)
 {
 	int		fd;
 	char	*file;
 
-	file = current_out->filename;
+	file = current_inout->filename;
 	fd = -1;
-	if (current_out->arrow_num == 1)
+	if (current_inout->arrow_num == 1)
 		fd = open(file, O_TRUNC | O_CREAT | O_WRONLY, 0644);
-	else if (current_out->arrow_num == 2)
+	else if (current_inout->arrow_num == 2)
 		fd = open(file, O_APPEND | O_CREAT | O_WRONLY, 0644);
 	if (fd < 0)
 		perror(file);
-printf("[out] current_cmd:%s    file:%s    out_fd:%d    out_currnt_fd[1]:%d    out_cmd_nbr:%d\n", current_cmd->command[0], current_out->filename, fd, current_cmd->fd[1], current_out->cmd_num);
+printf("[out] current_cmd:%s    file:%s    out_fd:%d    out_currnt_fd[1]:%d    out_cmd_nbr:%d\n", current_cmd->command[0], current_inout->filename, fd, current_cmd->fd[1], current_inout->cmd_num);
 	if (current_cmd->pipe)
 	{
 		if (dup2(fd, current_cmd->fd[0]) == -1)
@@ -46,25 +46,46 @@ printf("[out] current_cmd:%s    file:%s    out_fd:%d    out_currnt_fd[1]:%d    o
 
 void	redirection(t_vars *vars, t_command *current_cmd)
 {
-	t_redirect	*current_in;
-	t_redirect	*current_out;
+	t_redirect	*current_inout;
+
+	current_inout = vars->inout;
+	while (current_inout)
+	{
+		if (current_inout->side == REDIRECT_LEFT)
+		{
+			if (current_inout->arrow_num == 1)
+				redirect_input(current_cmd, current_inout);
+			else if (current_inout->arrow_num == 2)
+				redirect_heredoc();
+		}
+		else if (current_inout->side == REDIRECT_RIGHT)
+			redirect_out(current_cmd, current_inout);
+		current_inout = current_inout->next;
+	}
+}
+
+
+/*
+void	redirection(t_vars *vars, t_command *current_cmd)
+{
+	t_redirect	*current_inout;
 	int			i;
 
-	current_in = vars->in;
-	current_out = vars->out;
+	current_in = vars->inout;
 	i = 0;
-	while (current_in)
+	while (current_inout)
 	{
-		if (current_in->arrow_num == 1)
+		if (current_inout->arrow_num == 1)
 			redirect_input(current_cmd, current_in);
-		else if (current_in->arrow_num == 2)
+		else if (current_inout->arrow_num == 2)
 			redirect_heredoc();
-		current_in = current_in->next;
+		current_in = current_inout->next;
 	}
-	while (current_out)
+	while (current_inout)
 	{
 		redirect_out(current_cmd, current_out);
 		i++;
-		current_out = current_out->next;
+		current_out = current_intout->next;
 	}
 }
+*/
