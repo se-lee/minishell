@@ -110,7 +110,7 @@ printf("fd[0]2:%d    fd[1]2:%d\n", current_cmd->fd[0], current_cmd->fd[1]);
 	}
 }
 
-/*
+
 void	execute_command(t_vars *vars)
 {
 	t_command	*current_cmd;
@@ -124,4 +124,3 @@ void	execute_command(t_vars *vars)
 	if (current_cmd)
 		execute_with_or_without_pipe(vars, current_cmd);
 }
-*/
