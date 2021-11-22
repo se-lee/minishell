@@ -59,7 +59,9 @@ void	run_command_non_builtin(t_vars *vars,
 		temp = execve(path, current_cmd->command, env);
 		if (temp < 0)
 		{
-			perror(current_cmd->command[0]);
+			// ft_putstr_fd("minishell: ", 2);
+			// perror(current_cmd->command[0]);
+			display_cmd_error(current_cmd, "No such file or directory", FALSE);
 			free(path);
 			vars->return_value = 127;
 			exit(vars->return_value);

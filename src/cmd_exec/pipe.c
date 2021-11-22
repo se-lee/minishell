@@ -31,8 +31,7 @@ void	pipe_and_launch_command(t_vars *vars, t_command *current_cmd,
 		perror("pipe");
 	if (!to_close)
 		to_close = current_cmd->fd[0];
-	launch_commands(vars, current_cmd, (int [2]){input, current_cmd->fd[1]},
-		to_close);
+	launch_commands(vars, current_cmd, (int [2]){input, current_cmd->fd[1]}, to_close);
 }
 
 void	wait_loop(int command_count, pid_t child)

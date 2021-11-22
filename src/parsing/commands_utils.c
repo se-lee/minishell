@@ -54,6 +54,8 @@ void	initialize_command(t_command *command)
 	command->redirect_left = 0;
 	command->redirect_right = 0;
 	command->quotes = 0;
+	command->fd[0] = 0;
+	command->fd[1] = 1;
 }
 
 char	*remove_quotes(char *original, int token_type)

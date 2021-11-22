@@ -39,7 +39,10 @@ char	*get_command_path(t_envlist *envp, char *command)
 		ft_append(&path_sep[i], "/");
 		ft_append(&path_sep[i], command);
 		if (access(path_sep[i], X_OK) == 0)
+		{
+			g_vars->return_value = 126;
 			return (path_sep[i]);
+		}
 		i++;
 	}
 	free_array(path_sep);

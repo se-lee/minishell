@@ -13,7 +13,26 @@ int	redirect_input(char *file)
 	return (0);
 }
 
-int	redirect_out(t_redirect *current_out)
+// int	redirect_out(t_redirect *current_out)
+// {
+// 	int		fd;
+// 	char	*file;
+
+// 	file = current_out->filename;
+// 	fd = -1;
+// 	if (current_out->arrow_num == 1)
+// 		fd = open(file, O_TRUNC | O_CREAT | O_WRONLY, 0644);
+// 	else if (current_out->arrow_num == 2)
+// 		fd = open(file, O_APPEND | O_CREAT | O_WRONLY, 0644);
+// 	if (fd < 0)
+// 		perror(file);
+// 	if (dup2(fd, STDOUT_FILENO) == -1)
+// 		exit(EXIT_FAILURE);
+// 	close (fd);
+// 	return (0);
+// }
+
+int	redirect_out(t_command *current_cmd, t_redirect *current_out)
 {
 	int		fd;
 	char	*file;
@@ -26,8 +45,18 @@ int	redirect_out(t_redirect *current_out)
 		fd = open(file, O_APPEND | O_CREAT | O_WRONLY, 0644);
 	if (fd < 0)
 		perror(file);
-	if (dup2(fd, STDOUT_FILENO) == -1)
-		exit(EXIT_FAILURE);
+printf("out_fd:%d\n", fd);
+printf("current_cmd:%s    file:%s\n", current_cmd->command[0], current_out->filename);
+	if (current_cmd->pipe)
+	{
+		if (dup2(fd, current_cmd->fd[0]) == -1)
+			exit(EXIT_FAILURE);
+	}
+	else
+	{
+		if (dup2(fd, STDOUT_FILENO) == -1)
+			exit(EXIT_FAILURE);
+	}
 	close (fd);
 	return (0);
 }
@@ -36,10 +65,11 @@ void	redirection(t_vars *vars, t_command *current_cmd)
 {
 	t_redirect	*current_in;
 	t_redirect	*current_out;
+	int			i;
 
 	current_in = vars->in;
 	current_out = vars->out;
-	(void)current_cmd;
+	i = 0;
 	while (current_in)
 	{
 		if (current_in->arrow_num == 1)
@@ -50,7 +80,8 @@ void	redirection(t_vars *vars, t_command *current_cmd)
 	}
 	while (current_out)
 	{
-		redirect_out(current_out);
+		redirect_out(current_cmd, current_out);
+		i++;
 		current_out = current_out->next;
 	}
 }
