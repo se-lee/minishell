@@ -22,7 +22,6 @@ void	run_command_builtin(t_vars *vars, t_command *current_cmd)
 		vars->return_value = builtin_unset(vars, current_cmd, 0);
 }
 
-
 void	run_command_non_builtin(t_vars *vars,
 	t_envlist *envlist, t_command *current_cmd)
 {
@@ -37,8 +36,7 @@ void	run_command_non_builtin(t_vars *vars,
 		temp = execve(path, current_cmd->command, env);
 		if (temp < 0)
 		{
-			// ft_putstr_fd("minishell: ", 2);
-			// perror(current_cmd->command[0]);
+
 			display_cmd_error(current_cmd, "No such file or directory", FALSE);
 			free(path);
 			g_vars->return_value = 127;

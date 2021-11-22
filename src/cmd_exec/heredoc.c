@@ -54,9 +54,13 @@ void	write_to_heredoc(t_redirect *current_in)
 			free(line);
 		}
 		else
+		{
+			free(line); //added
 			break ;
+		}
 	}
 	close(fd);
+	free(delimiter); //added
 }
 
 void	update_heredoc(t_vars *vars)

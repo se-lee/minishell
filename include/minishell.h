@@ -80,6 +80,8 @@ struct s_vars {
 	t_command		*cmd;
 	t_redirect		*in;
 	t_redirect		*out;
+	int				std_in;
+	int				std_out;
 	struct termios	saved_termios;
 	long long int	return_value;
 	int				error;
@@ -145,6 +147,7 @@ void		print_commands(t_command *cmd); //erase this function
 void		launch_commands(t_vars *vars, t_command *current_cmd,
 				int fds[2], int to_close);
 void		execute_command(t_vars *vars);
+void		run_command(t_vars *vars, t_command *current_cmd);
 
 /* execution utils */
 void		run_command_builtin(t_vars *vars, t_command *current_cmd);
@@ -176,11 +179,11 @@ void		pipe_and_launch_command(t_vars *vars, t_command *current_cmd,
 void		wait_loop(int command_count, pid_t child);
 
 /* redirection */
-int			redirect_input(char *file);
+int			redirect_input(t_command *current_cmd, t_redirect *current_in);
 int			redirect_output_overwrite(char *file);
 int			redirect_output_append(char *file);
 void		put_to_heredoc(t_redirect *current_in);
-void		redirection(t_vars *vars, t_command *current_cmd);
+void		redirection(t_vars *vars, t_command *current_cmd);//, int i);
 void		write_to_heredoc(t_redirect *current_in);
 int			redirect_heredoc(void);
 int			count_heredoc(t_vars *vars);

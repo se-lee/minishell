@@ -1,38 +1,21 @@
 #include "minishell.h"
 
-/*
-remove this function later
-void	print_commands(t_command *cmd)
-{
-	int	i;
-
-	i = 0;
-	while (cmd->command[i])
-	{
-		printf("%d>>%s<<\n", i, cmd->command[i]);
-		i++;
-	}
-}
-*/
-
-
 void	run_command_no_pipe(t_vars *vars, t_command *current_cmd)
 {
 	pid_t	child;
-	int		status;
 
+	signal(SIGQUIT, sigchild);
+	signal(SIGINT, sigchild);
 	child = 0;
-	status = 0;
 	if (command_is_builtin(current_cmd->command) == TRUE)
 	{
-		if (vars->in || vars->out)
-		{
-			child = fork();
-			if (child == 0)
-				redirect_and_run_cmd(vars, current_cmd, TRUE);
-		}
-		else
-			run_command(vars, current_cmd); //run_command_builtin(vars, current_cmd);
+		vars->std_in = dup(STDIN_FILENO);
+		vars->std_out = dup(STDOUT_FILENO);
+		redirect_and_run_cmd(vars, current_cmd, TRUE);
+		dup2(vars->std_in, 0);
+		dup2(vars->std_out, 1);
+		close (vars->std_in);
+		close(vars->std_out);
 	}
 	else
 	{
@@ -40,7 +23,7 @@ void	run_command_no_pipe(t_vars *vars, t_command *current_cmd)
 		if (child == 0)
 			redirect_and_run_cmd(vars, current_cmd, FALSE);
 	}
-	waitpid(child, &status, 0);
+	wait_loop(count_command(vars->cmd), child);
 }
 
 void	launch_commands(t_vars *vars, t_command *current_cmd,
@@ -55,11 +38,10 @@ void	launch_commands(t_vars *vars, t_command *current_cmd,
 	{
 		signal(SIGINT, sigchild);
 		signal(SIGQUIT, sigchild);
-		redirection(vars, current_cmd);
 		fd_dup_and_close(fds[0], fds[1]);
+		redirection(vars, current_cmd);
 		if (to_close)
 			close(to_close);
-		// run_command(vars, current_cmd);
 		run_command_and_exit(vars, current_cmd);
 	}
 	else
@@ -85,7 +67,7 @@ void	execute_with_or_without_pipe(t_vars *vars, t_command *current_cmd)
 	input = 0;
 	to_close = 0;
 	if (!current_cmd->pipe)
-		run_command(vars, current_cmd); //run_command_no_pipe(vars, current_cmd);
+		run_command_no_pipe(vars, current_cmd);
 	else
 	{
 		if (current_cmd->next == NULL)
@@ -93,23 +75,18 @@ void	execute_with_or_without_pipe(t_vars *vars, t_command *current_cmd)
 		while (current_cmd->next != NULL)
 		{
 			pipe_and_launch_command(vars, current_cmd, input, to_close);
-// printf("current_cmd:%s\n", current_cmd->command[0]);
-printf("input:%d    output:%d\n", input, output);
-printf("fd[0]:%d    fd[1]:%d\n", current_cmd->fd[0], current_cmd->fd[1]);
+printf("current_cmd:%s    input:%d   output:%d   fd[0]:%d   fd[1]:%d\n", current_cmd->command[0], input, output, current_cmd->fd[0], current_cmd->fd[1]);
 			to_close = 0;
 			input = current_cmd->fd[0];
-printf("input_1:%d    output_1:%d\n", input, output);
+printf("                   input_1:%d   output_1:%d\n", input, output);
 			current_cmd = current_cmd->next;
 		}
-// printf("current_cmd:%s\n", current_cmd->command[0]);
-printf("input2:%d    output2:%d\n", input, output);
-printf("fd[0]2:%d    fd[1]2:%d\n", current_cmd->fd[0], current_cmd->fd[1]);
 		current_cmd->fd[1] = 1;
+printf("(last) current_cmd:%s   input:%d   output:%d   fd[0]:%d   fd[1]:%d\n", current_cmd->command[0], input, output, current_cmd->fd[0], current_cmd->fd[1]);
 		launch_commands(vars, current_cmd, (int [2]){input, output}, to_close);
 		wait_loop(count_command(vars->cmd), child);
 	}
 }
-
 
 void	execute_command(t_vars *vars)
 {
@@ -119,8 +96,8 @@ void	execute_command(t_vars *vars)
 		return ;
 	current_cmd = vars->cmd;
 	tcsetattr(STDIN_FILENO, TCSANOW, &vars->saved_termios);
-	if (count_heredoc(vars) > 0)
-		update_heredoc(vars);
+	// if (count_heredoc(vars) > 0)
+	// 	update_heredoc(vars);
 	if (current_cmd)
 		execute_with_or_without_pipe(vars, current_cmd);
 }

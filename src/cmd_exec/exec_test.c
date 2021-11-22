@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-/*
+
 void	fork_execute_command(t_vars *vars, t_command *current_cmd, t_envlist *envlist)
 {
 	char	*path;
@@ -91,6 +91,7 @@ void	pipe_fork_child(t_vars *vars, t_command *current_cmd)
 	}
 }
 
+/*
 void	execute_command(t_vars *vars)
 {
 	t_command	*current_cmd;

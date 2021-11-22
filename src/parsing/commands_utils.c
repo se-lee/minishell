@@ -38,6 +38,7 @@ void	add_piperedirect(t_token *current_token, t_command *current_command)
 {
 	while (current_token && ft_piperedirect(current_token->token_type) == 1)
 	{
+printf("1\n");
 		if (current_token->token_type == PIPE_SIGN)
 			current_command->pipe = 1;
 		if (current_token->token_type == REDIRECT_LEFT)
