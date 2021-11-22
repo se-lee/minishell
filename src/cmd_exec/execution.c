@@ -40,7 +40,7 @@ void	launch_commands(t_vars *vars, t_command *current_cmd,
 		signal(SIGQUIT, sigchild);
 		fd_dup_and_close(fds[0], fds[1]);
 		redirection(vars, current_cmd);
-		if (to_close)
+		if (to_close != 0)
 			close(to_close);
 		run_command_and_exit(vars, current_cmd);
 	}
@@ -63,8 +63,8 @@ void	execute_with_or_without_pipe(t_vars *vars, t_command *current_cmd)
 	int			to_close;
 
 	child = 0;
-	output = 1;
 	input = 0;
+	output = 1;
 	to_close = 0;
 	if (!current_cmd->pipe)
 		run_command_no_pipe(vars, current_cmd);
@@ -75,7 +75,7 @@ void	execute_with_or_without_pipe(t_vars *vars, t_command *current_cmd)
 		while (current_cmd->next != NULL)
 		{
 			pipe_and_launch_command(vars, current_cmd, input, to_close);
-printf("current_cmd:%s    input:%d   output:%d   fd[0]:%d   fd[1]:%d\n", current_cmd->command[0], input, output, current_cmd->fd[0], current_cmd->fd[1]);
+printf("current_cmd:%s		input:%d	output:%d   fd[0]:%d   fd[1]:%d\n", current_cmd->command[0], input, output, current_cmd->fd[0], current_cmd->fd[1]);
 			to_close = 0;
 			input = current_cmd->fd[0];
 printf("                   input_1:%d   output_1:%d\n", input, output);
@@ -96,8 +96,6 @@ void	execute_command(t_vars *vars)
 		return ;
 	current_cmd = vars->cmd;
 	tcsetattr(STDIN_FILENO, TCSANOW, &vars->saved_termios);
-	// if (count_heredoc(vars) > 0)
-	// 	update_heredoc(vars);
 	if (current_cmd)
 		execute_with_or_without_pipe(vars, current_cmd);
 }

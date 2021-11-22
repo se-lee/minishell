@@ -30,16 +30,16 @@ int	redirect_out(t_command *current_cmd, t_redirect *current_out)
 	if (fd < 0)
 		perror(file);
 printf("[out] current_cmd:%s    file:%s    out_fd:%d    out_currnt_fd[1]:%d    out_cmd_nbr:%d\n", current_cmd->command[0], current_out->filename, fd, current_cmd->fd[1], current_out->cmd_num);
-	// if (current_cmd->pipe)
-	// {
-	// 	if (dup2(fd, current_cmd->fd[0]) == -1)
-	// 		exit(EXIT_FAILURE);
-	// }
-	// else
-	// {
+	if (current_cmd->pipe)
+	{
+		if (dup2(fd, current_cmd->fd[0]) == -1)
+			exit(EXIT_FAILURE);
+	}
+	else
+	{
 		if (dup2(fd, STDOUT_FILENO) == -1)
 			exit(EXIT_FAILURE);
-	// }
+	}
 	close (fd);
 	return (0);
 }

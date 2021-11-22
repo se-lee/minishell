@@ -66,8 +66,8 @@ struct s_command {
 	char		**command;
 	int			pipe;
 	int			quotes;
-	int			redirect_right;
-	int			redirect_left;
+	int			redirect_right; //remove
+	int			redirect_left; //remove
 	int			fd[2];
 	pid_t		pid; //add (need to initiate)
 	int			exit_status; //ADD (need to initiate)

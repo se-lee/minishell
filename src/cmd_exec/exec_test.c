@@ -1,6 +1,5 @@
 #include "minishell.h"
 
-
 void	fork_execute_command(t_vars *vars, t_command *current_cmd, t_envlist *envlist)
 {
 	char	*path;
