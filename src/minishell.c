@@ -18,6 +18,7 @@ void	main_loop(t_vars *vars, char *str)
 		parsing(vars, str);
 		if (count_heredoc(vars) > 0) //moved to main_loop for cases where heredoc with 
 			update_heredoc(vars);
+//it might have to add a function to check redirection (so that it can handle redirection without commands)
 		if (vars->error == 0 && vars->cmd != NULL)
 			execute_command(vars);
 		free(str);

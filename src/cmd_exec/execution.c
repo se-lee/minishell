@@ -63,36 +63,36 @@ void	execute_with_or_without_pipe(t_vars *vars, t_command *current_cmd)
 	int			output;
 	pid_t		child;
 	int			to_close;
+	int			i;
 
-	child = 0;
+	// child = 0;
 	input = 0;
 	output = 1;
 	to_close = 0;
+	i = 0;
 	if (!current_cmd->pipe)
 		run_command_no_pipe(vars, current_cmd);
 	else
 	{
 		if (current_cmd->next == NULL)
 			pipe_get_next_cmd(current_cmd);
-		while (current_cmd->next != NULL)
+		while (i < count_command(vars->cmd) - 1)//current_cmd->next != NULL)
 		{
 			pipe_and_launch_command(vars, current_cmd, input, to_close);
-printf("current_cmd:%s		input:%d	output:%d   fd[0]:%d   fd[1]:%d\n", current_cmd->command[0], input, output, current_cmd->fd[0], current_cmd->fd[1]);
 			to_close = 0;
 			input = current_cmd->fd[0];
-printf("                   input_1:%d   output_1:%d\n", input, output);
 			current_cmd = current_cmd->next;
+			i++;
+			current_cmd->cmd_index = i;
 		}
-		current_cmd->fd[1] = 1;
-printf("(last) current_cmd:%s   input:%d   output:%d   fd[0]:%d   fd[1]:%d\n", current_cmd->command[0], input, output, current_cmd->fd[0], current_cmd->fd[1]);
-		// launch_commands(vars, current_cmd, (int [2]){input, output}, to_close);
-		// wait_loop(count_command(vars->cmd), child);
-
 		child = launch_commands(vars, current_cmd,
 				(int [2]){input, output}, to_close);
 		wait_loop(vars, child);
 	}
 }
+// printf("                   input_1:%d   output_1:%d\n", input, output);
+// printf("current_cmd:%s		input:%d	output:%d   fd[0]:%d   fd[1]:%d\n", current_cmd->command[0], input, output, current_cmd->fd[0], current_cmd->fd[1]);
+// printf("(last) current_cmd:%s   input:%d   output:%d   fd[0]:%d   fd[1]:%d\n", current_cmd->command[0], input, output, current_cmd->fd[0], current_cmd->fd[1]);
 
 void	execute_command(t_vars *vars)
 {

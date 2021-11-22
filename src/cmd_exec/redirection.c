@@ -8,7 +8,8 @@ int	redirect_input(t_command *current_cmd, t_redirect *current_inout)
 	file = current_inout->filename;
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
-		perror(file);
+		ft_putendl_fd("No such file or directory", 2);
+		// perror(file);
 printf("[in] current_cmd:%s    file:%s    in_fd:%d    in_currnt_fd[1]:%d    in_cmd_nbr:%d\n", current_cmd->command[0], current_inout->filename, fd, current_cmd->fd[1], current_inout->cmd_num);
 	if (dup2(fd, STDIN_FILENO) == -1)
 		perror("dup2");
@@ -49,7 +50,9 @@ void	redirection(t_vars *vars, t_command *current_cmd)
 	t_redirect	*current_inout;
 
 	current_inout = vars->inout;
-	while (current_inout)
+	while (current_inout && current_inout->cmd_num != current_cmd->cmd_index)
+		current_inout = current_inout->next;
+	while (current_inout && current_inout->cmd_num == current_cmd->cmd_index)
 	{
 		if (current_inout->side == REDIRECT_LEFT)
 		{
@@ -63,29 +66,3 @@ void	redirection(t_vars *vars, t_command *current_cmd)
 		current_inout = current_inout->next;
 	}
 }
-
-
-/*
-void	redirection(t_vars *vars, t_command *current_cmd)
-{
-	t_redirect	*current_inout;
-	int			i;
-
-	current_in = vars->inout;
-	i = 0;
-	while (current_inout)
-	{
-		if (current_inout->arrow_num == 1)
-			redirect_input(current_cmd, current_in);
-		else if (current_inout->arrow_num == 2)
-			redirect_heredoc();
-		current_in = current_inout->next;
-	}
-	while (current_inout)
-	{
-		redirect_out(current_cmd, current_out);
-		i++;
-		current_out = current_intout->next;
-	}
-}
-*/
