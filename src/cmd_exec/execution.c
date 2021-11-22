@@ -74,8 +74,8 @@ void	execute_with_or_without_pipe(t_vars *vars, t_command *current_cmd)
 		run_command_no_pipe(vars, current_cmd);
 	else
 	{
-		if (current_cmd->next == NULL)
-			pipe_get_next_cmd(current_cmd);
+		// if (current_cmd->next == NULL && )
+		// 	pipe_get_next_cmd(current_cmd);
 		while (i < count_command(vars->cmd) - 1)//current_cmd->next != NULL)
 		{
 			pipe_and_launch_command(vars, current_cmd, input, to_close);
@@ -93,6 +93,8 @@ void	execute_with_or_without_pipe(t_vars *vars, t_command *current_cmd)
 // printf("                   input_1:%d   output_1:%d\n", input, output);
 // printf("current_cmd:%s		input:%d	output:%d   fd[0]:%d   fd[1]:%d\n", current_cmd->command[0], input, output, current_cmd->fd[0], current_cmd->fd[1]);
 // printf("(last) current_cmd:%s   input:%d   output:%d   fd[0]:%d   fd[1]:%d\n", current_cmd->command[0], input, output, current_cmd->fd[0], current_cmd->fd[1]);
+
+
 
 void	execute_command(t_vars *vars)
 {

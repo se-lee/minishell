@@ -58,7 +58,6 @@ void	fill_redirect(t_vars *vars, int cmd_num)
 			prepare_inout(vars, &current_inout);
 			current_token = fill_inout(vars, current_token,
 					current_inout, cmd_num);
-			printf("filename :%s\n", current_inout->filename);
 		}
 		else
 			current_token = current_token->next;
