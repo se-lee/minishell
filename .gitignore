@@ -3,6 +3,7 @@ minishell
 .heredoc
 *.txt
 ft_mallocator/
+*.sh
 
 ## Mlx related
 Makefile.gen

@@ -68,7 +68,7 @@ void	update_heredoc(t_vars *vars)
 	t_redirect	*current_inout;
 
 	current_inout = vars->inout;
-	while (current_inout)
+	while (current_inout && current_inout->side == REDIRECT_LEFT)
 	{
 		if (current_inout->arrow_num == 2)
 			write_to_heredoc(current_inout);
