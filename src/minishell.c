@@ -18,10 +18,14 @@ void	main_loop(t_vars *vars, char *str)
 		parsing(vars, str);
 		if (count_heredoc(vars) > 0)
 			update_heredoc(vars);
+		if (vars->cmd == NULL)
+			vars->return_value = redirect_without_cmd(vars);
 		if (vars->error == 0 && vars->cmd != NULL)
 			execute_command(vars);
 		free(str);
 		loop_free(vars);
+		if (count_heredoc(vars) > 0)
+			unlink(".heredoc");
 	}
 	else
 		free(str);
@@ -47,7 +51,5 @@ int	main(int argc, char **argv, char **envp)
 		signal(SIGINT, control_c);
 		str = readline("\x1B[32mminishell$\x1B[0m: ");
 	}
-	if (count_heredoc(&vars) > 0)
-		unlink(".heredoc");
 	ft_putendl_fd("exit", 0);
 }

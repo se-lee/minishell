@@ -24,39 +24,44 @@ void	run_command_builtin(t_vars *vars, t_command *current_cmd)
 void	run_command_non_builtin(t_vars *vars,
 	t_envlist *envlist, t_command *current_cmd)
 {
-	char	*path;
-	char	**env;
-	int		temp;
+	char		*path;
+	char		**env;
+	struct stat	buff;
 
+	stat(path, &buff);
 	env = envlist_to_char_array(envlist);
 	path = get_command_path(envlist, current_cmd->command[0]);
 	if (path != NULL)
 	{
-		temp = execve(path, current_cmd->command, env);
-		if (temp < 0)
+		if (S_ISDIR(buff.st_mode) == 1)
 		{
-			display_cmd_error(current_cmd, "No such file or directory", FALSE);
-			free(path);
-			g_vars->return_value = 127;
-			exit(vars->return_value);
+			printf("a\n");
+			display_cmd_error(current_cmd, "is a directory", FALSE);
+			vars->return_value = 126;
 		}
-		else
-			g_vars->return_value = temp;
-	}
-	else if (ft_strncmp(current_cmd->command[0], "|", 1) == 0)
-	{
-		ft_putendl_fd("minishell: syntax error near unexpected token `|'", 2);
+		// else if (access(path, X_OK) < 0)
+		// {
+		// 	printf("b\n");
+		// 	display_cmd_error(current_cmd, "Permission denied", FALSE);
+		// 	vars->return_value = 126;
+		// }
+		else if (execve(path, current_cmd->command, env) < 0)
+		{
+			printf("c\n");
+			ft_putstr_fd("minishell: ", 2);
+			perror(current_cmd->command[0]);
+			vars->return_value = 127;
+		}
 		free(path);
-		g_vars->return_value = 127;
 		exit(vars->return_value);
 	}
 	else
 	{
 		display_cmd_error(current_cmd, "command not found", FALSE);
-		free(path);
 		vars->return_value = 127;
-		exit(vars->return_value);
 	}
+	free(path);
+	exit(vars->return_value);
 }
 
 void	run_command_and_exit(t_vars *vars, t_command *current_cmd)

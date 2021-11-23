@@ -8,14 +8,20 @@ int	redirect_input(t_redirect *current_inout)
 	file = current_inout->filename;
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(file, 2);
+		ft_putstr_fd(": ", 2);
 		ft_putendl_fd("No such file or directory", 2);
+		exit (EXIT_FAILURE);
+	}
 	if (dup2(fd, STDIN_FILENO) == -1)
 		perror("dup2");
 	close(fd);
 	return (0);
 }
 
-int	redirect_out(t_redirect *current_inout)
+int	redirect_output(t_redirect *current_inout)
 {
 	int		fd;
 	char	*file;
@@ -64,7 +70,7 @@ void	redirection(t_vars *vars, t_command *current_cmd)
 				redirect_heredoc();
 		}
 		else if (current_inout->side == REDIRECT_RIGHT)
-			redirect_out(current_inout);
+			redirect_output(current_inout);
 		current_inout = current_inout->next;
 	}
 }
