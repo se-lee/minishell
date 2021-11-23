@@ -17,7 +17,7 @@ int	check_error(t_token *token)
 	return (0);
 }
 
-int	check_error2(t_token *token)
+int	check_error2(t_vars *vars, t_token *token)
 {
 	t_token	*current_token;
 
@@ -29,6 +29,11 @@ int	check_error2(t_token *token)
 			current_token = current_token->next;
 		if (current_token && current_token->token_type == PIPE_SIGN)
 			return (-1);
+	}
+	if (token == vars->first && token->next == NULL)
+	{
+		vars->return_value = 258;
+		return (-1);
 	}
 	return (0);
 }

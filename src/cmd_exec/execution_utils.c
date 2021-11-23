@@ -43,13 +43,6 @@ void	run_command_non_builtin(t_vars *vars,
 		else
 			g_vars->return_value = temp;
 	}
-	else if (ft_strncmp(current_cmd->command[0], "|", 1) == 0)
-	{
-		ft_putendl_fd("minishell: syntax error near unexpected token `|'", 2);
-		free(path);
-		g_vars->return_value = 127;
-		exit(vars->return_value);
-	}
 	else
 	{
 		display_cmd_error(current_cmd, "command not found", FALSE);

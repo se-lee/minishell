@@ -101,7 +101,7 @@ void	parsing(t_vars *vars, char *str)
 	current_token = vars->first;
 	while (current_token)
 	{
-		if (check_error(current_token) == 0 && check_error2(current_token) == 0)
+		if (check_error(current_token) == 0 && check_error2(vars, current_token) == 0)
 		{
 			if (current_token->token_type == WORD
 				|| current_token->token_type == QUOTE)

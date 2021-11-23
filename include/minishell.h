@@ -113,7 +113,7 @@ void		malloc_token_next(t_token **current_token);
 void		envlist_free(t_envlist *to_free);
 void		envlist_print_all(t_envlist *envp);
 int			check_error(t_token *token);
-int			check_error2(t_token *token);
+int			check_error2(t_vars *vars, t_token *token);
 
 /* built-in utils */
 int			format_is_valid(char *str);
