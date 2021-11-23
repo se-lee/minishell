@@ -32,6 +32,14 @@ char	*get_delimiter(t_redirect *current_inout)
 	}
 }
 
+void	display_and_put_lines(char *line, int fd)
+{
+	ft_putstr_fd("> ", OUT);
+	ft_putstr_fd(line, fd);
+	ft_putstr_fd("\n", fd);
+	free(line);
+}
+
 void	write_to_heredoc(t_redirect *current_in)
 {
 	int		fd;
@@ -47,12 +55,7 @@ void	write_to_heredoc(t_redirect *current_in)
 	while (get_next_line(IN, &line))
 	{
 		if (ft_strcmp(line, delimiter))
-		{
-			ft_putstr_fd("> ", OUT);
-			ft_putstr_fd(line, fd);
-			ft_putstr_fd("\n", fd);
-			free(line);
-		}
+			display_and_put_lines(line, fd);
 		else
 		{
 			free(line);
