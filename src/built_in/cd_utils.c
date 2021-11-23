@@ -1,5 +1,29 @@
 #include "minishell.h"
 
+char	*find_old_pwd(t_vars *vars)
+{
+	t_envlist	*current_env;
+
+	current_env = vars->envp;
+	while (current_env && ft_strncmp(current_env->name, "OLDPWD", 7) != 0)
+		current_env = current_env->next;
+	if (current_env)
+		return (current_env->value);
+	return (NULL);
+}
+
+char	*find_pwd(t_vars *vars)
+{
+	t_envlist	*current_env;
+
+	current_env = vars->envp;
+	while (current_env && ft_strncmp(current_env->name, "PWD", 4) != 0)
+		current_env = current_env->next;
+	if (current_env)
+		return (current_env->value);
+	return (NULL);
+}
+
 char	*search_home(t_envlist	*envp)
 {
 	t_envlist	*current_envp;

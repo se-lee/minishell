@@ -11,30 +11,6 @@ void	replace_oldpwd_and_pwd(t_vars *vars, char *old_pwd)
 	replace_pwd(vars, current_envp, "PWD", pwd);
 }
 
-char	*find_old_pwd(t_vars *vars)
-{
-	t_envlist	*current_env;
-
-	current_env = vars->envp;
-	while (current_env && ft_strncmp(current_env->name, "OLDPWD", 7) != 0)
-		current_env = current_env->next;
-	if (current_env)
-		return (current_env->value);
-	return (NULL);
-}
-
-char	*find_pwd(t_vars *vars)
-{
-	t_envlist	*current_env;
-
-	current_env = vars->envp;
-	while (current_env && ft_strncmp(current_env->name, "PWD", 4) != 0)
-		current_env = current_env->next;
-	if (current_env)
-		return (current_env->value);
-	return (NULL);
-}
-
 void	cd_to_home(t_vars *vars, char *path_temp)
 {
 	char	*home;
@@ -59,6 +35,22 @@ void	cd_to_home(t_vars *vars, char *path_temp)
 	replace_oldpwd_and_pwd(vars, find_pwd(vars));
 }
 
+int	cd_to_oldpwd(t_vars *vars, t_command *current_cmd, char *old_pwd)
+{
+	old_pwd = find_old_pwd(vars);
+	if (old_pwd != NULL)
+		printf("%s\n", old_pwd);
+	else
+	{
+		display_cmd_error(current_cmd, "OLDPWD not set", FALSE);
+		return (EXIT_FAILURE);
+	}
+	chdir(old_pwd);
+	old_pwd = find_pwd(vars);
+	replace_oldpwd_and_pwd(vars, old_pwd);
+	return (EXIT_SUCCESS);
+}
+
 int	builtin_cd(t_vars *vars, t_command *current_cmd)
 {
 	char	*path;
@@ -68,19 +60,7 @@ int	builtin_cd(t_vars *vars, t_command *current_cmd)
 	if (path == NULL || ft_strncmp(path, "~", 1) == 0)
 		cd_to_home(vars, path);
 	else if (ft_strncmp(path, "-", 2) == 0)
-	{
-		old_pwd = find_old_pwd(vars);
-		if (old_pwd != NULL)
-			printf("%s\n", old_pwd);
-		else
-		{
-			display_cmd_error(current_cmd, "OLDPWD not set", FALSE);
-			return (EXIT_FAILURE);
-		}
-		chdir(old_pwd);
-		old_pwd = find_pwd(vars);
-		replace_oldpwd_and_pwd(vars, old_pwd);
-	}
+		cd_to_oldpwd(vars, current_cmd, old_pwd);
 	else
 	{
 		old_pwd = find_pwd(vars);

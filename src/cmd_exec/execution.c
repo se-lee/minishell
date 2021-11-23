@@ -72,7 +72,7 @@ void	execute_with_or_without_pipe(t_vars *vars, t_command *current_cmd)
 		run_command_no_pipe(vars, current_cmd);
 	else
 	{
-		if (current_cmd->next == NULL && )
+		if (current_cmd->next == NULL)
 			pipe_get_next_cmd(current_cmd);
 		while (i < count_command(vars->cmd) - 1)
 		{
