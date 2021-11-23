@@ -34,6 +34,19 @@ int	redirect_out(t_redirect *current_inout)
 	return (0);
 }
 
+int	redirect_heredoc(void)
+{
+	int		fd;
+
+	fd = open(".heredoc", O_RDONLY);
+	if (fd < 0)
+		perror(".heredoc");
+	if (dup2(fd, STDIN_FILENO) == -1)
+		perror("dup2");
+	close(fd);
+	return (0);
+}
+
 void	redirection(t_vars *vars, t_command *current_cmd)
 {
 	t_redirect	*current_inout;

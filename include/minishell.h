@@ -216,7 +216,6 @@ void		sigmain(int sig);
 void		set_termios(void);
 void		control_c(int sig);
 
-/* new exec */
-void		run_command(t_vars *vars, t_command *current_cmd);
+// void		run_command(t_vars *vars, t_command *current_cmd);
 
 #endif
