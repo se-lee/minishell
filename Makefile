@@ -33,11 +33,9 @@ SRCS =	minishell.c						\
 		cmd_exec/pipe.c					\
 		cmd_exec/redirection.c			\
 
-GCCF = gcc -g #-Wall -Wextra -Werror #-fsanitize=address
+GCCF = gcc -g -Wall -Wextra -Werror #-fsanitize=address
 
 READLINE = -lreadline -L/usr/local/lib -I/usr/local/include
-
-#-L /Users/acusanno/.brew/opt/readline/lib -I/Users/acusanno/.brew/opt/readline/include
 
 OBJS = $(addprefix bin/, ${SRCS:.c=.o})
 

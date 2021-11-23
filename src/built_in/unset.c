@@ -52,8 +52,7 @@ int	unset_check_error(t_command *current_cmd)
 	return (EXIT_FAILURE);
 }
 
-void	unset_loop(t_vars *vars, t_envlist *current_env,
-	t_command *current_cmd, char *var_to_unset)
+void	unset_loop(t_vars *vars, t_envlist *current_env, char *var_to_unset)
 {
 	if (ft_strncmp(current_env->name, var_to_unset,
 			ft_strlen(var_to_unset)) == 0)
@@ -84,7 +83,7 @@ int	builtin_unset(t_vars *vars, t_command *current_cmd, int i)
 		var_to_unset = current_cmd->command[i];
 		if (ft_isdigit(var_to_unset[0]))
 			return (unset_check_error(current_cmd));
-		unset_loop(vars, current_env, current_cmd, var_to_unset);
+		unset_loop(vars, current_env, var_to_unset);
 		i++;
 	}
 	return (EXIT_SUCCESS);

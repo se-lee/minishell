@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	redirect_input(t_command *current_cmd, t_redirect *current_inout)
+int	redirect_input(t_redirect *current_inout)
 {
 	int		fd;
 	char	*file;
@@ -15,7 +15,7 @@ int	redirect_input(t_command *current_cmd, t_redirect *current_inout)
 	return (0);
 }
 
-int	redirect_out(t_command *current_cmd, t_redirect *current_inout)
+int	redirect_out(t_redirect *current_inout)
 {
 	int		fd;
 	char	*file;
@@ -46,12 +46,12 @@ void	redirection(t_vars *vars, t_command *current_cmd)
 		if (current_inout->side == REDIRECT_LEFT)
 		{
 			if (current_inout->arrow_num == 1)
-				redirect_input(current_cmd, current_inout);
+				redirect_input(current_inout);
 			else if (current_inout->arrow_num == 2)
 				redirect_heredoc();
 		}
 		else if (current_inout->side == REDIRECT_RIGHT)
-			redirect_out(current_cmd, current_inout);
+			redirect_out(current_inout);
 		current_inout = current_inout->next;
 	}
 }

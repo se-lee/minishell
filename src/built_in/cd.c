@@ -37,7 +37,6 @@ void	cd_to_home(t_vars *vars, char *path_temp)
 
 int	cd_to_oldpwd(t_vars *vars, t_command *current_cmd, char *old_pwd)
 {
-	old_pwd = find_old_pwd(vars);
 	if (old_pwd != NULL)
 		printf("%s\n", old_pwd);
 	else
@@ -56,6 +55,7 @@ int	builtin_cd(t_vars *vars, t_command *current_cmd)
 	char	*path;
 	char	*old_pwd;
 
+	old_pwd = find_old_pwd(vars);
 	path = current_cmd->command[1];
 	if (path == NULL || ft_strncmp(path, "~", 1) == 0)
 		cd_to_home(vars, path);

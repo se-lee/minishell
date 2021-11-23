@@ -181,7 +181,6 @@ void		pipe_and_launch_command(t_vars *vars, t_command *current_cmd,
 void		wait_loop(t_vars *vars, pid_t child);
 
 /* redirection */
-int			redirect_input(t_command *current_cmd, t_redirect *current_in);
 int			redirect_output_overwrite(char *file);
 int			redirect_output_append(char *file);
 void		put_to_heredoc(t_redirect *current_in);
