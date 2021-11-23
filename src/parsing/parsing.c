@@ -55,7 +55,9 @@ int	check_error(t_token *token)
 	if (ft_piperedirect(token->token_type) == 1 && token->buffer.len > 2)
 		return (-1);
 	if ((token->token_type == REDIRECT_LEFT
-			|| token->token_type == REDIRECT_RIGHT) && token->next == NULL)
+			|| token->token_type == REDIRECT_RIGHT)
+		&& (token->next == NULL || (token->next->token_type == SPACE_SIGN
+				&& token->next->next == NULL)))
 		return (-1);
 	return (0);
 }

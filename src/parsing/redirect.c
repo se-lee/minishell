@@ -46,6 +46,8 @@ void	fill_redirect(t_vars *vars, int cmd_num)
 	t_token		*current_token;
 	t_redirect	*current_inout;
 
+	if (vars->error == -1)
+		return ;
 	current_token = vars->first;
 	while (current_token)
 	{
