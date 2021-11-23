@@ -89,7 +89,7 @@ void	redirect_and_run_cmd(t_vars *vars, t_command *current_cmd, int builtin)
 
 void	pipe_get_next_cmd(t_command *current_cmd)
 {
-	char	*line;
+	char		*line;
 
 	current_cmd->next = protected_malloc(1, sizeof(t_command));
 	current_cmd->next->next = NULL;

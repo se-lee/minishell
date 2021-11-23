@@ -62,26 +62,21 @@ void	execute_with_or_without_pipe(t_vars *vars, t_command *current_cmd)
 	int			output;
 	pid_t		child;
 	int			to_close;
-	int			i;
 
 	input = 0;
 	output = 1;
 	to_close = 0;
-	i = 0;
 	if (!current_cmd->pipe)
 		run_command_no_pipe(vars, current_cmd);
 	else
 	{
-		// if (current_cmd->next == NULL)
-		// 	pipe_get_next_cmd(current_cmd);
-		while (i < count_command(vars->cmd) - 1)
+		while (current_cmd->next != NULL)
 		{
 			pipe_and_launch_command(vars, current_cmd, input, to_close);
 			to_close = 0;
 			input = current_cmd->fd[0];
 			current_cmd = current_cmd->next;
-			i++;
-			current_cmd->cmd_index = i;
+			current_cmd->cmd_index++;
 		}
 		child = launch_commands(vars, current_cmd,
 				(int [2]){input, output}, to_close);

@@ -112,6 +112,8 @@ char		*find_variable(char *str);
 void		malloc_token_next(t_token **current_token);
 void		envlist_free(t_envlist *to_free);
 void		envlist_print_all(t_envlist *envp);
+int			check_error(t_token *token);
+int			check_error2(t_token *token);
 
 /* built-in utils */
 int			format_is_valid(char *str);
@@ -127,9 +129,10 @@ void		free_env(t_envlist *current_env);
 int			strisnum(char *str);
 void		remove_space(char **str);
 int			value_exceeds_llint(char *str, long long int return_value);
+char		*find_old_pwd(t_vars *vars);
+char		*find_pwd(t_vars *vars);
 
 /* built-in commands */
-// void		builtin_cd(t_vars *vars, t_command *current_cmd);
 int			builtin_cd(t_vars *vars, t_command *current_cmd);
 int			builtin_echo(t_command *current_cmd);
 int			builtin_env(t_vars *vars);
@@ -180,7 +183,6 @@ void		pipe_and_launch_command(t_vars *vars, t_command *current_cmd,
 void		wait_loop(t_vars *vars, pid_t child);
 
 /* redirection */
-int			redirect_input(t_command *current_cmd, t_redirect *current_in);
 int			redirect_output_overwrite(char *file);
 int			redirect_output_append(char *file);
 void		put_to_heredoc(t_redirect *current_in);

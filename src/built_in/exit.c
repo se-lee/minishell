@@ -7,6 +7,12 @@ void	display_error_and_exit(t_command *current_cmd,
 	exit(exit_status);
 }
 
+int	exit_simple(int return_value)
+{
+	printf("exit\n");
+	return (return_value);
+}
+
 long long int	ft_atolli(const char *str)
 {
 	int				i;
@@ -36,13 +42,17 @@ long long int	ft_atolli(const char *str)
 	return (sign * out);
 }
 
+int	exit_uint_return_value(int return_value)
+{
+	if (return_value > 255 || return_value < 0)
+		return_value = return_value % 256;
+	return (return_value);
+}
+
 void	builtin_exit(t_vars *vars, t_command *current_cmd)
 {
 	if (current_cmd->command[1] == NULL)
-	{
-		printf("exit\n");
-		exit(vars->return_value);
-	}
+		exit(exit_simple(vars->return_value));
 	else if (current_cmd->command[1])
 	{
 		if (current_cmd->command[1][0] == ' ')
@@ -55,11 +65,9 @@ void	builtin_exit(t_vars *vars, t_command *current_cmd)
 					vars->return_value) == TRUE)
 				display_error_and_exit(current_cmd,
 					"numeric argument required", 255);
-			if (vars->return_value > 255 || vars->return_value < 0)
-				vars->return_value = vars->return_value % 256;
+			vars->return_value = exit_uint_return_value(vars->return_value);
 			if (count_command(vars->cmd) == 1)
-				printf("exit\n");
-			exit(vars->return_value);
+				exit(exit_simple(vars->return_value));
 		}
 		else if (strisnum(current_cmd->command[1]) == 1
 			&& current_cmd->command[2] != NULL)

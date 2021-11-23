@@ -5,6 +5,7 @@ SRCS =	minishell.c						\
 		signals.c						\
 		parsing/parsing.c				\
 		parsing/variables.c				\
+		parsing/parsing_errors.c				\
 		parsing/variable_utils.c		\
 		parsing/parsing_utils.c			\
 		parsing/tokenization.c			\
@@ -36,8 +37,6 @@ SRCS =	minishell.c						\
 GCCF = gcc -g  -fsanitize=address #-Wall -Wextra -Werror
 
 READLINE = -lreadline -L/usr/local/lib -I/usr/local/include
-
-#-L /Users/acusanno/.brew/opt/readline/lib -I/Users/acusanno/.brew/opt/readline/include
 
 OBJS = $(addprefix bin/, ${SRCS:.c=.o})
 
