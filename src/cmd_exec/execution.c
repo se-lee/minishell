@@ -23,7 +23,6 @@ void	run_command_no_pipe(t_vars *vars, t_command *current_cmd)
 		if (child == 0)
 			redirect_and_run_cmd(vars, current_cmd, FALSE);
 	}
-	//wait_loop(count_command(vars->cmd), child);
 	if (child != 0)
 		wait_loop(vars, child);
 }
@@ -65,7 +64,6 @@ void	execute_with_or_without_pipe(t_vars *vars, t_command *current_cmd)
 	int			to_close;
 	int			i;
 
-	// child = 0;
 	input = 0;
 	output = 1;
 	to_close = 0;
@@ -74,9 +72,9 @@ void	execute_with_or_without_pipe(t_vars *vars, t_command *current_cmd)
 		run_command_no_pipe(vars, current_cmd);
 	else
 	{
-		// if (current_cmd->next == NULL && )
-		// 	pipe_get_next_cmd(current_cmd);
-		while (i < count_command(vars->cmd) - 1)//current_cmd->next != NULL)
+		if (current_cmd->next == NULL && )
+			pipe_get_next_cmd(current_cmd);
+		while (i < count_command(vars->cmd) - 1)
 		{
 			pipe_and_launch_command(vars, current_cmd, input, to_close);
 			to_close = 0;
@@ -90,11 +88,6 @@ void	execute_with_or_without_pipe(t_vars *vars, t_command *current_cmd)
 		wait_loop(vars, child);
 	}
 }
-// printf("                   input_1:%d   output_1:%d\n", input, output);
-// printf("current_cmd:%s		input:%d	output:%d   fd[0]:%d   fd[1]:%d\n", current_cmd->command[0], input, output, current_cmd->fd[0], current_cmd->fd[1]);
-// printf("(last) current_cmd:%s   input:%d   output:%d   fd[0]:%d   fd[1]:%d\n", current_cmd->command[0], input, output, current_cmd->fd[0], current_cmd->fd[1]);
-
-
 
 void	execute_command(t_vars *vars)
 {

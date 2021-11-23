@@ -68,11 +68,11 @@ struct s_command {
 	int			pipe;
 	int			quotes;
 	int			cmd_index;
-	int			redirect_right; //remove
-	int			redirect_left; //remove
+	int			redirect_right;
+	int			redirect_left;
 	int			fd[2];
-	pid_t		pid; //add (need to initiate)
-	int			exit_status; //ADD (need to initiate)
+	pid_t		pid;
+	int			exit_status;
 	t_command	*next;
 };
 
@@ -184,7 +184,7 @@ int			redirect_input(t_command *current_cmd, t_redirect *current_in);
 int			redirect_output_overwrite(char *file);
 int			redirect_output_append(char *file);
 void		put_to_heredoc(t_redirect *current_in);
-void		redirection(t_vars *vars, t_command *current_cmd);//, int i);
+void		redirection(t_vars *vars, t_command *current_cmd);
 void		write_to_heredoc(t_redirect *current_in);
 int			redirect_heredoc(void);
 int			count_heredoc(t_vars *vars);
@@ -217,6 +217,6 @@ void		set_termios(void);
 void		control_c(int sig);
 
 /* new exec */
-void	run_command(t_vars *vars, t_command *current_cmd);
+void		run_command(t_vars *vars, t_command *current_cmd);
 
 #endif

@@ -28,7 +28,6 @@ t_token	*fill_inout(t_vars *vars, t_token *current_token,
 		t_redirect *current_inout, int cmd_num)
 {
 	initialize_inout(current_inout);
-
 	current_inout->arrow_num = current_token->buffer.len;
 	current_inout->cmd_num = cmd_num;
 	current_inout->side = current_token->token_type;

@@ -23,7 +23,8 @@ void	pipe_and_launch_command(t_vars *vars, t_command *current_cmd,
 		ft_putendl_fd("error: pipe", 2);
 	if (!to_close)
 		to_close = current_cmd->fd[0];
-	launch_commands(vars, current_cmd, (int [2]){input, current_cmd->fd[1]}, to_close);
+	launch_commands(vars, current_cmd,
+		(int [2]){input, current_cmd->fd[1]}, to_close);
 }
 
 void	wait_loop(t_vars *vars, pid_t child)
@@ -32,7 +33,7 @@ void	wait_loop(t_vars *vars, pid_t child)
 	int	status;
 	int	nl;
 
-	nl = 0;	
+	nl = 0;
 	i = 0;
 	waitpid(child, &status, 0);
 	if (WIFSIGNALED(status))
@@ -55,8 +56,6 @@ void	wait_loop(t_vars *vars, pid_t child)
 	}
 	if (nl)
 		write(1, "\n", 1);
-	// signal(SIGQUIT, sigmain);
-	// signal(SIGINT, sigmain);
 	signal(SIGINT, control_c);
 	set_termios();
 }

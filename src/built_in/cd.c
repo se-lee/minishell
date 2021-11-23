@@ -59,7 +59,7 @@ void	cd_to_home(t_vars *vars, char *path_temp)
 	replace_oldpwd_and_pwd(vars, find_pwd(vars));
 }
 
-int		builtin_cd(t_vars *vars, t_command *current_cmd)
+int	builtin_cd(t_vars *vars, t_command *current_cmd)
 {
 	char	*path;
 	char	*old_pwd;
