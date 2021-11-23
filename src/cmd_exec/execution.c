@@ -78,6 +78,7 @@ void	execute_with_or_without_pipe(t_vars *vars, t_command *current_cmd)
 			current_cmd = current_cmd->next;
 			current_cmd->cmd_index++;
 		}
+		current_cmd->cmd_index++;
 		child = launch_commands(vars, current_cmd,
 				(int [2]){input, output}, to_close);
 		wait_loop(vars, child);
