@@ -4,6 +4,8 @@ minishell
 *.txt
 ft_mallocator/
 *.sh
+.gitignore
+a
 
 ## Mlx related
 Makefile.gen
