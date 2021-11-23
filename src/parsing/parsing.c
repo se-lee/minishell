@@ -29,24 +29,6 @@ char	*replace(char *full, char *placeholder, char *real)
 	return (final);
 }
 
-int	check_error(t_token *token)
-{
-	if (token->token_type == PIPE_SIGN && token->buffer.len > 1)
-		return (-1);
-	if ((token->token_type == QUOTE || token->token_type == SINGLE_QUOTE)
-		&& token->quote_nb != 2)
-		return (-1);
-	if (ft_piperedirect(token->token_type) == 1 && token->buffer.len > 2)
-		return (-1);
-	if (token->next && (token->token_type) == 1
-		&& ft_piperedirect(token->next->token_type) == 1)
-		return (-1);
-	if ((token->token_type == REDIRECT_LEFT
-			|| token->token_type == REDIRECT_RIGHT) && token->next == NULL)
-		return (-1);
-	return (0);
-}
-
 int	find_space(char *str)
 {
 	int	i;
@@ -119,7 +101,7 @@ void	parsing(t_vars *vars, char *str)
 	current_token = vars->first;
 	while (current_token)
 	{
-		if (check_error(current_token) == 0)
+		if (check_error(current_token) == 0 && check_error2(current_token) == 0)
 		{
 			if (current_token->token_type == WORD
 				|| current_token->token_type == QUOTE)
@@ -138,6 +120,6 @@ void	parsing(t_vars *vars, char *str)
 	}
 	fill_redirect(vars, 0);
 	fill_commands(vars, vars->first, 0);
-	// if (vars->error == 0)
-	// 	printf_commands(vars);
+	if (vars->error == 0)
+		printf_commands(vars);
 }

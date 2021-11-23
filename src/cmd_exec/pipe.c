@@ -27,6 +27,17 @@ void	pipe_and_launch_command(t_vars *vars, t_command *current_cmd,
 		(int [2]){input, current_cmd->fd[1]}, to_close);
 }
 
+void	wait_loop_utils(int nl, int status)
+{
+	while (waitpid(-1, &status, 0) != -1)
+	{
+		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+			nl = 1;
+	}
+	if (nl)
+		write(1, "\n", 1);
+}
+
 void	wait_loop(t_vars *vars, pid_t child)
 {
 	int	i;
@@ -49,13 +60,7 @@ void	wait_loop(t_vars *vars, pid_t child)
 	}
 	else
 		vars->return_value = WEXITSTATUS(status);
-	while (waitpid(-1, &status, 0) != -1)
-	{
-		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
-			nl = 1;
-	}
-	if (nl)
-		write(1, "\n", 1);
+	wait_loop_utils(nl, status);
 	signal(SIGINT, control_c);
 	set_termios();
 }
