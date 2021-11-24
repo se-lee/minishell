@@ -1,16 +1,25 @@
 #include "minishell.h"
 
+int	is_valid(char c)
+{
+	if (ft_isalnum(c) == 1 || c == '_')
+		return (1);
+	return (0);
+}
+
 char	*find_variable(char *str)
 {
 	int		i;
 	char	*var;
 
 	i = 0;
-	while (str[i] && str[i] != ' ' && str[i] != '"' && str[i] != '\'')
+	while (str[i] && (is_valid(str[i]) == 1 || (i == 0 && str[i] == '$')
+			|| (i == 1 && str[i] == '?')))
 		i++;
 	var = protected_malloc((i + 1), sizeof(char));
 	i = 0;
-	while (str[i] && str[i] != ' ' && str[i] != '"' && str[i] != '\'')
+	while (str[i] && (is_valid(str[i]) == 1 || (i == 0 && str[i] == '$')
+			|| (i == 1 && str[i] == '?')))
 	{
 		var[i] = str[i];
 		i++;

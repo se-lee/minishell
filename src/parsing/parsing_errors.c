@@ -12,12 +12,16 @@ int	check_error(t_token *token)
 	if ((token->token_type == REDIRECT_LEFT
 			|| token->token_type == REDIRECT_RIGHT)
 		&& (token->next == NULL || (token->next->token_type == SPACE_SIGN
-				&& token->next->next == NULL)))
+				&& token->next->next == NULL)
+			|| (token->next->token_type == PIPE_SIGN)
+			|| (token->next->token_type == SPACE_SIGN
+				&& token->next->next != NULL
+				&& token->next->next->token_type == PIPE_SIGN)))
 		return (-1);
 	return (0);
 }
 
-int	check_error2(t_token *token)
+int	check_error2(t_vars *vars, t_token *token)
 {
 	t_token	*current_token;
 
@@ -29,6 +33,12 @@ int	check_error2(t_token *token)
 			current_token = current_token->next;
 		if (current_token && current_token->token_type == PIPE_SIGN)
 			return (-1);
+	}
+	if (token == vars->first && token->token_type == PIPE_SIGN
+		&& token->next == NULL)
+	{
+		vars->return_value = 258;
+		return (-1);
 	}
 	return (0);
 }

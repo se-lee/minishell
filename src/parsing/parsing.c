@@ -99,9 +99,10 @@ void	parsing(t_vars *vars, char *str)
 
 	tokenization(vars, str);
 	current_token = vars->first;
-	while (current_token)
+	while (current_token && vars->error != -1)
 	{
-		if (check_error(current_token) == 0 && check_error2(current_token) == 0)
+		if (check_error(current_token) == 0
+			&& check_error2(vars, current_token) == 0)
 		{
 			if (current_token->token_type == WORD
 				|| current_token->token_type == QUOTE)
@@ -112,11 +113,7 @@ void	parsing(t_vars *vars, char *str)
 				current_token = current_token->next;
 		}
 		else
-		{
-			display_syntax_error(current_token);
-			vars->error = -1;
-			break ;
-		}
+			display_syntax_error(vars, current_token);
 	}
 	fill_redirect(vars, 0);
 	fill_commands(vars, vars->first, 0);

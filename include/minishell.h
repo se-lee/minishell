@@ -116,7 +116,7 @@ void		malloc_token_next(t_token **current_token);
 void		envlist_free(t_envlist *to_free);
 void		envlist_print_all(t_envlist *envp);
 int			check_error(t_token *token);
-int			check_error2(t_token *token);
+int			check_error2(t_vars *vars, t_token *token);
 
 /* built-in utils */
 int			format_is_valid(char *str);
@@ -214,7 +214,7 @@ void		ft_append(char **a, char *str);
 void		*protected_malloc(size_t count, size_t size);
 void		free_array(char **array);
 void		display_cmd_error(t_command *current_cmd, char *message, int arg);
-void		display_syntax_error(t_token *current_token);
+void		display_syntax_error(t_vars *vars, t_token *current_token);
 
 /* Signals */
 void		sigchild(int sig);
