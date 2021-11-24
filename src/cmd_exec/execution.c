@@ -97,6 +97,6 @@ void	execute_command(t_vars *vars)
 		else
 			execute_with_pipe(vars, current_cmd);
 	}
-	if (count_heredoc > 0)
+	if (count_heredoc(vars) > 0)
 		unlink(".heredoc");
 }
