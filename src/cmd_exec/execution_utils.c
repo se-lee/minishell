@@ -37,18 +37,21 @@ void	run_command_non_builtin(t_vars *vars,
 	}
 	else if (path != NULL)
 	{
-		if (S_ISDIR(buff.st_mode))
+		if (S_ISDIR(buff.st_mode) && current_cmd->command == NULL)
 		{
+			printf("a\n");
 			display_cmd_error(current_cmd, "is a directory", FALSE);
 			vars->return_value = 126;
 		}
 		else if (access(path, X_OK) < 0)
 		{
+			printf("b\n");
 			display_cmd_error(current_cmd, "Permission denied", FALSE);
 			vars->return_value = 126;
 		}
 		else if (execve(path, current_cmd->command, env) < 0)
 		{
+			printf("c\n");
 			ft_putstr_fd("minishell: ", 2);
 			perror(current_cmd->command[0]);
 			vars->return_value = 127;

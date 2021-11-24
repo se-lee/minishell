@@ -7,12 +7,6 @@ void	display_error_and_exit(t_command *current_cmd,
 	exit(exit_status);
 }
 
-int	exit_simple(int return_value)
-{
-	printf("exit\n");
-	return (return_value);
-}
-
 long long int	ft_atolli(const char *str)
 {
 	int				i;
@@ -49,6 +43,34 @@ int	exit_uint_return_value(int return_value)
 	return (return_value);
 }
 
+void	exit_with_arg(t_vars *vars, t_command *current_cmd)
+{
+	if (strisnum(current_cmd->command[1]) == 1
+		&& current_cmd->command[2] == NULL)
+	{
+		vars->return_value = ft_atolli(current_cmd->command[1]);
+		if (value_exceeds_llint(current_cmd->command[1],
+				vars->return_value) == TRUE)
+			display_error_and_exit(current_cmd,
+				"numeric argument required", 255);
+		vars->return_value = exit_uint_return_value(vars->return_value);
+		if (count_command(vars->cmd) == 1)
+			exit(exit_simple(vars->return_value));
+	}
+	else if (strisnum(current_cmd->command[1]) == 1
+		&& current_cmd->command[2] != NULL)
+	{
+		ft_putstr_fd("exit\n", 1);
+		display_cmd_error(current_cmd, "too many arguments", FALSE);
+		vars->return_value = 1;
+	}
+	else
+	{
+		ft_putstr_fd("exit\n", 1);
+		display_error_and_exit(current_cmd, "numeric argument required", 255);
+	}
+}
+
 void	builtin_exit(t_vars *vars, t_command *current_cmd)
 {
 	if (current_cmd->command[1] == NULL)
@@ -57,23 +79,6 @@ void	builtin_exit(t_vars *vars, t_command *current_cmd)
 	{
 		if (current_cmd->command[1][0] == ' ')
 			remove_space(&current_cmd->command[1]);
-		if (strisnum(current_cmd->command[1]) == 1
-			&& current_cmd->command[2] == NULL)
-		{
-			vars->return_value = ft_atolli(current_cmd->command[1]);
-			if (value_exceeds_llint(current_cmd->command[1],
-					vars->return_value) == TRUE)
-				display_error_and_exit(current_cmd,
-					"numeric argument required", 255);
-			vars->return_value = exit_uint_return_value(vars->return_value);
-			if (count_command(vars->cmd) == 1)
-				exit(exit_simple(vars->return_value));
-		}
-		else if (strisnum(current_cmd->command[1]) == 1
-			&& current_cmd->command[2] != NULL)
-			display_cmd_error(current_cmd, "too many arguments", FALSE);
-		else
-			display_error_and_exit(current_cmd,
-				"numeric argument required", 255);
+		exit_with_arg(vars, current_cmd);
 	}
 }

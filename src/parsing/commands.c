@@ -1,6 +1,7 @@
 #include "minishell.h"
 
-char	**fill_loop(t_token *current_token, char **cmd, int i, t_command *current_cmd)
+char	**fill_loop(t_token *current_token, char **cmd,
+	int i, t_command *current_cmd)
 {
 	char	*temp;
 	char	*unquotes;

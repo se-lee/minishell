@@ -41,3 +41,9 @@ int	value_exceeds_llint(char *str, long long int return_value)
 		return (FALSE);
 	}
 }
+
+int	exit_simple(int return_value)
+{
+	printf("exit\n");
+	return (return_value);
+}

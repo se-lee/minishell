@@ -134,6 +134,7 @@ void		remove_space(char **str);
 int			value_exceeds_llint(char *str, long long int return_value);
 char		*find_old_pwd(t_vars *vars);
 char		*find_pwd(t_vars *vars);
+int		exit_simple(int return_value);
 
 /* built-in commands */
 int			builtin_cd(t_vars *vars, t_command *current_cmd);

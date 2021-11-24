@@ -23,6 +23,8 @@ char	*get_command_path(t_envlist *envp, char *command)
 	char	*path;
 	int		i;
 
+	if (command == NULL || ft_strcmp(command, "") == 0)
+		return (NULL);
 	path = get_env_value(envp, "PATH", 0);
 	if (path == NULL || ft_strncmp("/", command, 1) == 0
 		|| ft_strcmp(path, "") == 0)
