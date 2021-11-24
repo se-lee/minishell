@@ -39,12 +39,12 @@ void	run_command_non_builtin(t_vars *vars,
 			display_cmd_error(current_cmd, "is a directory", FALSE);
 			vars->return_value = 126;
 		}
-		// else if (access(path, X_OK) < 0)
-		// {
-		// 	printf("b\n");
-		// 	display_cmd_error(current_cmd, "Permission denied", FALSE);
-		// 	vars->return_value = 126;
-		// }
+		else if (access(path, X_OK) < 0)
+		{
+			printf("b\n");
+			display_cmd_error(current_cmd, "Permission denied", FALSE);
+			vars->return_value = 126;
+		}
 		else if (execve(path, current_cmd->command, env) < 0)
 		{
 			printf("c\n");
