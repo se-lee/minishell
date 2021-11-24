@@ -77,6 +77,8 @@ void	fill_commands(t_vars *vars, t_token *token, int i)
 {
 	t_command	*current_cmd;
 
+	if (vars->error == -1)
+		return ;
 	while (token)
 	{
 		if (token->token_type == SPACE_SIGN && token->next)
