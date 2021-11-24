@@ -24,8 +24,6 @@ void	main_loop(t_vars *vars, char *str)
 			execute_command(vars);
 		free(str);
 		loop_free(vars);
-		if (count_heredoc(vars) > 0)
-			unlink(".heredoc");
 	}
 	else
 		free(str);
