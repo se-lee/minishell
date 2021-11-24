@@ -21,7 +21,7 @@ int	redir_in_no_cmd(t_redirect *current_inout)
 	return (0);
 }
 
-void	redir_dup_output(t_redirect *current_inout)
+void	redir_out_no_cmd(t_redirect *current_inout)
 {
 	int	std_in;
 	int	std_out;
@@ -47,10 +47,10 @@ int	redirect_without_cmd(t_vars *vars)
 			if (current_inout->arrow_num == 1)
 				return (redir_in_no_cmd(current_inout));
 			else if (current_inout->arrow_num == 2)
-				redirect_heredoc();
+				update_heredoc(vars);
 		}
 		else if (current_inout->side == REDIRECT_RIGHT)
-			redir_dup_output(current_inout);
+			redir_out_no_cmd(current_inout);
 		current_inout = current_inout->next;
 	}
 	return (0);
