@@ -33,10 +33,9 @@ void	run_command_non_builtin(t_vars *vars,
 	if (stat(path, &buff) < 0 && path != NULL)
 	{
 		display_cmd_error(current_cmd, "No such file or directory", FALSE);
-		free(path);
-		exit(127);
+		vars->return_value = 127;
 	}
-	if (path != NULL)
+	else if (path != NULL)
 	{
 		if (S_ISDIR(buff.st_mode))
 		{
@@ -54,8 +53,6 @@ void	run_command_non_builtin(t_vars *vars,
 			perror(current_cmd->command[0]);
 			vars->return_value = 127;
 		}
-		free(path);
-		exit(vars->return_value);
 	}
 	else
 	{
