@@ -21,7 +21,6 @@ int	redir_in_no_cmd(t_redirect *current_inout)
 	return (0);
 }
 
-
 void	redir_dup_output(t_redirect *current_inout)
 {
 	int	std_in;

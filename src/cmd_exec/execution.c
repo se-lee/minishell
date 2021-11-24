@@ -56,37 +56,30 @@ int	launch_commands(t_vars *vars, t_command *current_cmd,
 	return (child);
 }
 
-void	execute_with_or_without_pipe(t_vars *vars, t_command *current_cmd)
+void	execute_with_pipe(t_vars *vars, t_command *current_cmd)
 {
 	int			input;
 	int			output;
-	pid_t		child;
 	int			to_close;
 	int			i;
+	pid_t		child;
 
 	input = 0;
 	output = 1;
 	to_close = 0;
 	i = 0;
-	if (!current_cmd->pipe)
-		run_command_no_pipe(vars, current_cmd);
-	else
+	while (i < count_command(vars->cmd) - 1)
 	{
-		// if (current_cmd->next == NULL && )
-		// 	pipe_get_next_cmd(current_cmd);
-		while (i < count_command(vars->cmd) - 1)//current_cmd->next != NULL)
-		{
-			pipe_and_launch_command(vars, current_cmd, input, to_close);
-			to_close = 0;
-			input = current_cmd->fd[0];
-			current_cmd = current_cmd->next;
-			i++;
-			current_cmd->cmd_index = i;
-		}
-		child = launch_commands(vars, current_cmd,
-				(int [2]){input, output}, to_close);
-		wait_loop(vars, child);
+		pipe_and_launch_command(vars, current_cmd, input, to_close);
+		to_close = 0;
+		input = current_cmd->fd[0];
+		current_cmd = current_cmd->next;
+		i++;
+		current_cmd->cmd_index = i;
 	}
+	child = launch_commands(vars, current_cmd,
+			(int [2]){input, output}, to_close);
+	wait_loop(vars, child);
 }
 
 void	execute_command(t_vars *vars)
@@ -98,5 +91,10 @@ void	execute_command(t_vars *vars)
 	current_cmd = vars->cmd;
 	tcsetattr(STDIN_FILENO, TCSANOW, &vars->saved_termios);
 	if (current_cmd)
-		execute_with_or_without_pipe(vars, current_cmd);
+	{
+		if (!current_cmd->pipe)
+			run_command_no_pipe(vars, current_cmd);
+		else
+			execute_with_pipe(vars, current_cmd);
+	}
 }

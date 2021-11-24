@@ -28,26 +28,28 @@ void	run_command_non_builtin(t_vars *vars,
 	char		**env;
 	struct stat	buff;
 
-	stat(path, &buff);
 	env = envlist_to_char_array(envlist);
 	path = get_command_path(envlist, current_cmd->command[0]);
+	if (stat(path, &buff) < 0 && path != NULL)
+	{
+		display_cmd_error(current_cmd, "No such file or directory", FALSE);
+		free(path);
+		exit(127);
+	}
 	if (path != NULL)
 	{
-		if (S_ISDIR(buff.st_mode) == 1)
+		if (S_ISDIR(buff.st_mode))
 		{
-			printf("a\n");
 			display_cmd_error(current_cmd, "is a directory", FALSE);
 			vars->return_value = 126;
 		}
 		else if (access(path, X_OK) < 0)
 		{
-			printf("b\n");
 			display_cmd_error(current_cmd, "Permission denied", FALSE);
 			vars->return_value = 126;
 		}
 		else if (execve(path, current_cmd->command, env) < 0)
 		{
-			printf("c\n");
 			ft_putstr_fd("minishell: ", 2);
 			perror(current_cmd->command[0]);
 			vars->return_value = 127;
