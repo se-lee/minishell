@@ -52,4 +52,5 @@ int	main(int argc, char **argv, char **envp)
 		str = readline("\x1B[32mminishell$\x1B[0m: ");
 	}
 	ft_putendl_fd("exit", 0);
+	exit(vars.return_value);
 }
