@@ -51,5 +51,7 @@ int	redirect_without_cmd(t_vars *vars)
 			redir_out_no_cmd(current_inout);
 		current_inout = current_inout->next;
 	}
+	if (count_heredoc(vars) > 0)
+		unlink(".heredoc");
 	return (0);
 }
