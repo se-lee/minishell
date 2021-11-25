@@ -46,8 +46,6 @@ int	redirect_without_cmd(t_vars *vars)
 		{
 			if (current_inout->arrow_num == 1)
 				return (redir_in_no_cmd(current_inout));
-			else if (current_inout->arrow_num == 2)
-				update_heredoc(vars);
 		}
 		else if (current_inout->side == REDIRECT_RIGHT)
 			redir_out_no_cmd(current_inout);
