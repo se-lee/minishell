@@ -17,6 +17,22 @@ char	*search_current_dir(char *command)
 	return (NULL);
 }
 
+char	*search_path_accessible(char *command, char **path_sep)
+{
+	int	i;
+
+	i = 0;
+	while (path_sep[i])
+	{
+		ft_append(&path_sep[i], "/");
+		ft_append(&path_sep[i], command);
+		if (access(path_sep[i], X_OK) == 0)
+			return (path_sep[i]);
+		i++;
+	}	
+	return (NULL);
+}
+
 char	*get_command_path(t_envlist *envp, char *command)
 {
 	char	**path_sep;
@@ -36,14 +52,7 @@ char	*get_command_path(t_envlist *envp, char *command)
 	if (ft_strchr(command, '/') != 0)
 		path = ft_strdup(command);
 	i = 0;
-	while (path_sep[i])
-	{
-		ft_append(&path_sep[i], "/");
-		ft_append(&path_sep[i], command);
-		if (access(path_sep[i], X_OK) == 0)
-			return (path_sep[i]);
-		i++;
-	}
+	path = search_path_accessible(command, path_sep);
 	free_array(path_sep);
 	return (path);
 }
