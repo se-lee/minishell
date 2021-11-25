@@ -134,7 +134,7 @@ void		remove_space(char **str);
 int			value_exceeds_llint(char *str, long long int return_value);
 char		*find_old_pwd(t_vars *vars);
 char		*find_pwd(t_vars *vars);
-int		exit_simple(int return_value);
+int			exit_simple(int return_value);
 
 /* built-in commands */
 int			builtin_cd(t_vars *vars, t_command *current_cmd);
@@ -177,7 +177,6 @@ void		run_command_no_pipe(t_vars *vars, t_command *current_cmd);
 void		run_command_and_exit(t_vars *vars, t_command *current_cmd);
 void		redirect_and_run_cmd(t_vars *vars, t_command *current_cmd,
 				int builtin);
-void		pipe_get_next_cmd(t_command *current_cmd);
 
 /* pipe */
 void		fd_dup_and_close(int input, int output);
@@ -198,7 +197,7 @@ void		update_heredoc(t_vars *vars);
 int			redirect_without_cmd(t_vars *vars);
 
 /* command utils */
-char		*get_command_path(t_envlist *envp, char *command);
+char		*get_command_path(t_envlist *envp, char *command, int i);
 int			count_command(t_command *cmd);
 int			command_is_builtin(char **command);
 

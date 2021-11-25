@@ -21,8 +21,6 @@ void	run_command_builtin(t_vars *vars, t_command *current_cmd)
 		vars->return_value = builtin_unset(vars, current_cmd, 0);
 }
 
-/**test**/
-
 int	check_stat_and_access(t_vars *vars, t_command *current_cmd, char *path)
 {
 	struct stat	buff;
@@ -58,14 +56,13 @@ void	run_command_non_builtin(t_vars *vars,
 	char		**env;
 
 	env = envlist_to_char_array(envlist);
-	path = get_command_path(envlist, current_cmd->command[0]);
+	path = get_command_path(envlist, current_cmd->command[0], 0);
 	if (check_stat_and_access(vars, current_cmd, path) == FALSE)
 		exit (vars->return_value);
 	if (path != NULL)
 	{
 		if (execve(path, current_cmd->command, env) < 0)
 		{
-			printf("c\n");
 			ft_putstr_fd("minishell: ", 2);
 			perror(current_cmd->command[0]);
 			vars->return_value = 126;

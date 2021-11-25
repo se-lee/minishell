@@ -17,11 +17,10 @@ char	*search_current_dir(char *command)
 	return (NULL);
 }
 
-char	*get_command_path(t_envlist *envp, char *command)
+char	*get_command_path(t_envlist *envp, char *command, int i)
 {
 	char	**path_sep;
 	char	*path;
-	int		i;
 
 	if (command == NULL || ft_strcmp(command, "") == 0)
 		return (NULL);
@@ -35,7 +34,6 @@ char	*get_command_path(t_envlist *envp, char *command)
 	path = NULL;
 	if (ft_strchr(command, '/') != 0)
 		path = ft_strdup(command);
-	i = 0;
 	while (path_sep[i])
 	{
 		ft_append(&path_sep[i], "/");
