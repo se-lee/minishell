@@ -31,8 +31,6 @@ void	main_loop(t_vars *vars, char *str)
 
 void	envlist_finish(t_vars *vars)
 {
-	t_envlist	*current_envlist;
-
 	if (ft_inenv(vars->envp, "PWD") == 0)
 		replace_oldpwd_and_pwd(vars, NULL);
 	if (ft_inenv(vars->envp, "OLDPWD") == 0)
