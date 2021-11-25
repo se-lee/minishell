@@ -35,14 +35,12 @@ int	check_stat_and_access(t_vars *vars, t_command *current_cmd, char *path)
 		}
 		else if (S_ISDIR(buff.st_mode))
 		{
-			printf("a\n");
 			display_cmd_error(current_cmd, "is a directory", FALSE);
 			vars->return_value = 126;
 			return (FALSE);
 		}
 		else if (access(path, X_OK) < 0)
 		{
-			printf("b\n");
 			display_cmd_error(current_cmd, "Permission denied", FALSE);
 			vars->return_value = 126;
 			return (FALSE);
@@ -59,27 +57,10 @@ void	run_command_non_builtin(t_vars *vars,
 
 	env = envlist_to_char_array(envlist);
 	path = get_command_path(envlist, current_cmd->command[0]);
-	// if (stat(path, &buff) < 0 && path != NULL)
-	// {
-	// 	display_cmd_error(current_cmd, "No such file or directory", FALSE);
-	// 	vars->return_value = 127;
-	// }
 	if (check_stat_and_access(vars, current_cmd, path) == FALSE)
 		exit (vars->return_value);
 	if (path != NULL)
 	{
-		// if (S_ISDIR(buff.st_mode)) //&& current_cmd->command == NULL)
-		// {
-		// 	printf("a\n");
-		// 	display_cmd_error(current_cmd, "is a directory", FALSE);
-		// 	vars->return_value = 126;
-		// }
-		// else if (access(path, X_OK) < 0)
-		// {
-		// 	printf("b\n");
-		// 	display_cmd_error(current_cmd, "Permission denied", FALSE);
-		// 	vars->return_value = 126;
-		// }
 		if (execve(path, current_cmd->command, env) < 0)
 		{
 			printf("c\n");
@@ -123,17 +104,4 @@ void	redirect_and_run_cmd(t_vars *vars, t_command *current_cmd, int builtin)
 		redirection(vars, current_cmd);
 		run_command_non_builtin(vars, vars->envp, current_cmd);
 	}
-}
-
-void	pipe_get_next_cmd(t_command *current_cmd)
-{
-	char		*line;
-
-	current_cmd->next = protected_malloc(1, sizeof(t_command));
-	current_cmd->next->next = NULL;
-	line = NULL;
-	ft_putstr_fd("> ", OUT);
-	get_next_line(IN, &line);
-	current_cmd->next->command = ft_split(line, ' ');
-	free(line);
 }

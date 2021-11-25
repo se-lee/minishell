@@ -177,7 +177,6 @@ void		run_command_no_pipe(t_vars *vars, t_command *current_cmd);
 void		run_command_and_exit(t_vars *vars, t_command *current_cmd);
 void		redirect_and_run_cmd(t_vars *vars, t_command *current_cmd,
 				int builtin);
-void		pipe_get_next_cmd(t_command *current_cmd);
 
 /* pipe */
 void		fd_dup_and_close(int input, int output);
