@@ -15,6 +15,7 @@ void	cd_to_home(t_vars *vars, char *path_temp)
 {
 	char	*home;
 	char	*path;
+	char	*temp;
 
 	home = search_home(vars->envp);
 	if (home == NULL)
@@ -24,12 +25,13 @@ void	cd_to_home(t_vars *vars, char *path_temp)
 		return ;
 	}
 	path = NULL;
+	temp = ft_substr(path_temp, 1, ft_strlen(path_temp) - 1);
 	if (path_temp == NULL)
 		path = ft_strdup(home);
 	else if (ft_strncmp(path_temp, "~", 1) == 0)
-		path = ft_strjoin(home,
-				ft_substr(path_temp, 1, ft_strlen(path_temp) - 1));
+		path = ft_strjoin(home, temp);
 	free(home);
+	free(temp);
 	chdir(path);
 	free(path);
 	replace_oldpwd_and_pwd(vars, find_pwd(vars));
