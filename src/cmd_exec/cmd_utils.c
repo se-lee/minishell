@@ -17,12 +17,13 @@ char	*search_current_dir(char *command)
 	return (NULL);
 }
 
-char	*get_command_path(t_envlist *envp, char *command)
+char	*get_command_path(t_envlist *envp, char *command, int i)
 {
 	char	**path_sep;
 	char	*path;
-	int		i;
 
+	if (command == NULL || ft_strcmp(command, "") == 0)
+		return (NULL);
 	path = get_env_value(envp, "PATH", 0);
 	if (path == NULL || ft_strncmp("/", command, 1) == 0
 		|| ft_strcmp(path, "") == 0)
@@ -33,16 +34,12 @@ char	*get_command_path(t_envlist *envp, char *command)
 	path = NULL;
 	if (ft_strchr(command, '/') != 0)
 		path = ft_strdup(command);
-	i = 0;
 	while (path_sep[i])
 	{
 		ft_append(&path_sep[i], "/");
 		ft_append(&path_sep[i], command);
 		if (access(path_sep[i], X_OK) == 0)
-		{
-			g_vars->return_value = 126;
 			return (path_sep[i]);
-		}
 		i++;
 	}
 	free_array(path_sep);

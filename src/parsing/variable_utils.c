@@ -18,10 +18,15 @@ char	*find_variable(char *str)
 		i++;
 	var = protected_malloc((i + 1), sizeof(char));
 	i = 0;
-	while (str[i] && (is_valid(str[i]) == 1 || (i == 0 && str[i] == '$')
+	while (str[i] && (is_valid(str[i]) || (i == 0 && str[i] == '$')
 			|| (i == 1 && str[i] == '?')))
 	{
 		var[i] = str[i];
+		if (i == 1 && ft_isdigit(str[i]) == 1)
+		{
+			i++;
+			break ;
+		}
 		i++;
 	}
 	var[i] = '\0';

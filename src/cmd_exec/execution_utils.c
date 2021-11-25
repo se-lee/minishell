@@ -21,35 +21,60 @@ void	run_command_builtin(t_vars *vars, t_command *current_cmd)
 		vars->return_value = builtin_unset(vars, current_cmd, 0);
 }
 
+int	check_stat_and_access(t_vars *vars, t_command *current_cmd, char *path)
+{
+	struct stat	buff;
+
+	if (path != NULL)
+	{
+		if (stat(path, &buff) < 0)
+		{
+			display_cmd_error(current_cmd, "No such file or directory", FALSE);
+			vars->return_value = 127;
+			return (FALSE);
+		}
+		else if (S_ISDIR(buff.st_mode))
+		{
+			display_cmd_error(current_cmd, "is a directory", FALSE);
+			vars->return_value = 126;
+			return (FALSE);
+		}
+		else if (access(path, X_OK) < 0)
+		{
+			display_cmd_error(current_cmd, "Permission denied", FALSE);
+			vars->return_value = 126;
+			return (FALSE);
+		}
+	}
+	return (TRUE);
+}
+
 void	run_command_non_builtin(t_vars *vars,
 	t_envlist *envlist, t_command *current_cmd)
 {
-	char	*path;
-	char	**env;
-	int		temp;
+	char		*path;
+	char		**env;
 
 	env = envlist_to_char_array(envlist);
-	path = get_command_path(envlist, current_cmd->command[0]);
+	path = get_command_path(envlist, current_cmd->command[0], 0);
+	if (check_stat_and_access(vars, current_cmd, path) == FALSE)
+		exit (vars->return_value);
 	if (path != NULL)
 	{
-		temp = execve(path, current_cmd->command, env);
-		if (temp < 0)
+		if (execve(path, current_cmd->command, env) < 0)
 		{
-			display_cmd_error(current_cmd, "No such file or directory", FALSE);
-			free(path);
-			g_vars->return_value = 127;
-			exit(vars->return_value);
+			ft_putstr_fd("minishell: ", 2);
+			perror(current_cmd->command[0]);
+			vars->return_value = 126;
 		}
-		else
-			g_vars->return_value = temp;
 	}
 	else
 	{
 		display_cmd_error(current_cmd, "command not found", FALSE);
-		free(path);
 		vars->return_value = 127;
-		exit(vars->return_value);
 	}
+	free(path);
+	exit(vars->return_value);
 }
 
 void	run_command_and_exit(t_vars *vars, t_command *current_cmd)
@@ -78,17 +103,4 @@ void	redirect_and_run_cmd(t_vars *vars, t_command *current_cmd, int builtin)
 		redirection(vars, current_cmd);
 		run_command_non_builtin(vars, vars->envp, current_cmd);
 	}
-}
-
-void	pipe_get_next_cmd(t_command *current_cmd)
-{
-	char		*line;
-
-	current_cmd->next = protected_malloc(1, sizeof(t_command));
-	current_cmd->next->next = NULL;
-	line = NULL;
-	ft_putstr_fd("> ", OUT);
-	get_next_line(IN, &line);
-	current_cmd->next->command = ft_split(line, ' ');
-	free(line);
 }

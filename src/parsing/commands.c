@@ -1,13 +1,18 @@
 #include "minishell.h"
 
-char	**fill_loop(t_token *current_token, char **cmd, int i)
+char	**fill_loop(t_token *current_token, char **cmd,
+	int i, t_command *current_cmd)
 {
 	char	*temp;
+	char	*unquotes;
 
 	if (cmd[i] != NULL)
 	{
-		current_token->buffer.str = remove_quotes(current_token->buffer.str,
+		unquotes = remove_quotes(current_token->buffer.str,
 				current_token->token_type);
+		if (ft_strcmp(unquotes, current_token->buffer.str) != 0)
+			current_cmd->quotes = 1;
+		current_token->buffer.str = unquotes;
 		temp = ft_strjoin(cmd[i], current_token->buffer.str);
 		free(cmd[i]);
 		cmd[i] = temp;
@@ -53,7 +58,7 @@ void	fill_command(t_token *token, t_command *current_command)
 		while (current_token && ft_piperedirect(current_token->token_type) == 0
 			&& current_token->token_type != SPACE_SIGN)
 		{
-			cmd = fill_loop(current_token, cmd, i);
+			cmd = fill_loop(current_token, cmd, i, current_command);
 			current_token = current_token->next;
 		}
 		if (current_token && current_token->token_type == SPACE_SIGN)
@@ -77,8 +82,6 @@ void	fill_commands(t_vars *vars, t_token *token, int i)
 {
 	t_command	*current_cmd;
 
-	if (vars->error == -1)
-		return ;
 	while (token)
 	{
 		if (token->token_type == SPACE_SIGN && token->next)

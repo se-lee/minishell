@@ -8,6 +8,9 @@
 # include <sys/param.h>
 # include <sys/wait.h>
 # include <termios.h>
+# include <errno.h>
+# include <sys/types.h>
+# include <sys/stat.h>
 # include "../libft/libft.h"
 
 # define TRUE	1
@@ -132,6 +135,7 @@ int			value_exceeds_llint(char *str, long long int return_value);
 char		*find_old_pwd(t_vars *vars);
 char		*find_pwd(t_vars *vars);
 void		replace_oldpwd_and_pwd(t_vars *vars, char *old_pwd);
+int			exit_simple(int return_value);
 
 /* built-in commands */
 int			builtin_cd(t_vars *vars, t_command *current_cmd);
@@ -174,7 +178,6 @@ void		run_command_no_pipe(t_vars *vars, t_command *current_cmd);
 void		run_command_and_exit(t_vars *vars, t_command *current_cmd);
 void		redirect_and_run_cmd(t_vars *vars, t_command *current_cmd,
 				int builtin);
-void		pipe_get_next_cmd(t_command *current_cmd);
 
 /* pipe */
 void		fd_dup_and_close(int input, int output);
@@ -184,17 +187,18 @@ void		pipe_and_launch_command(t_vars *vars, t_command *current_cmd,
 void		wait_loop(t_vars *vars, pid_t child);
 
 /* redirection */
-int			redirect_output_overwrite(char *file);
-int			redirect_output_append(char *file);
+int			redirect_input(t_redirect *current_inout);
+int			redirect_output(t_redirect *current_inout);
 void		put_to_heredoc(t_redirect *current_in);
 void		redirection(t_vars *vars, t_command *current_cmd);
 void		write_to_heredoc(t_redirect *current_in);
 int			redirect_heredoc(void);
 int			count_heredoc(t_vars *vars);
 void		update_heredoc(t_vars *vars);
+int			redirect_without_cmd(t_vars *vars);
 
 /* command utils */
-char		*get_command_path(t_envlist *envp, char *command);
+char		*get_command_path(t_envlist *envp, char *command, int i);
 int			count_command(t_command *cmd);
 int			command_is_builtin(char **command);
 
@@ -219,7 +223,6 @@ void		sigmain(int sig);
 void		set_termios(void);
 void		control_c(int sig);
 
-/* new exec */
-void		run_command(t_vars *vars, t_command *current_cmd);
+// void		run_command(t_vars *vars, t_command *current_cmd);
 
 #endif

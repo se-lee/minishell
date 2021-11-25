@@ -78,16 +78,3 @@ void	update_heredoc(t_vars *vars)
 		current_inout = current_inout->next;
 	}
 }
-
-int	redirect_heredoc(void)
-{
-	int		fd;
-
-	fd = open(".heredoc", O_RDONLY);
-	if (fd < 0)
-		perror(".heredoc");
-	if (dup2(fd, STDIN_FILENO) == -1)
-		perror("dup2");
-	close(fd);
-	return (0);
-}

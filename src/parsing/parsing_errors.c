@@ -40,5 +40,9 @@ int	check_error2(t_vars *vars, t_token *token)
 		vars->return_value = 258;
 		return (-1);
 	}
+	if (token->token_type == PIPE_SIGN && (!token->next
+			|| (token->next && token->next->token_type == SPACE_SIGN
+				&& !token->next->next)))
+		return (-1);
 	return (0);
 }

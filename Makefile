@@ -32,6 +32,7 @@ SRCS =	minishell.c						\
 		cmd_exec/execution.c			\
 		cmd_exec/heredoc.c				\
 		cmd_exec/pipe.c					\
+		cmd_exec/redirection_no_cmd.c	\
 		cmd_exec/redirection.c			\
 
 GCCF = gcc -g -fsanitize=address #-Wall -Wextra -Werror
