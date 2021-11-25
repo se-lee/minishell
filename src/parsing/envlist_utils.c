@@ -23,6 +23,10 @@ void	default_envlist(t_envlist **current_envlist)
 	(*current_envlist) = (*current_envlist)->next;
 	(*current_envlist)->name = ft_strdup("_");
 	(*current_envlist)->value = ft_strdup("/usr/bin/env");
+	(*current_envlist)->next = malloc(sizeof(t_envlist));
+	(*current_envlist) = (*current_envlist)->next;
+	(*current_envlist)->name = ft_strdup("OLDPWD");
+	(*current_envlist)->value = NULL;
 	(*current_envlist)->next = NULL;
 }
 

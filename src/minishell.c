@@ -27,6 +27,20 @@ void	main_loop(t_vars *vars, char *str)
 		free(str);
 }
 
+void	envlist_finish(t_vars *vars)
+{
+	t_envlist	*current_envlist;
+
+	if (ft_inenv(vars->envp, "PWD") == 0)
+		replace_oldpwd_and_pwd(vars, NULL);
+	if (ft_inenv(vars->envp, "OLDPWD") == 0)
+		add_new_var_to_list(vars, "OLDPWD");
+	if (ft_inenv(vars->envp, "SHLVL") == 0)
+		add_new_var_to_list(vars, "SHLVL=1");
+	if (ft_inenv(vars->envp, "_") == 0)
+		add_new_var_to_list(vars, "_=/usr/bin/env");
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_vars			vars;
@@ -37,6 +51,7 @@ int	main(int argc, char **argv, char **envp)
 	g_vars = &vars;
 	str = vars_initializer(&vars);
 	envlist_create(&vars, envp);
+	envlist_finish(&vars);
 	tcgetattr(0, &vars.saved_termios);
 	while (str != NULL)
 	{
