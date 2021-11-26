@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   envlist_utils2.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/11/26 07:42:14 by acusanno          #+#    #+#             */
+/*   Updated: 2021/11/26 07:44:15 by acusanno         ###   ########lyon.fr   */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	envlist_free(t_envlist *to_free)
@@ -84,4 +96,25 @@ char	*env_separation(char *str, int part)
 		return (new_str);
 	}
 	return (NULL);
+}
+
+void	default_envlist(t_envlist **current_envlist)
+{
+	char		pwd[MAXPATHLEN];
+
+	(*current_envlist)->name = ft_strdup("PWD");
+	(*current_envlist)->value = ft_strdup(getcwd(pwd, MAXPATHLEN));
+	(*current_envlist)->next = malloc(sizeof(t_envlist));
+	(*current_envlist) = (*current_envlist)->next;
+	(*current_envlist)->name = ft_strdup("SHLVL");
+	(*current_envlist)->value = ft_strdup("1");
+	(*current_envlist)->next = malloc(sizeof(t_envlist));
+	(*current_envlist) = (*current_envlist)->next;
+	(*current_envlist)->name = ft_strdup("_");
+	(*current_envlist)->value = ft_strdup("/usr/bin/env");
+	(*current_envlist)->next = malloc(sizeof(t_envlist));
+	(*current_envlist) = (*current_envlist)->next;
+	(*current_envlist)->name = ft_strdup("OLDPWD");
+	(*current_envlist)->value = NULL;
+	(*current_envlist)->next = NULL;
 }

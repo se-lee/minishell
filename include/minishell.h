@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/11/26 07:41:13 by acusanno          #+#    #+#             */
+/*   Updated: 2021/11/26 07:44:34 by acusanno         ###   ########lyon.fr   */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -114,6 +126,7 @@ t_token		*remove_token(t_vars *vars, t_token *token);
 char		*find_variable(char *str);
 void		malloc_token_next(t_token **current_token);
 void		envlist_free(t_envlist *to_free);
+void		default_envlist(t_envlist **current_envlist);
 void		envlist_print_all(t_envlist *envp);
 int			check_error(t_token *token);
 int			check_error2(t_vars *vars, t_token *token);

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/11/26 07:41:26 by acusanno          #+#    #+#             */
+/*   Updated: 2021/11/26 07:41:29 by acusanno         ###   ########lyon.fr   */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 char	*vars_initializer(t_vars *vars)
@@ -31,8 +43,6 @@ void	main_loop(t_vars *vars, char *str)
 
 void	envlist_finish(t_vars *vars)
 {
-	t_envlist	*current_envlist;
-
 	if (ft_inenv(vars->envp, "PWD") == 0)
 		replace_oldpwd_and_pwd(vars, NULL);
 	if (ft_inenv(vars->envp, "OLDPWD") == 0)

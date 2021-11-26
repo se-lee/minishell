@@ -1,11 +1,16 @@
-#include "minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exit.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/11/26 07:43:01 by acusanno          #+#    #+#             */
+/*   Updated: 2021/11/26 07:43:04 by acusanno         ###   ########lyon.fr   */
+/*                                                                            */
+/* ************************************************************************** */
 
-void	display_error_and_exit(t_command *current_cmd,
-	char *message, int exit_status)
-{
-	display_cmd_error(current_cmd, message, TRUE);
-	exit(exit_status);
-}
+#include "minishell.h"
 
 long long int	ft_atolli(const char *str)
 {
@@ -34,6 +39,13 @@ long long int	ft_atolli(const char *str)
 	else if (len > 19 && sign == -1)
 		return (0);
 	return (sign * out);
+}
+
+void	display_error_and_exit(t_command *current_cmd,
+	char *message, int exit_status)
+{
+	display_cmd_error(current_cmd, message, TRUE);
+	exit(exit_status);
 }
 
 int	exit_uint_return_value(int return_value)
@@ -73,8 +85,10 @@ void	exit_with_arg(t_vars *vars, t_command *current_cmd)
 
 void	builtin_exit(t_vars *vars, t_command *current_cmd)
 {
-	if (current_cmd->command[1] == NULL)
+	if (current_cmd->command[1] == NULL && count_command(vars->cmd) == 1)
 		exit(exit_simple(vars->return_value));
+	else if (current_cmd->command[1] == NULL && count_command(vars->cmd) > 1)
+		return ;
 	else if (current_cmd->command[1])
 	{
 		if (current_cmd->command[1][0] == ' ')

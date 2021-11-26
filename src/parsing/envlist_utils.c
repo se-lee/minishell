@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   envlist_utils.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/11/26 07:42:16 by acusanno          #+#    #+#             */
+/*   Updated: 2021/11/26 07:44:17 by acusanno         ###   ########lyon.fr   */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	envlist_create_loop(char **envp, t_envlist **current_envlist, int i)
@@ -6,27 +18,6 @@ void	envlist_create_loop(char **envp, t_envlist **current_envlist, int i)
 	(*current_envlist) = (*current_envlist)->next;
 	(*current_envlist)->name = env_separation(envp[i], 0);
 	(*current_envlist)->value = env_separation(envp[i], 1);
-	(*current_envlist)->next = NULL;
-}
-
-void	default_envlist(t_envlist **current_envlist)
-{
-	char		pwd[MAXPATHLEN];
-
-	(*current_envlist)->name = ft_strdup("PWD");
-	(*current_envlist)->value = ft_strdup(getcwd(pwd, MAXPATHLEN));
-	(*current_envlist)->next = malloc(sizeof(t_envlist));
-	(*current_envlist) = (*current_envlist)->next;
-	(*current_envlist)->name = ft_strdup("SHLVL");
-	(*current_envlist)->value = ft_strdup("1");
-	(*current_envlist)->next = malloc(sizeof(t_envlist));
-	(*current_envlist) = (*current_envlist)->next;
-	(*current_envlist)->name = ft_strdup("_");
-	(*current_envlist)->value = ft_strdup("/usr/bin/env");
-	(*current_envlist)->next = malloc(sizeof(t_envlist));
-	(*current_envlist) = (*current_envlist)->next;
-	(*current_envlist)->name = ft_strdup("OLDPWD");
-	(*current_envlist)->value = NULL;
 	(*current_envlist)->next = NULL;
 }
 
